@@ -1,3 +1,5 @@
+function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun)
+
 % Titan analogue damage model for coastal erosion of a lake
 % Rose Palermo 2-2018
 %
@@ -8,9 +10,9 @@
 %
 %
 
-close all;clear all;
+% close all;clear all;
 
-tic
+% tic
 
 % fetch weighted?
 fetch_on = false;
@@ -20,12 +22,12 @@ tmax = 100;
 
 % when creating a gif
 plot_now = true;
-gif_on = true;
-filename = 'fetch_5_2018_example.gif';
+gif_on = false;
+filename = [num2str(modelrun),'fetch_5_2018_example.gif'];
 
-load('xycontours.mat')
-lakex = x_1m_t1;
-lakey = y_1m_t1;
+% load('xycontours.mat')
+% lakex = x_1m_t1;
+% lakey = y_1m_t1;
 
 % % Test lake
 % th = linspace(0,2*pi,60);
@@ -61,14 +63,14 @@ lakey = y_1m_t1;
 % lakex = .5*cat(2, -1*ones(1,length(-1:0.01:1)),-1:0.01:1,ones(1,length(-1:0.01:1)),1:-0.01:-1);
 % lakey = .5*cat(2, -1:0.01:1, ones(1,length(-1:0.01:1)), 1:-0.01:-1, -1*ones(1,length(-1:0.01:1)));
 
-figure()
-plot(lakex,lakey)
-axis square
+% figure()
+% plot(lakex,lakey)
+% axis square
 LakeArea = polyarea(lakex,lakey);
 
 %make a grid larger than lake by eps
-eps = 200;
-dx = 0.5; dy = 0.5;
+% eps = 200;
+% dx = 0.5; dy = 0.5;
 x = (min(lakex)-eps):dx:(max(lakex)+eps);
 y = (min(lakey)-eps):dy:(max(lakey)+eps);
 [X,Y] = meshgrid(x,y);
@@ -116,9 +118,9 @@ for i = 1:tmax
             disp('fetch')
             %order the shoreline
             [indshoreline] = order_cw_lastpoint(lake,shoreline); % ccw ordered ind = indshoreline
-
+            indshoreline = sub2ind(size(X),indshoreline(:,1),indshoreline(:,2));
             % calculate fetch
-            [FetchArea] = fetch_mw(X(indshoreline(:,1)),Y(indshoreline(:,2)));
+            [FetchArea] = fetch_mw(X(indshoreline),Y(indshoreline));
             normfetch = FetchArea./LakeArea; % divide fetch area by original lake area
             
             clearvars erodedind
@@ -159,10 +161,15 @@ for i = 1:tmax
     %plot
     if plot_now
         drawnow
-        imagesc(x,y,double(shoreline))
+%         imagesc(x,y,double(shoreline))
+        imagesc(x,y,strength)
+        colormap('gray')
         shading flat
         axis square
         %         axis([-2 -0.5 0.5 2])
+        if modelrun == 1
+            axis([570 650 740 780])
+        end
         str = sprintf('Time step = %d',i);
         title(str)
         hold on
@@ -188,7 +195,7 @@ for i = 1:tmax
         end
     end
     
-    save(['test',num2str(i),'.mat'])
+    save([num2str(modelrun),'uniform',num2str(i),'.mat'])
     
 end
 
@@ -199,10 +206,11 @@ eroded = eroded(2:end,:);
 figure()
 imagesc('XData',x,'YData',y,'CData',strength)
 shading flat
-colormap((parula))
+colormap((gray))
 hold on
 plot(lakex,lakey,'w')
 axis square
 % scatter(eroded(:,1),eroded(:,2),'c')
 
-toc
+% toc
+end
