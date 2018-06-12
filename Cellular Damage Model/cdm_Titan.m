@@ -1,4 +1,4 @@
-function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun)
+% function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun)
 
 % Titan analogue damage model for coastal erosion of a lake
 % Rose Palermo 2-2018
@@ -15,14 +15,15 @@ function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun)
 % tic
 
 % fetch weighted?
-fetch_on = false;
+fetch_on = true;
 
 % run time
-tmax = 100;
+tmax = 1000;
 
 % when creating a gif
 plot_now = true;
 gif_on = false;
+save_on = false;
 filename = [num2str(modelrun),'fetch_5_2018_example.gif'];
 
 % load('xycontours.mat')
@@ -107,37 +108,38 @@ eroded = nan(1,2);
 h = figure;
 for i = 1:tmax
     i
-    %     if ~fetch_on % if no fetch, the order is fine like this.
-    % create array of uniform damage and subtract
-    indshoreline = find(shoreline);
-    [slr,slc] = find(shoreline);
-    %     end
+    if ~fetch_on % if no fetch, the order is fine like this.
+        indshoreline = find(shoreline);
+        dam = double(shoreline);
+        %damage the shoreline
+        strength(indshoreline) = strength(indshoreline)-dam(indshoreline);
+    end
     
     if fetch_on
         if (exist('erodedind','var')) | (i == 1)
             disp('fetch')
+            clearvars fetch_sl_cells indshoreline WaveArea_cell
             %order the shoreline
             [indshoreline] = order_cw_lastpoint(lake,shoreline); % ccw ordered ind = indshoreline
-            indshoreline = sub2ind(size(X),indshoreline(:,1),indshoreline(:,2));
-            % calculate fetch
-            [FetchArea] = fetch_mw(X(indshoreline),Y(indshoreline));
-            normfetch = FetchArea./LakeArea; % divide fetch area by original lake area
+            for l = 1: length(indshoreline)
+                indshoreline{l,1} = sub2ind(size(X),indshoreline{l,1}(:,1),indshoreline{l,1}(:,2));
+                fetch_sl_cells{l,1}(:,1) = X(indshoreline{l,1});
+                fetch_sl_cells{l,1}(:,2) = Y(indshoreline{l,1});
+            end
+            % calculate wave weighted (sqrt(F)*cos(theta-phi))
+            [WaveArea_cell] = fetch_wavefield_cell(fetch_sl_cells);
             
             clearvars erodedind
         end
+        % Damage the shoreline
+        indshoreline = cell2mat(indshoreline);
+%         [shoreline] = addidshoreline_cardonly(lake,land); % edges only
+        [shoreline] = addidshoreline(lake,land); % corners and edges
+        dam = cell2mat(WaveArea_cell);
+        %         strength(indshoreline) = strength(indshoreline) - ones(length(indshoreline),1).*dam;
+        strength(indshoreline) = strength(indshoreline) - shoreline(indshoreline).*dam;
     end
-    
-    
-    
-    % to damage shoreline by shoreline matrix
-    if fetch_on
-        dam = ones(1,length(indshoreline)) .* normfetch;
-        strength(indshoreline) = strength(indshoreline) - dam';
-    end
-    if ~fetch_on
-        dam = double(shoreline);
-        strength(indshoreline) = strength(indshoreline)-dam(indshoreline);
-    end
+
     
     
     % find eroded points
@@ -153,7 +155,10 @@ for i = 1:tmax
     land = ~lake;
     % update shoreline
     %     [shoreline,shorelinecard,shorelinecorn] = idshoreline(lake,land);
-    [shoreline] = addidshoreline_cardonly(lake,land);
+    [shoreline] = addidshoreline_cardonly(lake,land); % update to card only because only card for fetch part
+    if ~fetch_on
+        [shoreline] = addidshoreline(lake,land);
+    end
     
     
     
@@ -195,8 +200,9 @@ for i = 1:tmax
         end
     end
     
+    if save_on
     save([num2str(modelrun),'uniform',num2str(i),'.mat'])
-    
+    end
 end
 
 
@@ -213,4 +219,4 @@ axis square
 % scatter(eroded(:,1),eroded(:,2),'c')
 
 % toc
-end
+% end
