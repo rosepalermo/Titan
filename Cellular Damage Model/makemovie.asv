@@ -4,12 +4,11 @@ open(v);
 
 for k = 1:92
     % Create a mat filename, and load it into a structure called matData.
-%     matFileName = sprintf('4test%d.mat', k);
-    figFileName = sprintf('4test%d.fig', k);
-    if exist(figFileName, 'file')
-        matData = load(figFileName);
+    matFileName = sprintf('4test%d.fig', k);
+    if exist(matFileName, 'file')
+        matData = load(matFileName);
     else
-        fprintf('File %s does not exist.\n', figFileName);
+        fprintf('File %s does not exist.\n', matFileName);
     end
     axis([900 1100 450 650])
     axis square

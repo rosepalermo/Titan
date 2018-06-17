@@ -134,7 +134,7 @@ for i = 1:tmax
         end
         % Damage the shoreline
         indshoreline = cell2mat(indshoreline);
-        %         [shoreline] = addidshoreline_cardonly(lake,land); % edges only
+%         [shoreline] = addidshoreline_cardonly(lake,land); % edges only
         [shoreline] = addidshoreline(lake,land); % corners and edges
         corners = setdiff(find(shoreline),indshoreline);
         dam = cell2mat(WaveArea_cell);
@@ -142,7 +142,7 @@ for i = 1:tmax
         %         strength(indshoreline) = strength(indshoreline) - ones(length(indshoreline),1).*dam;
         strength(indshoreline) = strength(indshoreline) - shoreline(indshoreline).*dam;
     end
-    
+
     
     
     % find eroded points
@@ -169,7 +169,7 @@ for i = 1:tmax
     %plot
     if plot_now
         drawnow
-        %         imagesc(x,y,double(shoreline))
+%         imagesc(x,y,double(shoreline))
         imagesc(x,y,strength)
         colormap('gray')
         shading flat
@@ -205,24 +205,16 @@ for i = 1:tmax
     
     
     
-    %     if save_on
-    %         if ~fetch_on
-    %             save([num2str(modelrun),'uniform',num2str(i),'.mat'])
-    %         elseif fetch_on
-    %             save([num2str(modelrun),'wave',num2str(i),'.mat'])
-    %         end
-    %     end
-    
-    shoreline_save{i,1} = find(shoreline);
-    
-    if save_on
-        saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave',num2str(i),'.fig'])
-    end
-    
-end
+%     if save_on
+%         if ~fetch_on
+%             save([num2str(modelrun),'uniform',num2str(i),'.mat'])
+%         elseif fetch_on
+%             save([num2str(modelrun),'wave',num2str(i),'.mat'])
+%         end
+%     end
 
-if save_on
-    save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave','.mat'],'shoreline_save')
+shoreline_save{i,1} = 
+
 end
 %% plot
 eroded = eroded(2:end,:);
