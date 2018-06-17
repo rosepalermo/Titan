@@ -146,7 +146,7 @@ for obj = 1:length(shoreline_fetch)
         ylos(loc,iv) = yimin;
         
         
-        % Sqrt of the distance is the fetch contribution to wave energy
+        % Fetch distance is the contribution to wave energy (sqrt(F) ~ H; H^2~E ==> F ~ E)
         Fetch_dist = sqrt((xlos(:,iv) - x(iv)).^2 + (ylos(:,iv) - y(iv)).^2); % Find Fetch distance
         x4ang = [x(end) x x(1)]; y4ang = [y(end) y y(1)];
         % unit shoreline vector
@@ -163,8 +163,8 @@ for obj = 1:length(shoreline_fetch)
         cosang = abs(xlosvec*slvecx + ylosvec*slvecy);
         angdiff = rad2deg(acos(cosang(find(~isnan(cosang))))); % theta - phi
         
-        %Wave weighting = sqrt(F)*cosang
-        Waveweighting(:,iv) = sqrt(Fetch_dist).*cosang;
+        %Wave weighting = (F)*cosang
+        Waveweighting(:,iv) = (Fetch_dist).*cosang;
         Wavex(:,iv) = x(iv) + Waveweighting(:,iv).*cos(theta');
         Wavey(:,iv) = y(iv) + Waveweighting(:,iv).*sin(theta');
         
