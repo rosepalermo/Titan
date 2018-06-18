@@ -18,7 +18,7 @@ y = (y - mean(y))/sqrt(variance);
 n = length(y);
 t = (0:length(y)-1)*dt;  % construct time array
 xlim = [min(t),max(t)];  % plotting range
-pad = 1;      % pad the time series with zeroes (recommended)
+pad = 0;      % pad the time series with zeroes (recommended)
 dj = 0.25;    % this will do 4 sub-octaves per octave
 s0 = 2*dt;    % this says start at a scale of 2*dt (analogous to the Nyquist wavelength of a time series)
 % npow = 10;   % number of powers of two to do.
@@ -166,181 +166,238 @@ set(gca,'YLim',log2([min(period),max(period)]), ...
 set(gca,'XLim',[0,1.25*max(global_ws)])
 
 
+% TAYLOR 9 MAY 2018
 
+% normalize the wavelet spectrum by the global wavelet spectrum and display
+% it
 
-m=zeros(length(power(1,:)),1);
-for i=1:length(power(1,:))
-    p=polyfit(log2(period'),log2(power(:,i)),1);
-    m(i)=p(1);
-    v(i) = var(log2(power(:,i)));
-    stdev(i) = std(log2(power(:,i)));
-
-%     figure
-%     plot(log2(period'),log2(power(:,i)),'k')
-%     hold on
-%     yslope=polyval(p,log2(period'));
-%     plot(log2(period'),yslope,'r')  
-
-end
-
-
-%pause
-
-%plot the slope of the power spectrum at each point
-% xx=xx(1:end-2);
-% yy=yy(1:end-2);
-figure
-scatter3(xx,yy,m,[],m,'.')
-colormap(parula)
-colorbar
-set(gca,'Clim',[mean(m)-2*std(m),mean(m)+2*std(m)])
-view(2)
-title('m')
-axis equal
-axis equal
-
-figure()
-plot(t,m)
-title('m')
+powernorm = power./repmat(global_ws(:),[1 n]);
 
 figure
-scatter3(xx,yy,v,[],v,'.')
-colormap(parula)
+imagesc(t,log2(period),log2(powernorm));
 colorbar
-set(gca,'Clim',[mean(v)-2*std(v),mean(v)+2*std(v)])
-view(2)
-title('var')
-axis equal
-axis equal
+set(gca,'clim',[-5 5])
 
-figure()
-plot(t,v)
-title('var')
+% note the differences in power along the shoreline at wavelengths
+% (periods) of about 2^11 to 2^14 m! Let's use the normalized power summed
+% over that range of periods as a measure of relative roughness within that
+% wavelength range.
+
+pmin = 2^16;
+pmax = 2^17; 
+pband = period >= pmin & period <= pmax;
+powernorm_sub = powernorm(pband,:);
+rness = sum(powernorm_sub);
+figure
+plot(t/1000,rness,'-b')
+xlabel('distance along coast (km)')
+ylabel('roughness')
 
 figure
-scatter3(xx,yy,stdev,[],stdev,'.')
-colormap(parula)
+norm_rness_unsmoothed = (rness-min(rness))./max(rness);
+scatter3(xx/1e3,yy/1e3,norm_rness_unsmoothed,[],norm_rness_unsmoothed,'.')
+colormap jet
 colorbar
-set(gca,'Clim',[mean(stdev)-2*std(stdev),mean(stdev)+2*std(stdev)])
 view(2)
-title('stdev')
-axis equal
-axis equal
+axis equal tight
+xlabel('km')
+ylabel('km')
+title('unsmoothed roughness normalized')
 
-figure()
-plot(t,stdev)
-title('stdev')
+% there's a signal there, but it's noisy, so let's smooth it 
+Lsm = 5*pmax; % smoothing window length in meters
+rnesssm = movmean([rness rness rness],round(Lsm/dt)); rnesssm = rnesssm(n+1:2*n); % note that we took advantage of the periodicity of the spectrum in t
+% hold on
+% plot(t/1000,rnesssm,'-r') % better!
 
+% normalize it to range from 0 to 1
+rnesssm = rnesssm-min(rnesssm);
+rnesssm = rnesssm/max(rnesssm);
+
+% plot it along the coast
+figure
+scatter3(xx/1e3,yy/1e3,rnesssm,[],rnesssm,'.')
+colormap jet
+colorbar
+view(2)
+axis equal tight
+xlabel('km')
+ylabel('km')
+title(['roughness in the ' num2str(pmin/1e3) '-' num2str(pmax/1e3) ' km band'])
+
+% m=zeros(length(power(1,:)),1);
+% for i=1:length(power(1,:))
+%     p=polyfit(log2(period'),log2(power(:,i)),1);
+%     m(i)=p(1);
+%     v(i) = var(log2(power(:,i)));
+%     stdev(i) = std(log2(power(:,i)));
 % 
-% %moving average--need the financial toolbox
-% floor(0.1*length(power(1,:)))
-% %mper=[m(length(m)/2:end);m;m(1:length(m)/2)]; %make think it's periodic (add either end to the other side--result is 2x length of the data set)
-% mper=m;
-% mtest=tsmovavg(mper,'t',floor(0.01*length(mper)),1); %window=1/10 of lake points
-% %movav=mtest((length(m)/2)+2:(length(m))+(length(m)/2)+1);
-% movav=mtest;
+% %     figure
+% %     plot(log2(period'),log2(power(:,i)),'k')
+% %     hold on
+% %     yslope=polyval(p,log2(period'));
+% %     plot(log2(period'),yslope,'r')  
+% 
+% end
+% 
+% 
+% %pause
+% 
+% %plot the slope of the power spectrum at each point
+% % xx=xx(1:end-2);
+% % yy=yy(1:end-2);
 % figure
-% scatter3(xx,yy,movav,[],movav,'.')
-% colormap(flipud(jet))
+% scatter3(xx,yy,m,[],m,'.')
+% colormap(parula)
 % colorbar
+% set(gca,'Clim',[mean(m)-2*std(m),mean(m)+2*std(m)])
+% view(2)
+% title('m')
+% axis equal
+% axis equal
+% 
+% figure()
+% plot(t,m)
+% title('m')
+% 
+% figure
+% scatter3(xx,yy,v,[],v,'.')
+% colormap(parula)
+% colorbar
+% set(gca,'Clim',[mean(v)-2*std(v),mean(v)+2*std(v)])
+% view(2)
+% title('var')
+% axis equal
+% axis equal
+% 
+% figure()
+% plot(t,v)
+% title('var')
+% 
+% figure
+% scatter3(xx,yy,stdev,[],stdev,'.')
+% colormap(parula)
+% colorbar
+% set(gca,'Clim',[mean(stdev)-2*std(stdev),mean(stdev)+2*std(stdev)])
+% view(2)
+% title('stdev')
+% axis equal
+% axis equal
+% 
+% figure()
+% plot(t,stdev)
+% title('stdev')
+% 
+% % 
+% % %moving average--need the financial toolbox
+% % floor(0.1*length(power(1,:)))
+% % %mper=[m(length(m)/2:end);m;m(1:length(m)/2)]; %make think it's periodic (add either end to the other side--result is 2x length of the data set)
+% % mper=m;
+% % mtest=tsmovavg(mper,'t',floor(0.01*length(mper)),1); %window=1/10 of lake points
+% % %movav=mtest((length(m)/2)+2:(length(m))+(length(m)/2)+1);
+% % movav=mtest;
+% % figure
+% % scatter3(xx,yy,movav,[],movav,'.')
+% % colormap(flipud(jet))
+% % colorbar
+% % %set(gca,'Clim',[0.8,2.2])
+% % view(2)
+% % axis equal
+% % axis equal
+% 
+% normm=m./max(m);
+% figure
+% scatter3(xx,yy,normm,[],normm,'.')
+% colormap(parula)
+% colorbar
+% title('normalized spectral slope')
 % %set(gca,'Clim',[0.8,2.2])
 % view(2)
 % axis equal
 % axis equal
-
-normm=m./max(m);
-figure
-scatter3(xx,yy,normm,[],normm,'.')
-colormap(parula)
-colorbar
-title('normalized spectral slope')
-%set(gca,'Clim',[0.8,2.2])
-view(2)
-axis equal
-axis equal
-
-
-%plot just time series
-figure
-ax1 = subplot(2,1,1)
-plot(t,y,'k','LineWidth',1.5)
-set(gca,'XLim',xlim(:))
-xlabel('alongshore distance (m)')
-ylabel('azimuth (radians)')
-set(gca,'Fontsize', 16)
-
-
-%plot wavelet power spectrum
-ax2 = subplot(2,1,2)
-Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
-imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
-colormap parula
-hold on
-contour(t,log2(period),sig95,[-99,1],'r','linewidth',1);
-xlabel('alongshore distance (m)')
-ylabel('Period (units of t)')
-set(gca,'XLim',xlim(:))
-set(gca,'YLim',log2([min(period),max(period)]), ...
-	'YDir','reverse', ...
-	'YTick',log2(Yticks(:)), ...
-	'YTickLabel',Yticks)
-set(gca,'Fontsize', 16)
-linkaxes([ax1,ax2],'x')
-
-%plot just time series
-figure
-ax1 = subplot(2,1,1)
-scatter3(t,y,t,[],t,'.')
-set(gca,'XLim',xlim(:))
-xlabel('alongshore distance (m)')
-ylabel('azimuth (radians)')
-set(gca,'Fontsize', 16)
-view(2)
-title('time series with alongshore coloring')
-
-
-%plot wavelet power spectrum
-ax2 = subplot(2,1,2)
-Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
-imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
-colormap parula
-hold on
-contour(t,log2(period),sig95,[-99,1],'r','linewidth',1);
-xlabel('alongshore distance (m)')
-ylabel('Period (units of t)')
-set(gca,'XLim',xlim(:))
-set(gca,'YLim',log2([min(period),max(period)]), ...
-	'YDir','reverse', ...
-	'YTick',log2(Yticks(:)), ...
-	'YTickLabel',Yticks)
-set(gca,'Fontsize', 16)
-linkaxes([ax1,ax2],'x')
-
-figure()
-title('lake with alongshore coloring')
-scatter3(xx,yy,t,[],t,'.')
-view(2)
-axis equal
-
-
-
-
 % 
-% imshow(A)
+% 
+% %plot just time series
+% figure
+% ax1 = subplot(2,1,1)
+% plot(t,y,'k','LineWidth',1.5)
+% set(gca,'XLim',xlim(:))
+% xlabel('alongshore distance (m)')
+% ylabel('azimuth (radians)')
+% set(gca,'Fontsize', 16)
+% 
+% 
+% %plot wavelet power spectrum
+% ax2 = subplot(2,1,2)
+% Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
+% imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
+% colormap parula
 % hold on
-% scatter3(xx./10,-yy./10,movav,[],movav,'.')
-% scatter(xx./100,yy./100,'*')
-% colormap(flipud(jet))
-% colorbar
-
-% name='spectralslope';
-% name=repmat(name,length(xmid),1);
-% S = geoshape(xx,yy,name,movav);
-% shapewrite(S,shapefilename)
-
-
-
-save=[xx yy normm];
-csvwrite(savename,save)
-
+% contour(t,log2(period),sig95,[-99,1],'r','linewidth',1);
+% xlabel('alongshore distance (m)')
+% ylabel('Period (units of t)')
+% set(gca,'XLim',xlim(:))
+% set(gca,'YLim',log2([min(period),max(period)]), ...
+% 	'YDir','reverse', ...
+% 	'YTick',log2(Yticks(:)), ...
+% 	'YTickLabel',Yticks)
+% set(gca,'Fontsize', 16)
+% linkaxes([ax1,ax2],'x')
+% 
+% %plot just time series
+% figure
+% ax1 = subplot(2,1,1)
+% scatter3(t,y,t,[],t,'.')
+% set(gca,'XLim',xlim(:))
+% xlabel('alongshore distance (m)')
+% ylabel('azimuth (radians)')
+% set(gca,'Fontsize', 16)
+% view(2)
+% title('time series with alongshore coloring')
+% 
+% 
+% %plot wavelet power spectrum
+% ax2 = subplot(2,1,2)
+% Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
+% imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
+% colormap parula
+% hold on
+% contour(t,log2(period),sig95,[-99,1],'r','linewidth',1);
+% xlabel('alongshore distance (m)')
+% ylabel('Period (units of t)')
+% set(gca,'XLim',xlim(:))
+% set(gca,'YLim',log2([min(period),max(period)]), ...
+% 	'YDir','reverse', ...
+% 	'YTick',log2(Yticks(:)), ...
+% 	'YTickLabel',Yticks)
+% set(gca,'Fontsize', 16)
+% linkaxes([ax1,ax2],'x')
+% 
+% figure()
+% title('lake with alongshore coloring')
+% scatter3(xx,yy,t,[],t,'.')
+% view(2)
+% axis equal
+% 
+% 
+% 
+% 
+% % 
+% % imshow(A)
+% % hold on
+% % scatter3(xx./10,-yy./10,movav,[],movav,'.')
+% % scatter(xx./100,yy./100,'*')
+% % colormap(flipud(jet))
+% % colorbar
+% 
+% % name='spectralslope';
+% % name=repmat(name,length(xmid),1);
+% % S = geoshape(xx,yy,name,movav);
+% % shapewrite(S,shapefilename)
+% 
+% 
+% 
+% save=[xx yy normm];
+% csvwrite(savename,save)
+% 
 

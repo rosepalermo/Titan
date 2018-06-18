@@ -32,16 +32,16 @@ y0=M(:,5);
 % y_int = interp1(dist_cum,y0,dist_interp);
 % figure()
 % scatter(x0,y0,'r')
-% hold on
+hold on
 % scatter(x_int,y_int,'k')
 % 
 % x0 = x_int';
 % y0 = y_int';
 
 
-% % rearrange ligeia for debugging
-% x0 = [x0(23186:end);x0(1:23185)];
-% y0 = [y0(23186:end);y0(1:23185)];
+% rearrange ligeia for debugging
+x0 = [x0(23186:end);x0(1:23185)];
+y0 = [y0(23186:end);y0(1:23185)];
 
 
 
@@ -58,35 +58,11 @@ x = x(1:end-2);
 y = y(1:end-2);
 
 
-% % TRY SMOOTHING AZIMUTH
-% Lsm = 7; % smoothing window length in # points
-% thetasm = movmean([theta; theta; theta],Lsm); thetasm = thetasm(length(x)+1:2*length(x)); % note that we took advantage of the periodicity of the spectrum in t
-
-% HERE IS A SYNTHETIC SIGNAL WITH THE SAME LENGTH AS theta
-
-t=deltad*(0:length(theta)-1);
-t = t(:);
-T = t(end)+deltad;
-hwin = 0.5*(1-cos(2*pi*t/T));
-synth = 4*sin(2*pi*t/(T/4)) + hwin.*( 1*sin(2*pi*t/(T/64)) );
-
+% do the wavelet transforms, comparing the spectra to those of an 
+% autoregressive process of order n (a.k.a. an AR(n) process)
 n=2;
-dowave(synth,deltad,n,x,y,savename);
-
-% NOW SHUFFLE ORDER AS A TEST:
-ihalf = round(length(t)/2);
-x = [x(ihalf+1:end);x(1:ihalf)];
-y = [y(ihalf+1:end);y(1:ihalf)];
-synth = [synth(ihalf+1:end); synth(1:ihalf)];
-
-n=2;
-dowave(synth,deltad,n,x,y,savename); % NO DIFFERENCE IN ROUGHNESS MAP!
-
-% % do the wavelet transforms, comparing the spectra to those of an 
-% % autoregressive process of order n (a.k.a. an AR(n) process)
-% n=2;
-% % dowave_duplicate(theta,deltad,n,x,y,savename);
-% dowave(theta,deltad,n,x,y,savename);
+% dowave_duplicate(theta,deltad,n,x,y,savename);
+dowave(theta,deltad,n,x,y,savename);
 
 % %plot where the first point is
 % figure
