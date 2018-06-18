@@ -18,12 +18,12 @@ function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun)
 fetch_on = true;
 
 % run time
-tmax = 100;
+tmax = 1000;
 
 % when creating a gif
 plot_now = true;
 gif_on = false;
-save_on = true;
+save_on = false;
 shoreline_save = cell(1,1);
 filename = [num2str(modelrun),'fetch_5_2018_example.gif'];
 
@@ -68,7 +68,7 @@ filename = [num2str(modelrun),'fetch_5_2018_example.gif'];
 % figure()
 % plot(lakex,lakey)
 % axis square
-LakeArea = polyarea(lakex,lakey);
+LakeArea = polyarea(lakex,lakey); % original lake area-- does NOT change throughout simulation
 
 %make a grid larger than lake by eps
 % eps = 200;
@@ -94,7 +94,9 @@ strength = 10*double(land);
 
 % identify the shoreline
 % [shoreline,shorelinecard,shorelinecorn] = idshoreline(lake,land);
-[shoreline] = addidshoreline_cardonly(lake,land);
+% [shoreline] = addidshoreline_cardonly(lake,land);
+[shoreline] = addidshoreline(lake,land);
+
 % indshoreline_last = find(shoreline);
 
 
@@ -114,6 +116,7 @@ for i = 1:tmax
         dam = double(shoreline);
         %damage the shoreline
         strength(indshoreline) = strength(indshoreline)-dam(indshoreline);
+        strength(strength<0) = 0;
     end
     
     if fetch_on
@@ -121,7 +124,8 @@ for i = 1:tmax
             disp('fetch')
             clearvars fetch_sl_cells indshoreline WaveArea_cell
             %order the shoreline
-            [indshoreline] = order_cw_lastpoint(lake,shoreline); % ccw ordered ind = indshoreline
+            shoreline = addidshoreline_cardonly(lake,land);
+            [indshoreline,cells2trash] = order_cw_lastpoint(lake,shoreline); % ccw ordered ind = indshoreline
             for l = 1: length(indshoreline)
                 indshoreline{l,1} = sub2ind(size(X),indshoreline{l,1}(:,1),indshoreline{l,1}(:,2));
                 fetch_sl_cells{l,1}(:,1) = X(indshoreline{l,1});
@@ -129,6 +133,7 @@ for i = 1:tmax
             end
             % calculate wave weighted (sqrt(F)*cos(theta-phi))
             [WaveArea_cell] = fetch_wavefield_cell(fetch_sl_cells);
+%         [WaveArea_cell] = {ones(size(fetch_sl_cells{1,1},1),1)}; % ones to test debugging with
             
             clearvars erodedind
         end
@@ -137,16 +142,34 @@ for i = 1:tmax
         %         [shoreline] = addidshoreline_cardonly(lake,land); % edges only
         [shoreline] = addidshoreline(lake,land); % corners and edges
         corners = setdiff(find(shoreline),indshoreline);
+        corners = corners(shoreline(corners)<1.5);
         dam = cell2mat(WaveArea_cell);
         [damcorn] = damagecorners(lake,corners,indshoreline,dam);
         %         strength(indshoreline) = strength(indshoreline) - ones(length(indshoreline),1).*dam;
         strength(indshoreline) = strength(indshoreline) - shoreline(indshoreline).*dam;
+        strength(corners) = strength(corners) - shoreline(corners).*damcorn;
+        strength(strength<0) = 0;
     end
     
     
+
+
     
-    % find eroded points
+    
+    % find eroded points 
     erodedind = indshoreline(strength(indshoreline)<=0);
+    if fetch_on
+        % erode points that weren't a corner and were only 2-1 cells
+        % connected because it messed up the fetch calculations..
+        findsl = find(shoreline);
+        if ~isempty(cells2trash)
+            cells2trash = sub2ind(size(lake),cells2trash(:,1),cells2trash(:,2));
+            erodedind_12 = cells2trash(find(~ismember(cells2trash,corners)));
+            erodedind =[erodedind;erodedind_12];
+        end
+    end
+
+         
     strength(erodedind) = 0;
     erodedX = X(erodedind);
     erodedY = Y(erodedind);
@@ -158,11 +181,11 @@ for i = 1:tmax
     land = ~lake;
     % update shoreline
     %     [shoreline,shorelinecard,shorelinecorn] = idshoreline(lake,land);
-    [shoreline] = addidshoreline_cardonly(lake,land); % update to card only because only card for fetch part
+%     [shoreline] = addidshoreline_cardonly(lake,land); % update to card only because only card for fetch part
+    [shoreline] = addidshoreline(lake,land);
     if ~fetch_on
         [shoreline] = addidshoreline(lake,land);
     end
-    
     
     
     
@@ -170,14 +193,14 @@ for i = 1:tmax
     if plot_now
         drawnow
         %         imagesc(x,y,double(shoreline))
-        imagesc(x,y,strength)
+        imagesc(x,y,(strength))
         colormap('gray')
         shading flat
         axis square
         %         axis([-2 -0.5 0.5 2])
-        if modelrun == 1
-            axis([570 650 740 780])
-        end
+%         if modelrun == 1
+%             axis([570 650 740 780])
+%         end
         str = sprintf('Time step = %d',i);
         title(str)
         hold on

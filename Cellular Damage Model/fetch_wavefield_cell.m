@@ -187,9 +187,9 @@ for obj = 1:length(shoreline_fetch)
 %         end
 %     end
 %     
-    % Plot "Wave field"
-    % For plotting, define each resulting line segment from vertex to
-    % line-of-sight point
+%     % Plot "Wave field"
+%     % For plotting, define each resulting line segment from vertex to
+%     % line-of-sight point
 %     xpltwave = permute(cat(3, x(1:end-1).*ones(nray,1), Wavex), [3 1 2]);
 %     ypltwave = permute(cat(3, y(1:end-1).*ones(nray,1), Wavey), [3 1 2]);
 %     % To check, let's plot just the rays associated with angle idx=50
@@ -198,15 +198,15 @@ for obj = 1:length(shoreline_fetch)
 %     hold on;
 %     % for ivv = 1:nray
 %     for ivv = 1:nray
-%         for iv =1:nvert
+%         for iv =20:20
 %             plot(xpltwave(:,ivv,iv), ypltwave(:,ivv,iv));
 %             hold on
 %         end
 %     end
-    
-%     figure()
-%     plot(x,y,'k')
-%     hold on
+%     
+% %     figure()
+% %     plot(x,y,'k')
+% %     hold on
     
     
     %LOS (Fetch) -- replace NaNs with coordinate for each vertex to close the polygon

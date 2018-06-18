@@ -1,4 +1,4 @@
-function [sl_cell] = order_cw_lastpoint(lake,shoreline)
+function [sl_cell,cells2trash] = order_cw_lastpoint(lake,shoreline)
 
 % This code will start at a point on the shoreline, look counterclockwise
 % at the 8-connected neighbors to find the next shoreline point, and
@@ -380,6 +380,13 @@ while sum(~ismember(ind,ordered_cw_all,'rows')) > 0
         
     end
 end
+
+% get rid of units 2 or less because they mess up in the fetch calc.
+length_cells = cellfun(@length,sl_cell,'uni',false);
+length_cells = cell2mat(length_cells);
+keepme = (length_cells) > 3;
+cells2trash = cell2mat(sl_cell(~keepme));
+sl_cell = sl_cell(keepme);
 
 %sort the elements of the shoreline by the length in descending order
 length_cells = cellfun(@length,sl_cell,'uni',false);

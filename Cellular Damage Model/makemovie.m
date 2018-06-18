@@ -1,5 +1,5 @@
 % make a movie from the figures
-v = VideoWriter('4fetch5_2018_zoom1');
+v = VideoWriter('whats_the_bug_now');
 open(v);
 
 for k = 1:92
