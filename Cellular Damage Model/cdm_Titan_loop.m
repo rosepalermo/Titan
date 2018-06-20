@@ -10,12 +10,12 @@ lakey_mr{2,1}(1,:) = y_1m_t3;
 eps_mr(2) = 200;
 dx_mr(2) = 2; dy_mr(2) = 2;
 
-% th = linspace(0,2*pi,60);
-% r = 2 + rand(size(th))-0.5 ;
-% lakex_mr{4,1}(1,:) = r.*cos(th );
-% lakey_mr{4,1}(1,:) = r.*sin(th );
-% eps_mr(4) = 10;
-% dx_mr(4) = 0.05; dy_mr(4) = 0.05;
+th = linspace(0,2*pi,60);
+r = 2 + rand(size(th))-0.5 ;
+lakex_mr{4,1}(1,:) = r.*cos(th );
+lakey_mr{4,1}(1,:) = r.*sin(th );
+eps_mr(4) = 10;
+dx_mr(4) = 0.05; dy_mr(4) = 0.05;
 load('testlake_rand.mat')
 
 % rng(2)
@@ -31,7 +31,7 @@ load('testlake_rand.mat')
 % eps_mr(3) = 5;
 % dx_mr(3) = 0.5; dy_mr(3) = 0.5;
 
-for modelrun = 2:2
+for modelrun = 4:4
     lakex = lakex_mr{modelrun,1}(1,:);
     lakey = lakey_mr{modelrun,1}(1,:);
     eps = eps_mr(modelrun);

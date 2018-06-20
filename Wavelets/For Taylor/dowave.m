@@ -183,7 +183,7 @@ set(gca,'clim',[-5 5])
 % over that range of periods as a measure of relative roughness within that
 % wavelength range.
 
-pmin = 2^16;
+pmin = 2^10;
 pmax = 2^17; 
 pband = period >= pmin & period <= pmax;
 powernorm_sub = powernorm(pband,:);
