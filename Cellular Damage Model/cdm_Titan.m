@@ -1,4 +1,4 @@
-function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun)
+% function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun)
 
 % Titan analogue damage model for coastal erosion of a lake
 % Rose Palermo 2-2018
@@ -18,14 +18,14 @@ function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun)
 fetch_on = true;
 
 % run time
-tmax = 1000;
+tmax = 75;
 
 % when creating a gif
 plot_now = true;
 gif_on = false;
-save_on = false;
+save_on = true;
 shoreline_save = cell(1,1);
-filename = [num2str(modelrun),'fetch_5_2018_example.gif'];
+% filename = [num2str(modelrun),'fetch_5_2018_example.gif'];
 
 % load('xycontours.mat')
 % lakex = x_1m_t1;
@@ -52,10 +52,10 @@ filename = [num2str(modelrun),'fetch_5_2018_example.gif'];
 
 
 % circle
-% theta = 0 : 0.1 : 2*pi;
-% radius = 2;
-% lakex = radius * cos(theta);
-% lakey = radius * sin(theta);
+theta = 0 : 0.1 : 2*pi;
+radius = 2;
+lakex = radius * cos(theta);
+lakey = radius * sin(theta);
 
 % triangle
 % lakey = cat(2,0:0.01:1,1-.01:-0.01:0,zeros(1,length(1:-.01:-1)));
@@ -71,8 +71,8 @@ filename = [num2str(modelrun),'fetch_5_2018_example.gif'];
 LakeArea = polyarea(lakex,lakey); % original lake area-- does NOT change throughout simulation
 
 %make a grid larger than lake by eps
-% eps = 200;
-% dx = 0.5; dy = 0.5;
+eps = 5;
+dx = 0.05; dy = 0.05;
 x = (min(lakex)-eps):dx:(max(lakex)+eps);
 y = (min(lakey)-eps):dy:(max(lakey)+eps);
 [X,Y] = meshgrid(x,y);
@@ -109,6 +109,8 @@ strength = 10*double(land);
 % ii = 1;
 eroded = nan(1,2);
 h = figure;
+h.Position = [0,0,1000,500]
+
 for i = 1:tmax
     i
     if ~fetch_on % if no fetch, the order is fine like this.
@@ -141,14 +143,25 @@ for i = 1:tmax
         indshoreline = cell2mat(indshoreline);
         %         [shoreline] = addidshoreline_cardonly(lake,land); % edges only
         [shoreline] = addidshoreline(lake,land); % corners and edges
-        corners = setdiff(find(shoreline),indshoreline);
-        corners = corners(shoreline(corners)<1.5);
         dam = cell2mat(WaveArea_cell);
+        strength(indshoreline) = strength(indshoreline) - shoreline(indshoreline).*dam;
+        
+        % find corners and damage if they exist alone
+        corners = setdiff(find(shoreline),indshoreline);
+        if ~isempty(cells2trash)
+        [c2t]=sub2ind(size(X),cells2trash(:,1),cells2trash(:,2)); % find the cells that arent the trash cells
+        if exist('c2t') & ~isempty(corners)
+        corners = corners(~ismember(corners,c2t));
+        end
+        end
+        if ~isempty(corners)
+        corners = corners(shoreline(corners)<1.5);
         [damcorn] = damagecorners(lake,corners,indshoreline,dam);
         %         strength(indshoreline) = strength(indshoreline) - ones(length(indshoreline),1).*dam;
-        strength(indshoreline) = strength(indshoreline) - shoreline(indshoreline).*dam;
         strength(corners) = strength(corners) - shoreline(corners).*damcorn;
-        strength(strength<0) = 0;
+        end
+        
+        strength(strength<0) = 0; % if strength is negative, make it 0 for convenience
     end
     
     
@@ -193,6 +206,7 @@ for i = 1:tmax
     if plot_now
         drawnow
         %         imagesc(x,y,double(shoreline))
+        p1 = subplot(1,2,1)
         imagesc(x,y,(strength))
         colormap('gray')
         shading flat
@@ -237,15 +251,35 @@ for i = 1:tmax
     %     end
     
     shoreline_save{i,1} = find(shoreline);
+    ordered_sl_save{i,1} = [fetch_sl_cells{l,1}(:,1),fetch_sl_cells{l,1}(:,2)];
+    dam_save{i,1} = dam;
+    corners_save{i,1} = corners;
+    damcorners_save{i,1} = damcorn;
+    
+    p2 = subplot(1,2,2)
+    cla(p2)
+    scatter3(fetch_sl_cells{l,1}(:,1),fetch_sl_cells{l,1}(:,2),dam,[],dam)
+    hold on
+    scatter3(X(corners),Y(corners),damcorn,[],damcorn)
+    axis equal
+    axis([min(min(X)) max(max(X)) min(min(Y)) max(max(Y))])
+    colorbar
+    colormap(jet)
+    view(2)
+    
+    
     
     if save_on
-        saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave',num2str(i),'.fig'])
+%         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave',num2str(i),'.fig'])
+        saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\','testingthediamond','wave',num2str(i),'.fig'])
     end
     
 end
 
 if save_on
-    save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave','.mat'],'shoreline_save')
+%     save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave','.mat'],'shoreline_save')
+    save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\','testingthediamond','wave','.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save')
+
 end
 %% plot
 eroded = eroded(2:end,:);
@@ -260,4 +294,4 @@ axis square
 % scatter(eroded(:,1),eroded(:,2),'c')
 
 % toc
-end
+% end

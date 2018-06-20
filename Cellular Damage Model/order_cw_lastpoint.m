@@ -20,10 +20,10 @@ land = ~lake;
 
 % look around the first point to find the second and find the "Last Point"
 % for point number 2
-[slX_orderedind, slY_orderedind, LastPoint] = find2ndpt(land,slXind(1),slYind(1));
+[slX_orderedind, slY_orderedind, LastPoint,LP_state] = find2ndpt(land,slXind(1),slYind(1));
 
 
-state = [slX_orderedind, slY_orderedind, LastPoint];
+state = [slX_orderedind, slY_orderedind, LP_state];
 unq = unique(state,'rows');
 
 ind = [slXind slYind];
@@ -45,20 +45,28 @@ while sum(~ismember(ind,ordered_cw_all,'rows')) > 0
         
         if [slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)-1,slY_orderedind(i-1)-1]
             LastPoint(i) = 2;
+            LP_state(i,:) = [slX_orderedind(i-1)-1,slY_orderedind(i-1)-1];
         elseif [slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)-1,slY_orderedind(i-1)]
             LastPoint(i) = 3;
+            LP_state(i,:) = [slX_orderedind(i-1)-1,slY_orderedind(i-1)];
         elseif [slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)-1,slY_orderedind(i-1)+1]
             LastPoint(i) = 4;
+            LP_state(i,:) = [slX_orderedind(i-1)-1,slY_orderedind(i-1)+1];
         elseif [slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1),slY_orderedind(i-1)+1]
             LastPoint(i) = 5;
+            LP_state(i,:) = [slX_orderedind(i-1),slY_orderedind(i-1)+1];
         elseif [slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)+1,slY_orderedind(i-1)+1]
             LastPoint(i) = 6;
+            LP_state(i,:) = [slX_orderedind(i-1)+1,slY_orderedind(i-1)+1];
         elseif [slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)+1,slY_orderedind(i-1)]
             LastPoint(i) = 7;
+            LP_state(i,:) = [slX_orderedind(i-1)+1,slY_orderedind(i-1)];
         elseif [slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)+1,slY_orderedind(i-1)-1]
             LastPoint(i) = 8;
+            LP_state(i,:) = [slX_orderedind(i-1)+1,slY_orderedind(i-1)-1];
         elseif [slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1),slY_orderedind(i-1)-1]
             LastPoint(i) = 1;
+            LP_state(i,:) = [slX_orderedind(i-1),slY_orderedind(i-1)-1];
         end
         
         if LastPoint(i) == 1
@@ -359,7 +367,7 @@ while sum(~ismember(ind,ordered_cw_all,'rows')) > 0
             end
         end
         i = i+1;
-        state = [slX_orderedind, slY_orderedind, LastPoint];
+        state = [slX_orderedind, slY_orderedind, LP_state];
         unq = unique(state,'rows');
     else
         ordered_cw = [slX_orderedind slY_orderedind];

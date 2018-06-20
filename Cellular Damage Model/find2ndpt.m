@@ -1,4 +1,4 @@
-function [slX_orderedind, slY_orderedind, LastPoint] = find2ndpt(land,slXind,slYind)
+function [slX_orderedind, slY_orderedind, LastPoint,LP_state] = find2ndpt(land,slXind,slYind)
 
 slX_orderedind = nan(2,1);
 slY_orderedind = nan(2,1);
@@ -56,22 +56,33 @@ end
 % find LastPoint(2)
 if [slX_orderedind(2),slY_orderedind(2)] == [slX_orderedind(1)-1,slY_orderedind(1)-1]
     LastPoint(2,1) = 2;
+    LP_state(2,:) = [slX_orderedind(1)-1,slY_orderedind(1)-1];
 elseif [slX_orderedind(2),slY_orderedind(2)] == [slX_orderedind(1)-1,slY_orderedind(1)]
     LastPoint(2,1) = 3;
+    LP_state(2,:) = [slX_orderedind(1)-1,slY_orderedind(1)];
 elseif [slX_orderedind(2),slY_orderedind(2)] == [slX_orderedind(1)-1,slY_orderedind(1)+1]
     LastPoint(2,1) = 4;
+    LP_state(2,:) = [slX_orderedind(1)-1,slY_orderedind(1)+1];
 elseif [slX_orderedind(2),slY_orderedind(2)] == [slX_orderedind(1),slY_orderedind(1)+1]
     LastPoint(2,1) = 5;
+    LP_state(2,:) = [slX_orderedind(1),slY_orderedind(1)+1];
 elseif [slX_orderedind(2),slY_orderedind(2)] == [slX_orderedind(1)+1,slY_orderedind(1)+1]
     LastPoint(2,1) = 6;
+    LP_state(2,:) = [slX_orderedind(1)+1,slY_orderedind(1)+1];
 elseif [slX_orderedind(2),slY_orderedind(2)] == [slX_orderedind(1)+1,slY_orderedind(1)]
     LastPoint(2,1) = 7;
+    LP_state(2,:) = [slX_orderedind(1)+1,slY_orderedind(1)];
 elseif [slX_orderedind(2),slY_orderedind(2)] == [slX_orderedind(1)+1,slY_orderedind(1)-1]
     LastPoint(2,1) = 8;
+    LP_state(2,:) = [slX_orderedind(1)+1,slY_orderedind(1)-1];
 elseif [slX_orderedind(2),slY_orderedind(2)] == [slX_orderedind(1),slY_orderedind(1)-1]
     LastPoint(2,1) = 1;
+    LP_state(2,:) = [slX_orderedind(1),slY_orderedind(1)-1];
 else
     LastPoint = zeros(2,1);
+    LP_state(2,:) = zeros(2,1);
 end
+
+
 
 end
