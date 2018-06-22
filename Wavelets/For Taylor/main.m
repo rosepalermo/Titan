@@ -1,8 +1,9 @@
-clear
+% clear
 
 % load river centerline coordinates
 filename = 'lg_4wavelets.xls';
 M = xlsread(filename);
+
 savename = 'trash.csv'; % savename is commented out in dowave, so not saving anything
 
 
@@ -72,11 +73,19 @@ y = [y0;y0(1:2)];
 x = x(1:end-2);
 y = y(1:end-2);
 
+<<<<<<< HEAD
 
 % % TRY SMOOTHING AZIMUTH
 % Lsm = 7; % smoothing window length in # points
 % thetasm = movmean([theta; theta; theta],Lsm); thetasm = thetasm(length(x)+1:2*length(x)); % note that we took advantage of the periodicity of the spectrum in t
 %%
+=======
+%% Taylor's synthetic coast tests
+% % % TRY SMOOTHING AZIMUTH
+% % Lsm = 7; % smoothing window length in # points
+% % thetasm = movmean([theta; theta; theta],Lsm); thetasm = thetasm(length(x)+1:2*length(x)); % note that we took advantage of the periodicity of the spectrum in t
+% 
+>>>>>>> 59010e5b119bfa95c471eb50a3a34cf5b2f7023c
 % % HERE IS A SYNTHETIC SIGNAL WITH THE SAME LENGTH AS theta
 % 
 % t=deltad*(0:length(theta)-1);
@@ -96,16 +105,21 @@ y = y(1:end-2);
 % 
 % n=2;
 % dowave(synth,deltad,n,x,y,savename); % NO DIFFERENCE IN ROUGHNESS MAP!
+<<<<<<< HEAD
 
 
 %%
 
+=======
+%%
+>>>>>>> 59010e5b119bfa95c471eb50a3a34cf5b2f7023c
 % do the wavelet transforms, comparing the spectra to those of an 
 % autoregressive process of order n (a.k.a. an AR(n) process)
 n=2;
 % dowave_duplicate(theta,deltad,n,x,y,savename);
 dowave(theta,deltad,n,x,y,savename);
 
+<<<<<<< HEAD
 %plot where the first point is
 figure
 % plot(x,y,'k','LineWidth',2)
@@ -118,3 +132,17 @@ ylabel('Y')
 axis tight
 axis equal
 
+=======
+% %plot where the first point is
+% figure
+% % plot(x,y,'k','LineWidth',2)
+% hold on
+% scatter(x,y,'.','k')
+% scatter(x(1),y(1),'*','r')
+% scatter(x(30),y(30),'*','b')
+% xlabel('X')
+% ylabel('Y')
+% axis tight
+% axis equal
+% 
+>>>>>>> 59010e5b119bfa95c471eb50a3a34cf5b2f7023c

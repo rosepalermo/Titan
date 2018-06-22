@@ -184,6 +184,7 @@ title('powernorm')
 % over that range of periods as a measure of relative roughness within that
 % wavelength range.
 
+
 pmin1 = 2^10;
 pmax1 = 2^15; 
 pmin2 = 2^10;
