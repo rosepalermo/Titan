@@ -1,7 +1,7 @@
 clear
 
 % load river centerline coordinates
-filename = 'lg_all_pts.xls';
+filename = 'lg_4wavelets.xls';
 M = xlsread(filename);
 savename = 'trash.csv'; % savename is commented out in dowave, so not saving anything
 
@@ -17,6 +17,21 @@ M(duplicate_ind,:)=[];
 
 x0=M(:,4);
 y0=M(:,5);
+
+clear
+load('xycontours.mat')
+x0 = x_1m_t3';
+y0 = y_1m_t3';
+savename = 'trash.csv'; % savename is commented out in dowave, so not saving anything
+% 
+% clear
+% load('uniform_rednoise.mat')
+% shoreline = addidshoreline_cardonly(lake_save{75,1},~lake_save{75,1});
+% [sl_cell,cells2trash] = order_cw_lastpoint(lake_save{75,1},shoreline);
+% x0 = sl_cell{1,1}(:,1);
+% y0 = sl_cell{1,1}(:,2);
+% savename = 'trash.csv'; % savename is commented out in dowave, so not saving anything
+% 
 
 % CONSIDER NOT INTERPOLATING HERE. WE DON'T NEED EVENLY SPACED POINTS TO
 % COMPUTE AZIMUTHS, AND IT CAN CREATE STEPS IN THE AZIMUTH VS. DISTANCE
@@ -61,42 +76,45 @@ y = y(1:end-2);
 % % TRY SMOOTHING AZIMUTH
 % Lsm = 7; % smoothing window length in # points
 % thetasm = movmean([theta; theta; theta],Lsm); thetasm = thetasm(length(x)+1:2*length(x)); % note that we took advantage of the periodicity of the spectrum in t
-
-% HERE IS A SYNTHETIC SIGNAL WITH THE SAME LENGTH AS theta
-
-t=deltad*(0:length(theta)-1);
-t = t(:);
-T = t(end)+deltad;
-hwin = 0.5*(1-cos(2*pi*t/T));
-synth = 4*sin(2*pi*t/(T/4)) + hwin.*( 1*sin(2*pi*t/(T/64)) );
-
-n=2;
-dowave(synth,deltad,n,x,y,savename);
-
-% NOW SHUFFLE ORDER AS A TEST:
-ihalf = round(length(t)/2);
-x = [x(ihalf+1:end);x(1:ihalf)];
-y = [y(ihalf+1:end);y(1:ihalf)];
-synth = [synth(ihalf+1:end); synth(1:ihalf)];
-
-n=2;
-dowave(synth,deltad,n,x,y,savename); % NO DIFFERENCE IN ROUGHNESS MAP!
-
-% % do the wavelet transforms, comparing the spectra to those of an 
-% % autoregressive process of order n (a.k.a. an AR(n) process)
-% n=2;
-% % dowave_duplicate(theta,deltad,n,x,y,savename);
-% dowave(theta,deltad,n,x,y,savename);
-
-% %plot where the first point is
-% figure
-% % plot(x,y,'k','LineWidth',2)
-% hold on
-% scatter(x,y,'.','k')
-% scatter(x(1),y(1),'*','r')
-% scatter(x(30),y(30),'*','b')
-% xlabel('X')
-% ylabel('Y')
-% axis tight
-% axis equal
+%%
+% % HERE IS A SYNTHETIC SIGNAL WITH THE SAME LENGTH AS theta
 % 
+% t=deltad*(0:length(theta)-1);
+% t = t(:);
+% T = t(end)+deltad;
+% hwin = 0.5*(1-cos(2*pi*t/T));
+% synth = 4*sin(2*pi*t/(T/4)) + hwin.*( 1*sin(2*pi*t/(T/64)) );
+% 
+% n=2;
+% dowave(synth,deltad,n,x,y,savename);
+% 
+% % NOW SHUFFLE ORDER AS A TEST:
+% ihalf = round(length(t)/2);
+% x = [x(ihalf+1:end);x(1:ihalf)];
+% y = [y(ihalf+1:end);y(1:ihalf)];
+% synth = [synth(ihalf+1:end); synth(1:ihalf)];
+% 
+% n=2;
+% dowave(synth,deltad,n,x,y,savename); % NO DIFFERENCE IN ROUGHNESS MAP!
+
+
+%%
+
+% do the wavelet transforms, comparing the spectra to those of an 
+% autoregressive process of order n (a.k.a. an AR(n) process)
+n=2;
+% dowave_duplicate(theta,deltad,n,x,y,savename);
+dowave(theta,deltad,n,x,y,savename);
+
+%plot where the first point is
+figure
+% plot(x,y,'k','LineWidth',2)
+hold on
+scatter(x,y,'.','k')
+scatter(x(1),y(1),'*','r')
+scatter(x(30),y(30),'*','b')
+xlabel('X')
+ylabel('Y')
+axis tight
+axis equal
+
