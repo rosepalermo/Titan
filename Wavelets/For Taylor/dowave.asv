@@ -184,11 +184,10 @@ title('powernorm')
 % over that range of periods as a measure of relative roughness within that
 % wavelength range.
 
-
-pmin1 = 2^10;
-pmax1 = 2^15; 
-pmin2 = 2^10;
-pmax2 = 2^15;
+% pmin1 = 2^10;
+% pmax1 = 2^15; 
+% pmin2 = 2^10;
+% pmax2 = 2^15;
 pmin1 = 2;
 pmax1 = 16; 
 pmin2 = 2;
@@ -270,38 +269,38 @@ ylabel('km')
 title(['roughness ratio in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) 'compared to the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
 
 
-% m=zeros(length(power(1,:)),1);
-% figure
-% for i=1:length(power(1,:))
-%     p=polyfit(log2(period'),log2(power(:,i)),1);
-%     m(i)=p(1);
-%     v(i) = var(log2(power(:,i)));
-%     stdev(i) = std(log2(power(:,i)));
-%     
-%     %     figure
-%     %     plot(log2(period'),log2(power(:,i)),'k')
-%     scatter((period'),(power(:,i)),'k','MarkerFaceAlpha',0.2)
-%     hold on
-%     %     yslope=polyval(p,log2(period'));
-%     %     plot(log2(period'),yslope,'r')
-%     
-% end
-% 
-% figure
-% for i=1:length(power(1,:))
-%     p=polyfit(log2(period'),log2(power(:,i)),1);
-%     m(i)=p(1);
-%     v(i) = var(log2(power(:,i)));
-%     stdev(i) = std(log2(power(:,i)));
-%     
-%     %     figure
-%         scatter(log2(period'),log2(power(:,i)),'k','MarkerFaceAlpha',0.2)
-% %     plot((period'),(power(:,i)),'k')
-%     hold on
-%     %     yslope=polyval(p,log2(period'));
-%     %     plot(log2(period'),yslope,'r')
-%     
-% end
+m=zeros(length(power(1,:)),1);
+figure
+for i=1:length(power(1,:))
+    p=polyfit(log2(period'),log2(power(:,i)),1);
+    m(i)=p(1);
+    v(i) = var(log2(power(:,i)));
+    stdev(i) = std(log2(power(:,i)));
+    
+    %     figure
+    %     plot(log2(period'),log2(power(:,i)),'k')
+    plot((period'),(power(:,i)),'k')
+    hold on
+    %     yslope=polyval(p,log2(period'));
+    %     plot(log2(period'),yslope,'r')
+    
+end
+
+figure
+for i=1:length(power(1,:))
+    p=polyfit(log2(period'),log2(power(:,i)),1);
+    m(i)=p(1);
+    v(i) = var(log2(power(:,i)));
+    stdev(i) = std(log2(power(:,i)));
+    
+    %     figure
+        plot(log2(period'),log2(power(:,i)),'k')
+%     plot((period'),(power(:,i)),'k')
+    hold on
+    %     yslope=polyval(p,log2(period'));
+    %     plot(log2(period'),yslope,'r')
+    
+end
 
 
 %pause
