@@ -1,9 +1,17 @@
 % contours
+% load('xycontours.mat')
+% lakex_mr{1,1}(1,:) = x_1m_t1;
+% lakey_mr{1,1}(1,:) = y_1m_t1;
+% eps_mr(1) = 200;
+% dx_mr(1) = 1; dy_mr(1) = 1;
+
 load('xycontours.mat')
-lakex_mr{1,1}(1,:) = x_1m_t1;
-lakey_mr{1,1}(1,:) = y_1m_t1;
+lakex_mr{1,1}(1,:) = x_1m_t2;
+lakey_mr{1,1}(1,:) = y_1m_t2;
 eps_mr(1) = 200;
 dx_mr(1) = 1; dy_mr(1) = 1;
+
+
 % 
 % lakex_mr{2,1}(1,:) = x_1m_t3;
 % lakey_mr{2,1}(1,:) = y_1m_t3;
@@ -31,11 +39,12 @@ dx_mr(1) = 1; dy_mr(1) = 1;
 % eps_mr(3) = 5;
 % dx_mr(3) = 0.5; dy_mr(3) = 0.5;
 
-for modelrun = 1:1
+% for modelrun = 1:1
+modelrun = 1;
     lakex = lakex_mr{modelrun,1}(1,:);
     lakey = lakey_mr{modelrun,1}(1,:);
     eps = eps_mr(modelrun);
     dx = dx_mr(modelrun);
     dy = dy_mr(modelrun);
-    cdm_Titan(lakex,lakey,eps,dx,dy,modelrun)
-end
+%     cdm_Titan(lakex,lakey,eps,dx,dy,modelrun)
+% end

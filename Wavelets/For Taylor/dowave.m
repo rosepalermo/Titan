@@ -205,6 +205,7 @@ pmax2 = 2^15;
 % pmax2 = 16;
 pband1 = period >= pmin1 & period <= pmax1;
 powernorm_sub = powernorm(pband1,:);
+
 rness = sum(powernorm_sub);
 norm_rness_unsmoothed = (rness-min(rness))./max(rness);
 figure
