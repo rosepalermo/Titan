@@ -32,8 +32,7 @@ deltad=mean(dd); % the mean distance spacing
 %    xprod = 0  straight
 %    xprod < 0  right turn
 %
-% Note that we assume the first link is straight %ROSE: CHECK THAT THIS IS
-% NOT THE SOURCE OF SHORT-WAVELENGTH POWER AT ENDPOINTS
+% Note that we assume the first link is straight 
 
 x1=x(1:end-2);
 x2=x(2:end-1);
@@ -73,6 +72,9 @@ az = az - mean(az);
 
 % Find whether the data series has a positive or negative background slope
 slopesign = sign(az(end)-az(1));
+if slopesign == 0
+    slopesign = sign(az(end-1) - az(1));
+end
 % bgslope = (az(end)-az(1))/(d(end) - d(1));
 bgslope = slopesign * 2*pi / (d(end) - d(1));
 bgx = d - mean(d);

@@ -1,4 +1,4 @@
-function [WaveArea] = fetch_mw_cell(shoreline_fetch)
+function [WaveArea,FetchArea] = fetch_mw_cell(shoreline_fetch)
     FetchArea = cell(size(shoreline_fetch));
     WaveArea = cell(size(shoreline_fetch));
 

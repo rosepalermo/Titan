@@ -2,23 +2,23 @@
 % Generals paper. 
 
 %% load Ligeia Mare
-clear
-filename = 'lg_4wavelets.xls';
-M = xlsread(filename);
-
-savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/lg_4wavelets_wavelet'; 
-
-%get rid of duplicate points (when it goes exactly around a pixel)
-% indices to unique values in column 3
-[~, ind] = unique(M(:, 4:5), 'rows');
-% duplicate indices
-duplicate_ind = setdiff(1:size(M, 1), ind);
-% duplicate values
-duplicate_val = [M(duplicate_ind, 4) M(duplicate_ind, 5)];
-M(duplicate_ind,:)=[];
-
-x0=M(:,4);
-y0=M(:,5);
+% clear
+% filename = 'lg_4wavelets.xls';
+% M = xlsread(filename);
+% 
+% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/lg_4wavelets_wavelet'; 
+% 
+% %get rid of duplicate points (when it goes exactly around a pixel)
+% % indices to unique values in column 3
+% [~, ind] = unique(M(:, 4:5), 'rows');
+% % duplicate indices
+% duplicate_ind = setdiff(1:size(M, 1), ind);
+% % duplicate values
+% duplicate_val = [M(duplicate_ind, 4) M(duplicate_ind, 5)];
+% M(duplicate_ind,:)=[];
+% 
+% x0=M(:,4);
+% y0=M(:,5);
 
 %%  Red noise eroded by waves
 % clear

@@ -42,7 +42,7 @@ figure()
 imagesc(tile(:,:,3))
 hold on
 
-maxc = 50*floor(max(max(tile(:,:,1)))/50);
+maxc = 50*floor(max(max(tile(:,:,3)))/50);
 [C,h] = contour(tile(:,:,3),[1,1]);
 
 idx = find(C(1,:) == 1);
@@ -73,4 +73,38 @@ set(gca,'Ydir','reverse')
 x_1m_t3 = out{1,1}(1,:);
 y_1m_t3 = out{1,1}(2,:);
 
-save('xycontours.mat','x_1m_t1','y_1m_t1','x_1m_t3','y_1m_t3')
+%% 1 m contour at t = 2
+
+figure()
+
+imagesc(tile(:,:,2))
+hold on
+
+maxc = 50*floor(max(max(tile(:,:,2)))/50);
+[C,h] = contour(tile(:,:,2),[1,1]);
+
+idx = find(C(1,:) == 1);
+Llen = C(2,idx);
+for k1 = 1:length(idx)
+    conturc{k1,1} = C(:,idx(k1)+1 : idx(k1)+1+Llen(k1)-1);
+    conturc{k1,2} = C(:,idx(k1)+1 : idx(k1)+1+Llen(k1)-1);
+end
+% get rid of empty cells
+contourxy = conturc;
+contourxy = contourxy(find(~cellfun(@isempty,contourxy)));
+
+% find longest cell
+val=cellfun(@(x) numel(x),contourxy);
+out=contourxy(val==max(val));
+figure
+[C,h] = contour(tile(:,:,2),[1,1]);
+hold on
+plot(out{1,1}(1,:),out{1,1}(2,:),'r')
+set(gca,'Ydir','reverse')
+
+
+x_1m_t2 = out{1,1}(1,:);
+y_1m_t2 = out{1,1}(2,:);
+
+
+save('xycontours.mat','x_1m_t1','y_1m_t1','x_1m_t2','y_1m_t2','x_1m_t3','y_1m_t3')

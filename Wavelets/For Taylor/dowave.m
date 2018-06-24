@@ -1,4 +1,4 @@
-function dowave(y,dt,ord,xx,yy,savename)
+function dowave(y,dt,ord,xx,yy,savename,save_on)
 
 % Computes the continuous wavelet transform of a function y with point
 % spacing dt, compares it with the spectrum for a random process with 
@@ -122,6 +122,7 @@ set(gca,'XLim',xlim(:))
 xlabel('t')
 ylabel('y')
 title('data')
+set(gca,'FontSize',12)
 hold off
 
 %--- Contour plot wavelet power spectrum
@@ -132,6 +133,8 @@ Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
 % contour(t,log2(period),log2(power),log2(levels));  %*** or use 'contourf'
 imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
 colormap gray
+set(gca,'FontSize',12)
+
 
 xlabel('t')
 ylabel('Period (units of t)')
@@ -144,6 +147,7 @@ set(gca,'YLim',log2([min(period),max(period)]), ...
 % % 95% significance contour, levels at -99 (fake) and 1 (95% signif)
 hold on
 contour(t,log2(period),sig95,[-99,1],'r','linewidth',1);
+set(gca,'FontSize',12)
 % hold on
 % cone-of-influence, anything "below" is dubious
 % plot(t,log2(coi),'k')
@@ -164,7 +168,13 @@ set(gca,'YLim',log2([min(period),max(period)]), ...
 	'YTick',log2(Yticks(:)), ...
 	'YTickLabel','')
 set(gca,'XLim',[0,1.25*max(global_ws)])
-
+set(gca,'FontSize',12)
+fig1 = gcf;
+fig1.Position = ([0,0,750,400]);
+if save_on
+    fig = '.png'; pws ='pws'; figname = strcat(savename,pws,fig);
+    saveas(gca,figname)
+end
 
 % TAYLOR 9 MAY 2018
 
@@ -173,11 +183,11 @@ set(gca,'XLim',[0,1.25*max(global_ws)])
 
 powernorm = power./repmat(global_ws(:),[1 n]);
 % powernorm = power;
-figure
-imagesc(t,log2(period),log2(powernorm));
-colorbar
-set(gca,'clim',[-5 5])
-title('powernorm')
+% figure
+% imagesc(t,log2(period),log2(powernorm));
+% colorbar
+% set(gca,'clim',[-5 5])
+% title('powernorm')
 
 % note the differences in power along the shoreline at wavelengths
 % (periods) of about 2^11 to 2^14 m! Let's use the normalized power summed
@@ -185,38 +195,29 @@ title('powernorm')
 % wavelength range.
 
 
-pmin1 = 2^10;
-pmax1 = 2^15; 
+pmin1 = 2^11;
+pmax1 = 2^17; 
 pmin2 = 2^10;
 pmax2 = 2^15;
-pmin1 = 2;
-pmax1 = 16; 
-pmin2 = 2;
-pmax2 = 16;
+% pmin1 = 8;
+% pmax1 = 256; 
+% pmin2 = 8;
+% pmax2 = 16;
 pband1 = period >= pmin1 & period <= pmax1;
 powernorm_sub = powernorm(pband1,:);
 rness = sum(powernorm_sub);
+norm_rness_unsmoothed = (rness-min(rness))./max(rness);
 figure
-plot(t/1000,rness,'-b')
+plot(t/1000,norm_rness_unsmoothed,'-b')
 xlabel('distance along coast (km)')
 ylabel('roughness')
-
-% try variance
-var_rness = std(powernorm_sub);
-figure
-plot(t/1000,var_rness,'-b')
-xlabel('distance along coast (km)')
-ylabel('variance in roughness')
-figure
-scatter3(xx/1e3,yy/1e3,var_rness,[],var_rness,'.')
-view(2)
-axis equal tight
-title('variance in rougness')
-set(gca,'Clim',[0 5])
-
+set(gca,'FontSize',14)
+if save_on
+    fig = '.png'; rn ='rn'; figname = strcat(savename,rn,fig);
+    saveas(gca,figname)
+end
 
 figure
-norm_rness_unsmoothed = (rness-min(rness))./max(rness);
 scatter3(xx/1e3,yy/1e3,norm_rness_unsmoothed,[],norm_rness_unsmoothed,'.')
 colormap jet
 colorbar
@@ -224,7 +225,35 @@ view(2)
 axis equal tight
 xlabel('km')
 ylabel('km')
-title('unsmoothed roughness normalized (p1)')
+title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
+set(gca,'Clim',[0 1])
+set(gca,'FontSize',14)
+if save_on
+    fig = '.png'; rn3 ='rn3'; figname = strcat(savename,rn3,fig);
+    saveas(gca,figname)
+end
+
+% norm_rness zoomed
+figure
+scatter3(xx/1e3,yy/1e3,norm_rness_unsmoothed,[],norm_rness_unsmoothed,'.')
+colormap jet
+colorbar
+view(2)
+axis equal tight
+xlabel('km')
+ylabel('km')
+title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
+set(gca,'XLim',([0.5 0.8])); set(gca,'YLim',([0.5 0.8])); set(gca,'Clim',[0 1])
+set(gca,'FontSize',14)
+if save_on
+    fig = '.png'; rn3z ='rn3z'; figname = strcat(savename,rn3z,fig);
+    saveas(gca,figname)
+end
+
+if save_on
+    save(savename,'xx','yy','norm_rness_unsmoothed','pmin1','pmax1','period','power')
+end
+
 
 % there's a signal there, but it's noisy, so let's smooth it 
 Lsm = 5*pmax1; % smoothing window length in meters
@@ -232,42 +261,42 @@ rnesssm = movmean([rness rness rness],round(Lsm/dt)); rnesssm = rnesssm(n+1:2*n)
 % hold on
 % plot(t/1000,rnesssm,'-r') % better!
 
-% normalize it to range from 0 to 1
-rnesssm = rnesssm-min(rnesssm);
-rnesssm = rnesssm/max(rnesssm);
+% % normalize it to range from 0 to 1
+% rnesssm = rnesssm-min(rnesssm);
+% rnesssm = rnesssm/max(rnesssm);
 
-% plot it along the coast
-figure
-scatter3(xx/1e3,yy/1e3,rnesssm,[],rnesssm,'.')
-colormap jet
-colorbar
-view(2)
-axis equal tight
-xlabel('km')
-ylabel('km')
-title(['roughness in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
+% % plot it along the coast
+% figure
+% scatter3(xx/1e3,yy/1e3,rnesssm,[],rnesssm,'.')
+% colormap jet
+% colorbar
+% view(2)
+% axis equal tight
+% xlabel('km')
+% ylabel('km')
+% title(['roughness in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
 
+% % Ratio of roughness in smaller band to larger band
+% pband2 = period >= pmin2 & period <= pmax2;
+% powerratio_sub = powernorm(pband2,:);
+% powerratio_ness = sum(powerratio_sub);
+% rationess = rness./powerratio_ness;
+% rationess = rationess./max(rationess);
+% figure
+% plot(t/1000,rationess,'-b')
+% xlabel('distance along coast (km)')
+% ylabel('roughness ratio of smaller pmin to pmax')
 
-pband2 = period >= pmin2 & period <= pmax2;
-powerratio_sub = powernorm(pband2,:);
-powerratio_ness = sum(powerratio_sub);
-rationess = rness./powerratio_ness;
-rationess = rationess./max(rationess);
-figure
-plot(t/1000,rationess,'-b')
-xlabel('distance along coast (km)')
-ylabel('roughness ratio of smaller pmin to pmax')
-
-% plot it along the coast
-figure
-scatter3(xx/1e3,yy/1e3,rationess,[],rationess,'.')
-colormap jet
-colorbar
-view(2)
-axis equal tight
-xlabel('km')
-ylabel('km')
-title(['roughness ratio in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) 'compared to the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
+% % plot it along the coast
+% figure
+% scatter3(xx/1e3,yy/1e3,rationess,[],rationess,'.')
+% colormap jet
+% colorbar
+% view(2)
+% axis equal tight
+% xlabel('km')
+% ylabel('km')
+% title(['roughness ratio in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) 'compared to the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
 
 
 % m=zeros(length(power(1,:)),1);
