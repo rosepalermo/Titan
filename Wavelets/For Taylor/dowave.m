@@ -195,6 +195,7 @@ pmin2 = 2;
 pmax2 = 16;
 pband1 = period >= pmin1 & period <= pmax1;
 powernorm_sub = powernorm(pband1,:);
+
 rness = sum(powernorm_sub);
 figure
 plot(t/1000,rness,'-b')

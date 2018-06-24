@@ -1,11 +1,11 @@
 % make a movie from the figures
-v = VideoWriter('testingthediamondwave');
+v = VideoWriter('wave_rednoise');
 open(v);
 
-for k = 1:75
+for k = 1:15
     % Create a mat filename, and load it into a structure called matData.
 %     matFileName = sprintf('4test%d.mat', k);
-    figFileName = sprintf('testingthediamondwave%d.fig', k);
+    figFileName = sprintf('wave_rednoise%d.fig', k);
     if exist(figFileName, 'file')
 %         matData = load(matFileName);
         h = open(figFileName)
