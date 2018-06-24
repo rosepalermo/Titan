@@ -18,7 +18,6 @@ dx_mr(1) = 1; dy_mr(1) = 1;
 % eps_mr(2) = 200;
 % dx_mr(2) = 1; dy_mr(2) = 1;
 
-th = linspace(0,2*pi,60);
 % th = linspace(0,2*pi,60);
 % r = 2 + rand(size(th))-0.5 ;
 % lakex_mr{4,1}(1,:) = r.*cos(th );
