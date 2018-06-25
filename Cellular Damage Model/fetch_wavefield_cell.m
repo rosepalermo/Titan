@@ -152,19 +152,19 @@ for obj = 1:length(shoreline_fetch)
         % unit shoreline vector
         slvecx = [x4ang(iv)-x4ang(iv+2)]; slvecy = [y4ang(iv)-y4ang(iv+2)];
         slvec_norm = norm([slvecx slvecy]);
-        slvecx = slvecx/slvec_norm;
-        slvecy = slvecy/slvec_norm;
+        slvecx = slvecx./slvec_norm;
+        slvecy = slvecy./slvec_norm;
         % unit "incident wave" vector
         xlosvec = xlos(:,iv) - x(iv); ylosvec = ylos(:,iv) - y(iv);
         los_norm = sqrt(xlosvec.^2 + ylosvec.^2);
         xlosvec = xlosvec./los_norm; ylosvec = ylosvec./los_norm;
         
 %         cos(theta - phi) = dot product of slvec and losvec
-        cosang = abs(xlosvec*slvecx + ylosvec*slvecy);
-        angdiff = rad2deg(acos(cosang(find(~isnan(cosang))))); % theta - phi
+        cosang = 90-rad2deg(abs(xlosvec*slvecx + ylosvec*slvecy));
+        angdiff = (acos(cosang(find((cosang))))); % theta - phi
         
         %Wave weighting = (F)*cosang
-        Waveweighting(:,iv) = (Fetch_dist).*cosang;
+        Waveweighting(:,iv) = (Fetch_dist).*deg2rad(cosang);
         Wavex(:,iv) = x(iv) + Waveweighting(:,iv).*cos(theta');
         Wavey(:,iv) = y(iv) + Waveweighting(:,iv).*sin(theta');
         
