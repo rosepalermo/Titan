@@ -20,7 +20,7 @@
 fetch_on = true;
 
 % run time
-tmax = 15;
+tmax = 70;
 
 % when creating a gif
 plot_now = true;
