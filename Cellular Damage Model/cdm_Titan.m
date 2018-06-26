@@ -25,7 +25,7 @@ tmax = 15;
 % when creating a gif
 plot_now = true;
 gif_on = false;
-save_on = true;
+save_on = false;
 shoreline_save = cell(1,1);
 % filename = [num2str(modelrun),'fetch_5_2018_example.gif'];
 

@@ -194,15 +194,26 @@ powernorm = power./repmat(global_ws(:),[1 n]);
 % over that range of periods as a measure of relative roughness within that
 % wavelength range.
 
-
+% Ligeia Mare
 pmin1 = 2^11;
 pmax1 = 2^17; 
 pmin2 = 2^10;
 pmax2 = 2^15;
+
+
+%Model lakes 
 pmin1 = 8;
 pmax1 = 256; 
 pmin2 = 8;
 pmax2 = 16;
+
+
+%Lake Powell
+pmin1 = 2^9;
+pmax1 = 2^14; 
+pmin2 = 2^9;
+pmax2 = 2^14;
+
 pband1 = period >= pmin1 & period <= pmax1;
 powernorm_sub = powernorm(pband1,:);
 
@@ -217,6 +228,8 @@ if save_on
     fig = '.png'; rn ='rn'; figname = strcat(savename,rn,fig);
     saveas(gca,figname)
 end
+rms(norm_rness_unsmoothed)
+
 
 figure
 scatter3(xx/1e3,yy/1e3,norm_rness_unsmoothed,[],norm_rness_unsmoothed,'.')
@@ -244,7 +257,7 @@ axis equal tight
 xlabel('km')
 ylabel('km')
 title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
-set(gca,'XLim',([0.5 0.8])); set(gca,'YLim',([0.5 0.8])); set(gca,'Clim',[0 1])
+set(gca,'XLim',([0.5 0.8])); set(gca,'YLim',([0.5 0.8])); set(gca,'Clim',[0 0.75])
 set(gca,'FontSize',14)
 if save_on
     fig = '.png'; rn3z ='rn3z'; figname = strcat(savename,rn3z,fig);
