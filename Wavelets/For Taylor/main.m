@@ -21,22 +21,22 @@ x0=M(:,4);
 y0=M(:,5);
 
 %%  Red noise eroded by waves
-% clear
-% load('wave_rednoise.mat')
-% x0 = ordered_sl_save{7,1}{1,1}(:,1);
-% y0 = ordered_sl_save{7,1}{1,1}(:,2);
-% M = [x0 y0];
-% %get rid of duplicate points (when it goes exactly around a pixel)
-% % indices to unique values in column 3
-% [~, ind] = unique(M, 'rows');
-% % duplicate indices
-% duplicate_ind = setdiff(1:size(M, 1), ind);
-% % duplicate values
-% duplicate_val = [M(duplicate_ind, 1) M(duplicate_ind, 2)];
-% M(duplicate_ind,:)=[];
-% x0 = M(:,1);
-% y0 = M(:,2);
-% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/wave_rednoise_wavelet'; 
+clear
+load('wave_rednoise.mat')
+x0 = ordered_sl_save{8,1}{1,1}(:,1);
+y0 = ordered_sl_save{8,1}{1,1}(:,2);
+M = [x0 y0];
+%get rid of duplicate points (when it goes exactly around a pixel)
+% indices to unique values in column 3
+[~, ind] = unique(M, 'rows');
+% duplicate indices
+duplicate_ind = setdiff(1:size(M, 1), ind);
+% duplicate values
+duplicate_val = [M(duplicate_ind, 1) M(duplicate_ind, 2)];
+M(duplicate_ind,:)=[];
+x0 = M(:,1);
+y0 = M(:,2);
+savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/wave_rednoise_wavelet'; 
 
 %%  Red noise t1
 % clear
@@ -74,7 +74,7 @@ y0=M(:,5);
 % y0 = Y(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:,2)));
 % savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/uniform_rednoise_wavelet';
 %%
-save_on = true;
+save_on = false;
 % CONSIDER NOT INTERPOLATING HERE. WE DON'T NEED EVENLY SPACED POINTS TO
 % COMPUTE AZIMUTHS, AND IT CAN CREATE STEPS IN THE AZIMUTH VS. DISTANCE
 % SERIES IF INTERPOLATING CREATES MULTIPLE SUCCESSIVE POINTS WITH THE SAME

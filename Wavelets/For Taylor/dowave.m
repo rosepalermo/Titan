@@ -199,10 +199,10 @@ pmin1 = 2^11;
 pmax1 = 2^17; 
 pmin2 = 2^10;
 pmax2 = 2^15;
-% pmin1 = 8;
-% pmax1 = 256; 
-% pmin2 = 8;
-% pmax2 = 16;
+pmin1 = 8;
+pmax1 = 256; 
+pmin2 = 8;
+pmax2 = 16;
 pband1 = period >= pmin1 & period <= pmax1;
 powernorm_sub = powernorm(pband1,:);
 

@@ -1,15 +1,15 @@
 % contours
-% load('xycontours.mat')
-% lakex_mr{1,1}(1,:) = x_1m_t1;
-% lakey_mr{1,1}(1,:) = y_1m_t1;
-% eps_mr(1) = 200;
-% dx_mr(1) = 1; dy_mr(1) = 1;
-
 load('xycontours.mat')
-lakex_mr{1,1}(1,:) = x_1m_t2;
-lakey_mr{1,1}(1,:) = y_1m_t2;
+lakex_mr{1,1}(1,:) = x_1m_t1;
+lakey_mr{1,1}(1,:) = y_1m_t1;
 eps_mr(1) = 200;
 dx_mr(1) = 1; dy_mr(1) = 1;
+
+% load('xycontours.mat')
+% lakex_mr{1,1}(1,:) = x_1m_t2;
+% lakey_mr{1,1}(1,:) = y_1m_t2;
+% eps_mr(1) = 200;
+% dx_mr(1) = 1; dy_mr(1) = 1;
 
 
 % 
