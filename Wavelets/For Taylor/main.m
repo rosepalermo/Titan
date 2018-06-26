@@ -1,13 +1,9 @@
 % This code does the wavelet analysis for shorelines as described in Rose's
 % Generals paper. 
 
-%% load Ligeia Mare
-clear
-filename = 'lg_4wavelets.xls';
-M = xlsread(filename);
-
-savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/lg_4wavelets_wavelet'; 
-
+% Lake Powell
+filename = 'LakePowell_gp.csv';
+M = csvread(filename);
 %get rid of duplicate points (when it goes exactly around a pixel)
 % indices to unique values in column 3
 [~, ind] = unique(M(:, 4:5), 'rows');
@@ -19,6 +15,62 @@ M(duplicate_ind,:)=[];
 
 x0=M(:,4);
 y0=M(:,5);
+lat = 110.978;
+lon = 89.012;
+x0 = (x0-min(x0)) * lon;%changed from lon/lat*lon to just lon
+y0 = (y0-min(y0)) * lat;
+
+dist = sqrt((x0(2:end) - x0(1:end-1)).^2 +  (y0(2:end) - y0(1:end-1)).^2);
+dist_off = find(dist>1);
+x0_fixed = [x0(1:dist_off(1)-1);x0(dist_off(2)+1:dist_off(3)-1);x0(dist_off(1)+1:dist_off(2)-1);x0(dist_off(12)+1:dist_off(13)-1);x0(dist_off(13)+1:end);x0(dist_off(11)+1:dist_off(12)-1);x0(dist_off(10)+1:dist_off(11)-1);x0(dist_off(6)+1:dist_off(7)-1);x0(dist_off(9)+1:dist_off(10)-1);x0(dist_off(3)+1:dist_off(4)-1);x0(dist_off(7)+1:dist_off(8)-1);x0(dist_off(5)+1:dist_off(6)-1);x0(dist_off(4)+1:dist_off(5)-1)];
+y0_fixed = [y0(1:dist_off(1)-1);y0(dist_off(2)+1:dist_off(3)-1);y0(dist_off(1)+1:dist_off(2)-1);y0(dist_off(12)+1:dist_off(13)-1);y0(dist_off(13)+1:end);y0(dist_off(11)+1:dist_off(12)-1);y0(dist_off(10)+1:dist_off(11)-1);y0(dist_off(6)+1:dist_off(7)-1);y0(dist_off(9)+1:dist_off(10)-1);y0(dist_off(3)+1:dist_off(4)-1);y0(dist_off(7)+1:dist_off(8)-1);y0(dist_off(5)+1:dist_off(6)-1);y0(dist_off(4)+1:dist_off(5)-1)];
+x0_fixed(1245) = []; y0_fixed(1245) = [];
+x0 = x0_fixed*1000; y0 = y0_fixed*1000; % convert to meters
+
+
+savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/Scotland_gp_wavelet'; 
+
+
+
+%% Scotland
+% filename = 'Scotland_gp.csv';
+% M = csvread(filename);
+% %get rid of duplicate points (when it goes exactly around a pixel)
+% % indices to unique values in column 3
+% [~, ind] = unique(M(:, 4:5), 'rows');
+% % duplicate indices
+% duplicate_ind = setdiff(1:size(M, 1), ind);
+% % duplicate values
+% duplicate_val = [M(duplicate_ind, 4) M(duplicate_ind, 5)];
+% M(duplicate_ind,:)=[];
+% 
+% x0=M(:,4);
+% y0=M(:,5);
+% lat = 111360;
+% lon = 60772;
+% x0 = (x0-min(x0)) * lon;%changed from lon/lat*lon to just lon
+% y0 = (y0-min(y0)) * lat;
+
+
+
+%% load Ligeia Mare
+% clear
+% filename = 'lg_4wavelets.xls';
+% M = xlsread(filename);
+% 
+% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/lg_4wavelets_wavelet'; 
+% 
+% %get rid of duplicate points (when it goes exactly around a pixel)
+% % indices to unique values in column 3
+% [~, ind] = unique(M(:, 4:5), 'rows');
+% % duplicate indices
+% duplicate_ind = setdiff(1:size(M, 1), ind);
+% % duplicate values
+% duplicate_val = [M(duplicate_ind, 4) M(duplicate_ind, 5)];
+% M(duplicate_ind,:)=[];
+% 
+% x0=M(:,4);
+% y0=M(:,5);
 
 %%  Red noise eroded by waves
 % clear

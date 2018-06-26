@@ -7,10 +7,15 @@
 %central point along the cape, by a National Geospatial-Intelligence Agency
 %calculator:
 %http://msi.nga.mil/MSISiteContent/StaticFiles/Calculators/degree.html
-lat = 111.360;
-lon = 60.772;
-SLdata(:,1) = (SLdata(:,1)-min(SLdata(:,1))) * lon;%changed from lon/lat*lon to just lon
-SLdata(:,2) = (SLdata(:,2)-min(SLdata(:,2))) * lat;
+lat = 111360;
+lon = 60772;
+% SLdata(:,1) = (SLdata(:,1)-min(SLdata(:,1))) * lon;%changed from lon/lat*lon to just lon
+% SLdata(:,2) = (SLdata(:,2)-min(SLdata(:,2))) * lat;
+
+
+% sea of azov
+lat = 111151;
+long = 77463;
 
 
 
@@ -30,7 +35,8 @@ M(duplicate_ind,:)=[];
 xlgm=M(:,4);
 ylgm=M(:,5);
 
-% figure(); plot(xlgm/1000,ylgm/1000)
+
+% figure(); plot(xlgm/1000,ylgm/1000,'k','LineWidth',2)
 % xlabel('km')
 % ylabel('km')
 % set(gca,'FontSize',14)
