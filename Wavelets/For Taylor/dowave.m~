@@ -211,9 +211,9 @@ pmax2 = 2^4;
 end
 
 if i == 6
-    %Lake Powell
-    pmin1 = 2^8;
-    pmax1 = 2^13;
+    Lake Powell
+    pmin1 = 2^9;
+    pmax1 = 2^14;
     pmin2 = 2^9;
     pmax2 = 2^14;
 end
@@ -245,7 +245,6 @@ rms_ness = rms(norm_rness_unsmoothed)
 var_ness = var(norm_rness_unsmoothed)
 mean_ness = mean(norm_rness_unsmoothed)
 median_ness = median(norm_rness_unsmoothed)
-skewness_ness = skewness(norm_rness_unsmoothed)
 
 if ~isempty(fetch)
     figure()

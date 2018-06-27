@@ -3,20 +3,14 @@
 %%
 load('waveandfetch_4generalssls.mat')
 % 1 = LGM
-savename{1} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/lg_4wavelets_wavelet_updated'; 
+savename{1} = savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/lg_4wavelets_wavelet_updated'; 
 % 2 = REDNOISE
-savename{2} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/rednoise_wavelet_updated'; 
+savename{2} = savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/rednoise_wavelet_updated'; 
 % 3 = WAVE
-savename{3} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/wave_wavelet_updated'; 
+savename{3} = savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/wave_wavelet_updated'; 
 % 4 = RIVERS
-savename{4} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/rivert2_wavelet_updated'; 
+savename{4} = savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/rivert2_wavelet_updated'; 
 % 5 = UNIFORM
-savename{5} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/uniform_wavelet_updated'; 
-% 6 = Lake Powell
-savename{6} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/LakePowell_wavelet_updated'; 
-% 7 = Scotland
-savename{7} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/scotland_wavelet_updated'; 
-
 
 
 i = 6
