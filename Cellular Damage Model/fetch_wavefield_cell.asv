@@ -164,7 +164,7 @@ for obj = 1:length(shoreline_fetch)
         xlosvec = xlosvec./los_norm; ylosvec = ylosvec./los_norm;
         
 %         cos(theta - phi) = dot product of slvec and losvec
-        cosang = cos(deg2rad(90-rad2deg(acos(xlosvec*slvecx + ylosvec*slvecy))));
+        cosang = cos(deg2rad(90-rad2deg(acos(abs(xlosvec*slvecx + ylosvec*slvecy)))));
         angdiff = (acos(cosang(find((cosang))))); % theta - phi
         
         %Wave weighting = (F)*cosang
