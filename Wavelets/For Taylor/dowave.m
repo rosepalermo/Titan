@@ -182,7 +182,7 @@ end
 % it
 
 powernorm = power./repmat(global_ws(:),[1 n]);
-% powernorm = power;
+% powernorm = power; % should be normalized by global otherwise as the power increases with period, higher periods will dominate roughness
 % figure
 % imagesc(t,log2(period),log2(powernorm));
 % colorbar
@@ -209,16 +209,19 @@ pmax2 = 16;
 
 
 %Lake Powell
-pmin1 = 2^9;
-pmax1 = 2^14; 
-pmin2 = 2^9;
-pmax2 = 2^14;
+% pmin1 = 2^9;
+% pmax1 = 2^14; 
+% pmin2 = 2^9;
+% pmax2 = 2^14;
 
 pband1 = period >= pmin1 & period <= pmax1;
 powernorm_sub = powernorm(pband1,:);
 
 rness = sum(powernorm_sub);
-norm_rness_unsmoothed = (rness-min(rness))./max(rness);
+norm_rness_unsmoothed = rness./mean(global_ws);
+% norm_rness_unsmoothed = (rness-min(rness))./max(rness);
+% norm_rness_unsmoothed = (rness)./max(max(power));
+% norm_rness_unsmoothed = (rness)./mean(power(pband1,:));
 figure
 plot(t/1000,norm_rness_unsmoothed,'-b')
 xlabel('distance along coast (km)')
@@ -228,7 +231,10 @@ if save_on
     fig = '.png'; rn ='rn'; figname = strcat(savename,rn,fig);
     saveas(gca,figname)
 end
+
 rms(norm_rness_unsmoothed)
+var(norm_rness_unsmoothed)
+
 
 
 figure
@@ -240,7 +246,7 @@ axis equal tight
 xlabel('km')
 ylabel('km')
 title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
-set(gca,'Clim',[0 1])
+%set(gca,'Clim',[0 1])
 set(gca,'FontSize',14)
 if save_on
     fig = '.png'; rn3 ='rn3'; figname = strcat(savename,rn3,fig);
@@ -257,7 +263,7 @@ axis equal tight
 xlabel('km')
 ylabel('km')
 title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
-set(gca,'XLim',([0.5 0.8])); set(gca,'YLim',([0.5 0.8])); set(gca,'Clim',[0 0.75])
+set(gca,'XLim',([0.5 0.8])); set(gca,'YLim',([0.5 0.8])); %set(gca,'Clim',[0 0.75])
 set(gca,'FontSize',14)
 if save_on
     fig = '.png'; rn3z ='rn3z'; figname = strcat(savename,rn3z,fig);

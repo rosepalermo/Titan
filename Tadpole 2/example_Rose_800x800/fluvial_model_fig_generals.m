@@ -22,8 +22,29 @@ set(gca,'Xlim',[400 1200]); set(gca,'Ylim',[150 950]);set(gca,'clim',[0 200]);
 set(gca,'Ydir','normal')
 
 subplot(2,2,4)
-plot(x_1m_t1,y_1m_t1,'k')
+plot(x_1m_t1/1000,y_1m_t1/1000,'k')
 hold on
-plot(x_1m_t2,y_1m_t2,'Color',[0.3 0.3 0.3])
-plot(x_1m_t3,y_1m_t3,'Color',[0.7 0.7 0.7])
+plot(x_1m_t2/1000,y_1m_t2/1000,'Color',[0.3 0.3 0.3])
+plot(x_1m_t3/1000,y_1m_t3/1000,'Color',[0.7 0.7 0.7])
 axis equal tight
+
+
+figure()
+subplot(1,2,1)
+plot(x_1m_t1/1000,y_1m_t1/1000,'k')
+hold on
+plot(x_1m_t2/1000,y_1m_t2/1000,'Color',[0.3 0.3 0.3])
+plot(x_1m_t3/1000,y_1m_t3/1000,'Color',[0.7 0.7 0.7])
+axis equal tight
+set(gca,'xtick',[],'ytick',[])
+set(gca,'xticklabel',[],'yticklabel',[])
+
+subplot(1,2,2)
+plot(x_1m_t1/1000,y_1m_t1/1000,'k')
+hold on
+plot(x_1m_t2/1000,y_1m_t2/1000,'Color',[0.3 0.3 0.3])
+plot(x_1m_t3/1000,y_1m_t3/1000,'Color',[0.7 0.7 0.7])
+axis equal tight
+set(gca,'XLim',([0.45 0.75])); set(gca,'YLim',([0.6 0.9]))
+set(gca,'xtick',[],'ytick',[])
+set(gca,'xticklabel',[],'yticklabel',[])
