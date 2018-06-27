@@ -20,12 +20,12 @@
 fetch_on = true;
 
 % run time
-tmax = 70;
+tmax = 15;
 
 % when creating a gif
 plot_now = true;
 gif_on = false;
-save_on = false;
+save_on = true;
 shoreline_save = cell(1,1);
 % filename = [num2str(modelrun),'fetch_5_2018_example.gif'];
 

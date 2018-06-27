@@ -1,11 +1,11 @@
 % make a movie from the figures
-v = VideoWriter('uniform_rednoise');
+v = VideoWriter('wave_rednoise');
 open(v);
 
 for k = 1:75
     % Create a mat filename, and load it into a structure called matData.
 %     matFileName = sprintf('4test%d.mat', k);
-    figFileName = sprintf('uniform_rednoise%d.fig', k);
+    figFileName = sprintf('wave_rednoise%d.fig', k);
     if exist(figFileName, 'file')
 %         matData = load(matFileName);
         h = open(figFileName)

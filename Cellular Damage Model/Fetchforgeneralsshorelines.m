@@ -48,3 +48,5 @@ for i = 1:length(A)
     WaveArea_save{i} = WaveArea;
     FetchArea_save{i} = FetchArea;
 end
+
+save('waveandfetch_4generalssls.mat','A','WaveArea_save','FetchArea_save')
