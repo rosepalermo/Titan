@@ -1,4 +1,4 @@
-function dowave(y,dt,ord,xx,yy,savename,save_on,fetch,i)
+function [period, global_Save] = dowave(y,dt,ord,xx,yy,savename,save_on,fetch,i)
 
 % Computes the continuous wavelet transform of a function y with point
 % spacing dt, compares it with the spectrum for a random process with 
@@ -160,6 +160,7 @@ semilogx(fft_theor,log2(period),'k')
 hold on
 semilogx(global_signif,log2(period),'r')
 semilogx(global_ws,log2(period))
+global_Save = global_ws;
 hold off
 xlabel('Power (amplitude^2)')
 % title('Global Wavelet Spectrum')
@@ -195,28 +196,29 @@ powernorm = power./repmat(global_ws(:),[1 n]);
 % wavelength range.
 
 if i ==1
-% Ligeia Mare
-pmin1 = 2^11;
-pmax1 = 2^16; 
-pmin2 = 2^10;
-pmax2 = 2^15;
+    % Ligeia Mare
+    pmin1 = 2^11;
+    pmax1 = 2^14;
+    pmin2 = 2^10;
+    pmax2 = 2^15;
 end
 
-if i >1
-%Model lakes 
-pmin1 = 2^2;
-pmax1 = 2^7; 
-pmin2 = 2^3;
-pmax2 = 2^4;
+if i == 2|i == 3|i == 4|i == 5
+    %Model lakes
+    pmin1 = 2^2;
+    pmax1 = 2^7;
+    pmin2 = 2^3;
+    pmax2 = 2^4;
 end
 
-if i == 6
-    %Lake Powell
-    pmin1 = 2^8;
-    pmax1 = 2^13;
+if i == 6| i == 7
+    %Lake Powell or scotland
+    pmin1 = 2^9;
+    pmax1 = 2^14;
     pmin2 = 2^9;
     pmax2 = 2^14;
 end
+
 
 pband1 = period >= pmin1 & period <= pmax1;
 powernorm_sub = powernorm(pband1,:);
@@ -247,17 +249,17 @@ mean_ness = mean(norm_rness_unsmoothed)
 median_ness = median(norm_rness_unsmoothed)
 skewness_ness = skewness(norm_rness_unsmoothed)
 
-if ~isempty(fetch)
-    figure()
-    scatter(fetch,norm_rness_unsmoothed,'.','k')
-    xlabel('Wave Weighting')
-    ylabel('Roughness')
-end
+% if ~isempty(fetch)
+%     figure()
+%     scatter(fetch,norm_rness_unsmoothed,'.','k')
+%     xlabel('Wave Weighting')
+%     ylabel('Roughness')
+% end
 
 figure
-if ~isempty(fetch)
-    subplot(1,2,1)
-end
+% if ~isempty(fetch)
+%     subplot(1,2,1)
+% end
 scatter3(xx/1e3,yy/1e3,norm_rness_unsmoothed,[],norm_rness_unsmoothed,'.')
 colormap jet
 colorbar
@@ -266,22 +268,22 @@ axis equal tight
 xlabel('km')
 ylabel('km')
 % title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
-% set(gca,'Clim',[0 0.75])
+set(gca,'Clim',[0 mean(rness)+2*std(rness)])
 set(gca,'FontSize',14)
 
-if ~isempty(fetch)
-    subplot(1,2,2)
-    scatter3(xx/1e3,yy/1e3,fetch,[],fetch,'.')
-    colormap jet
-    colorbar
-    view(2)
-    axis equal tight
-    xlabel('km')
-    ylabel('km')
-    % title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
-    % set(gca,'Clim',[0 0.75])
-    set(gca,'FontSize',14)
-end
+% if ~isempty(fetch)
+%     subplot(1,2,2)
+%     scatter3(xx/1e3,yy/1e3,fetch,[],fetch,'.')
+%     colormap jet
+%     colorbar
+%     view(2)
+%     axis equal tight
+%     xlabel('km')
+%     ylabel('km')
+%     % title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
+%     % set(gca,'Clim',[0 0.75])
+%     set(gca,'FontSize',14)
+% end
 if save_on
     fig = '.png'; rn3 ='rn3'; figname = strcat(savename,rn3,fig);
     saveas(gca,figname)
@@ -297,7 +299,7 @@ axis equal tight
 xlabel('km')
 ylabel('km')
 % title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
-set(gca,'XLim',([0.5 0.8])); set(gca,'YLim',([0.5 0.8])); set(gca,'Clim',[0 0.75])
+set(gca,'XLim',([0.5 0.8])); set(gca,'YLim',([0.5 0.8])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
 set(gca,'FontSize',14)
 if save_on
     fig = '.png'; rn3z ='rn3z'; figname = strcat(savename,rn3z,fig);
