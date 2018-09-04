@@ -201,11 +201,16 @@ pmin2 = 2^10;
 pmax2 = 2^15;
 
 
-%Model lakes 
+% Model lakes 
 pmin1 = 8;
 pmax1 = 256; 
 pmin2 = 8;
 pmax2 = 16;
+
+% % test new
+% pmin1 = 8;
+% pmax1 = 16;
+
 
 
 %Lake Powell

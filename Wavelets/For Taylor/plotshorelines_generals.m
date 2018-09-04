@@ -85,6 +85,13 @@ shoreline = addidshoreline_cardonly(lake_save{30,1},~lake_save{30,1});
 [sl_cell,cells2trash] = order_cw_lastpoint(lake_save{30,1},shoreline);
 xuniform = X(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:,2)));
 yuniform = Y(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:,2)));
+
+% Red noise eroded by uniform model
+load('uniform_t3.mat')
+shoreline = addidshoreline_cardonly(lake_save{15,1},~lake_save{15,1});
+[sl_cell,cells2trash] = order_cw_lastpoint(lake_save{15,1},shoreline);
+xuniform = X(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:,2)));
+yuniform = Y(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:,2)));
 %%
 fig1 = figure();
 plot(xt1,yt1,'k')

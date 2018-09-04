@@ -1,9 +1,9 @@
 % contours
-load('xycontours.mat')
-lakex_mr{1,1}(1,:) = x_1m_t1;
-lakey_mr{1,1}(1,:) = y_1m_t1;
-eps_mr(1) = 200;
-dx_mr(1) = 1; dy_mr(1) = 1;
+% load('xycontours.mat')
+% lakex_mr{1,1}(1,:) = x_1m_t1;
+% lakey_mr{1,1}(1,:) = y_1m_t1;
+% eps_mr(1) = 200;
+% dx_mr(1) = 1; dy_mr(1) = 1;
 
 % load('xycontours.mat')
 % lakex_mr{1,1}(1,:) = x_1m_t2;
@@ -12,11 +12,11 @@ dx_mr(1) = 1; dy_mr(1) = 1;
 % dx_mr(1) = 1; dy_mr(1) = 1;
 
 
-% 
-% lakex_mr{2,1}(1,:) = x_1m_t3;
-% lakey_mr{2,1}(1,:) = y_1m_t3;
-% eps_mr(2) = 200;
-% dx_mr(2) = 1; dy_mr(2) = 1;
+load('xycontours.mat')
+lakex_mr{2,1}(1,:) = x_1m_t3;
+lakey_mr{2,1}(1,:) = y_1m_t3;
+eps_mr(2) = 200;
+dx_mr(2) = 1; dy_mr(2) = 1;
 
 % th = linspace(0,2*pi,60);
 % r = 2 + rand(size(th))-0.5 ;
@@ -40,7 +40,7 @@ dx_mr(1) = 1; dy_mr(1) = 1;
 % dx_mr(3) = 0.5; dy_mr(3) = 0.5;
 
 % for modelrun = 1:1
-modelrun = 1;
+modelrun = 2;
     lakex = lakex_mr{modelrun,1}(1,:);
     lakey = lakey_mr{modelrun,1}(1,:);
     eps = eps_mr(modelrun);

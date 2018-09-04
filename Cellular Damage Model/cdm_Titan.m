@@ -20,12 +20,12 @@
 fetch_on = true;
 
 % run time
-tmax = 15;
+tmax = 20;
 
 % when creating a gif
 plot_now = true;
 gif_on = false;
-save_on = true;
+save_on = false;
 shoreline_save = cell(1,1);
 % filename = [num2str(modelrun),'fetch_5_2018_example.gif'];
 
@@ -83,7 +83,7 @@ Yinon = reshape(Y,[],1);
 
 
 %points in and on the polygon are the lake
-[in, on] = inpolygon(Xinon,Yinon,lakex,lakey);
+[in, on] = inpoly([Xinon,Yinon]',[lakex;lakey]);
 lake = in + on;
 lake = reshape(lake,length(y),length(x));
 % figure()
@@ -275,18 +275,19 @@ for i = 1:tmax
     
     if save_on
 %         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave',num2str(i),'.fig'])
-        saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\','wave_rednoise',num2str(i),'.fig'])
+%         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\','wave_rednoise',num2str(i),'.fig'])
+        saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\8_18_riverandwave\','uniform_t3',num2str(i),'.fig'])
     end
     
 end
 if fetch_on
     if save_on
         %     save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave','.mat'],'shoreline_save')
-        save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\','wave_rednoise','.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
+        save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\8_18_riverandwave\','uniform_t3','.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
         
     end
 else
-    save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\','wave_rednoise','.mat'],'shoreline_save','dam_save','X','Y','lake_save')
+    save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\8_18_riverandwave\','uniform_t3','.mat'],'shoreline_save','dam_save','X','Y','lake_save')
 end
 %% plot
 eroded = eroded(2:end,:);

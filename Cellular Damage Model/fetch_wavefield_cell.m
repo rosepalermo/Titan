@@ -121,13 +121,13 @@ for obj = 1:length(shoreline_fetch)
         % in
         dx = ximin - x(iv);
         dy = yimin - y(iv);
-        [in_bounding,on_bounding] = inpolygon(x(iv) + dx*1e-10, y(iv) + dy*1e-10, x_bounding, y_bounding); % is it in the lake?
+        [in_bounding,on_bounding] = inpoly([x(iv) + dx*1e-10, y(iv) + dy*1e-10]', [x_bounding; y_bounding]); % is it in the lake?
         
         % if island(s) exist, does the ray go into the island(s)?
         in_island = zeros(size(in_bounding)); on_island = zeros(size(on_bounding));
         if length(shoreline_fetch) > 1
             for ii = 2: length(shoreline_fetch)
-                [in_add, on_add] = inpolygon(x(iv) + dx*1e-10, y(iv) + dy*1e-10,[shoreline_fetch{ii,1}(:,1); shoreline_fetch{ii,1}(1,1)],[shoreline_fetch{ii,1}(:,2);shoreline_fetch{ii,1}(1,2)]);
+                [in_add, on_add] = inpoly([x(iv) + dx*1e-10, y(iv) + dy*1e-10],[[shoreline_fetch{ii,1}(:,1); shoreline_fetch{ii,1}(1,1)],[shoreline_fetch{ii,1}(:,2);shoreline_fetch{ii,1}(1,2)]]');
                 in_island = in_island | in_add; on_island = on_island | on_add;
             end
         end
@@ -178,18 +178,20 @@ for obj = 1:length(shoreline_fetch)
 %     % Plot LOS (Fetch)
 %     % For plotting, define each resulting line segment from vertex to
 %     % line-of-sight point
-%     xpltlos = permute(cat(3, x(1:end-1).*ones(nray,1), xlos), [3 1 2]);
-%     ypltlos = permute(cat(3, y(1:end-1).*ones(nray,1), ylos), [3 1 2]);
-%     % To check, let's plot just the rays associated with angle idx=50
-%     plot(x,y,'k');
-%     hold on;
-%     % for ivv = 1:nray
-%     for ivv = 1:nray
-%         for iv = 1:1
-%             plot(xpltlos(:,ivv,iv), ypltlos(:,ivv,iv));
-%             hold on
-%         end
-%     end
+    xpltlos = permute(cat(3, x(1:end-1).*ones(nray,1), xlos), [3 1 2]);
+    ypltlos = permute(cat(3, y(1:end-1).*ones(nray,1), ylos), [3 1 2]);
+    % To check, let's plot just the rays associated with angle idx=50
+    figure()
+    subplot(1,2,1)
+    plot(x,y,'k','LineWidth',1.5);
+    hold on;
+    % for ivv = 1:nray
+    for ivv = 1:nray
+        for iv = 500:500
+            plot(xpltlos(:,ivv,iv), ypltlos(:,ivv,iv),'b');
+            hold on
+        end
+    end
 %     
 %     % Plot "Wave field"
 %     % For plotting, define each resulting line segment from vertex to
@@ -197,13 +199,14 @@ for obj = 1:length(shoreline_fetch)
     xpltwave = permute(cat(3, x(1:end-1).*ones(nray,1), Wavex), [3 1 2]);
     ypltwave = permute(cat(3, y(1:end-1).*ones(nray,1), Wavey), [3 1 2]);
 %     % To check, let's plot just the rays associated with angle idx=50
-    figure()
-    plot(x,y,'k');
+%     figure()
+    subplot(1,2,2)
+    plot(x,y,'k','Linewidth',1.5);
     hold on;
     % for ivv = 1:nray
     for ivv = 1:nray
         for iv =500:500
-            plot(xpltwave(:,ivv,iv), ypltwave(:,ivv,iv));
+            plot(xpltwave(:,ivv,iv), ypltwave(:,ivv,iv),'b');
             hold on
         end
     end
