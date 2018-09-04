@@ -29,7 +29,8 @@ plot(x_1m_t3/1000,y_1m_t3/1000,'Color',[0.7 0.7 0.7])
 axis equal tight
 
 
-figure()
+h = figure();
+h.Position = [440,378,974,420];
 subaxis(1,2,1,'Spacing',0.05,'Margin',0.05)
 plot(x_1m_t1/1000,y_1m_t1/1000,'k')
 hold on

@@ -2,28 +2,28 @@
 % Generals paper. 
 %%
 clearvars -except period global_Save
-
+save_on = false;
 load('waveandfetch_4generalssls_u30.mat')
 % 1 = LGM
-savename{1} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/lg_4wavelets_wavelet_updated'; 
+savename{1} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/lg_4wavelets_wavelet_updated'; 
 % 2 = REDNOISE
-savename{2} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/rednoise_wavelet_updated'; 
+savename{2} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/rednoise_wavelet_updated'; 
 % 3 = WAVE
-savename{3} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/wave_wavelet_updated'; 
+savename{3} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/wave_wavelet_updated'; 
 % 4 = RIVERS
-savename{4} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/rivert2_wavelet_updated'; 
+savename{4} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/rivert2_wavelet_updated'; 
 % 5 = UNIFORM
-savename{5} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/uniform_wavelet_updated'; 
+savename{5} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/uniform_wavelet_updated'; 
 % 6 = Lake Powell
-savename{6} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/LakePowell_wavelet_updated'; 
+savename{6} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/LakePowell_wavelet_updated'; 
 % 7 = Scotland
-savename{7} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/scotland_wavelet_updated'; 
+savename{7} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/scotland_wavelet_updated'; 
 
 
 
-i = 1
+i = 4
 savename = savename{i};
-if i < 6
+if i < 6 
     xx = A(5).cord{1,1}(:,2); yy = A(5).cord{1,1}(:,1);
     A(5).cord{1,1}(:,1) = yy;
     A(5).cord{1,1}(:,2) = xx;
@@ -74,7 +74,7 @@ x0 = x0_fixed*1000; y0 = y0_fixed*1000; % convert to meters
 
 fetch = [];
 end
-% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/LakePowell_gp_wavelet'; 
+% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/LakePowell_gp_wavelet'; 
 % % 
 
 
@@ -108,22 +108,24 @@ end
 
 %% load Ligeia Mare
 % clear
-% filename = 'lg_4wavelets.xls';
-% M = xlsread(filename);
-% 
-% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/lg_4wavelets_wavelet_updated'; 
-% 
-% %get rid of duplicate points (when it goes exactly around a pixel)
-% % indices to unique values in column 3
-% [~, ind] = unique(M(:, 4:5), 'rows');
-% % duplicate indices
-% duplicate_ind = setdiff(1:size(M, 1), ind);
-% % duplicate values
-% duplicate_val = [M(duplicate_ind, 4) M(duplicate_ind, 5)];
-% M(duplicate_ind,:)=[];
-% 
-% x0=M(:,4);
-% y0=M(:,5);
+if i == 1
+filename = 'lg_4wavelets.xls';
+M = xlsread(filename);
+
+savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/lg_4wavelets_wavelet_updated'; 
+
+%get rid of duplicate points (when it goes exactly around a pixel)
+% indices to unique values in column 3
+[~, ind] = unique(M(:, 4:5), 'rows');
+% duplicate indices
+duplicate_ind = setdiff(1:size(M, 1), ind);
+% duplicate values
+duplicate_val = [M(duplicate_ind, 4) M(duplicate_ind, 5)];
+M(duplicate_ind,:)=[];
+
+x0=M(:,4);
+y0=M(:,5);
+end
 
 %%  Red noise eroded by waves
 % clear
@@ -141,7 +143,7 @@ end
 % M(duplicate_ind,:)=[];
 % x0 = M(:,1);
 % y0 = M(:,2);
-% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/wave_rednoise_wavelet_updated'; 
+% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/wave_rednoise_wavelet_updated'; 
 
 %%  Red noise t1
 % clear
@@ -159,7 +161,7 @@ end
 % M(duplicate_ind,:)=[];
 % x0 = M(:,1);
 % y0 = M(:,2);
-% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/rednoiset1_wavelet_updated';
+% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/rednoiset1_wavelet_updated';
 
 
 %% red noise eroded by rivers at t = 2
@@ -167,7 +169,7 @@ end
 % load('xycontours.mat')
 % x0 = x_1m_t2(1:4:end)';
 % y0 = y_1m_t2(1:4:end)';
-% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/x_1m_t2_wavelet_updated'; 
+% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/x_1m_t2_wavelet_updated'; 
 
 
 %% Red noise eroded by uniform model
@@ -177,9 +179,8 @@ end
 % [sl_cell,cells2trash] = order_cw_lastpoint(lake_save{30,1},shoreline);
 % x0 = X(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:,2)));
 % y0 = Y(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:,2)));
-% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/uniform_rednoise_wavelet_updated';
+% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/uniform_rednoise_wavelet_updated';
 %%
-save_on = true;
 % CONSIDER NOT INTERPOLATING HERE. WE DON'T NEED EVENLY SPACED POINTS TO
 % COMPUTE AZIMUTHS, AND IT CAN CREATE STEPS IN THE AZIMUTH VS. DISTANCE
 % SERIES IF INTERPOLATING CREATES MULTIPLE SUCCESSIVE POINTS WITH THE SAME

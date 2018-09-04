@@ -1,7 +1,8 @@
 load('uniform_rednoise.mat')
 runsplot = [1:5:35];
 runsplot = [1;30;60];
-% figure()
+h = figure();
+h.Position = [440,378,974,420];
 color = {'k';[0.3 0.3 0.3];[0.7 0.7 0.7]};
 
 for i = 1:3
@@ -12,32 +13,41 @@ xuniform = X(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:,2)));
 yuniform = Y(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:,2)));
 subaxis(1,2,1,'Spacing',0.05,'Margin',0.05)
 hold on
-plot(xuniform./1000,yuniform./1000,'Color',color{i})
+plot(xuniform,yuniform,'Color',color{i})
 axis equal tight
-% set(gca,'xtick',[],'ytick',[])
-% set(gca,'xticklabel',[],'yticklabel',[])
+set(gca,'xtick',[],'ytick',[])
+set(gca,'xticklabel',[],'yticklabel',[])
 subaxis(1,2,2,'Spacing',0.05,'Margin',0.05)
 hold on
-plot(xuniform./1000,yuniform./1000,'Color',color{i})
+plot(xuniform,yuniform,'Color',color{i})
 axis equal
-% set(gca,'xtick',[],'ytick',[])
-% set(gca,'xticklabel',[],'yticklabel',[])
-set(gca,'XLim',([0.45 0.75])); set(gca,'YLim',([0.6 0.85]))
+set(gca,'xtick',[],'ytick',[])
+set(gca,'xticklabel',[],'yticklabel',[])
+set(gca,'XLim',([450 750])); set(gca,'YLim',([600 850]))
 
 end
 
 
 
+hh = figure();
+hh.Position = [440,378,974,420];
+load('wave_rednoise.mat')
+runsplot = [1;7;14];
+for i = 1:3
+x = ordered_sl_save{runsplot(i),1}{1,1}(:,1);
+y = ordered_sl_save{runsplot(i),1}{1,1}(:,2);
+subaxis(1,2,1,'Spacing',0.05,'Margin',0.05)
+hold on
+plot(x,y,'Color',color{i})
+set(gca,'xtick',[],'ytick',[])
+set(gca,'xticklabel',[],'yticklabel',[])
+axis equal tight
 
-% 
-% subplot(1,2,2)
-% hold on
-% load('wave_rednoise.mat')
-% runsplot = [1;3;5;7;9;11;13];
-% runsplot = (1:7);
-% for i = 1:7
-% x = ordered_sl_save{runsplot(i),1}{1,1}(:,1);
-% y = ordered_sl_save{runsplot(i),1}{1,1}(:,2);
-% plot(x,y)
-% end
-% axis equal tight
+subaxis(1,2,2,'Spacing',0.05,'Margin',0.05)
+hold on
+plot(x,y,'Color',color{i})
+axis equal
+set(gca,'xtick',[],'ytick',[])
+set(gca,'xticklabel',[],'yticklabel',[])
+set(gca,'XLim',([450 750])); set(gca,'YLim',([600 850]))
+end

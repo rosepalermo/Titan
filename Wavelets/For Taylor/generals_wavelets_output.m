@@ -11,16 +11,16 @@ md = [17.6	19.6	17.3	18.6	18.8	20	11.8	22.9	19.5];
 sk = [1.2	0.4	1.9	1.4	0.9	0.1	1.1	0.3	0.3];
 
 figure()
-subplot(1,2,1)
-scatter(md(1),sk(1),'k')
+% subplot(1,2,1)
+scatter(md(1),sk(1),1000,'k','.')
 hold on
-scatter(md(2),sk(2),'b')
-scatter(md(3),sk(3),'g')
-scatter(md(4),sk(4),'r')
-xlabel('Median');ylabel('Variance')
+scatter(md(2),sk(2),1000,'b','.')
+scatter(md(3),sk(3),1000,'g','.')
+scatter(md(4),sk(4),1000,'r','.')
+xlabel('Median');ylabel('Skewness')
 set(gca,'FontSize',14)
 legend(model(1:4),'location','southwest')
-
+figure()
 subplot(1,2,2)
 scatter(md(1),sk(1),'k')
 hold on
