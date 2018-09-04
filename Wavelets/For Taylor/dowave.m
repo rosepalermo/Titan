@@ -1,10 +1,15 @@
-function dowave(y,dt,ord,xx,yy,savename,save_on)
-
+function [period, global_Save] = dowave(y,dt,ord,xx,yy,savename,save_on,fetch,i)
+%%
+% Rose -- try not normalizing, limiting range to 2^2-2^4, and changing
+% range of roughness to [0 9]. I liked how it looked and it may be a better
+% number because not deviation from mean, but a function of the power
+% itself.
+%%
 % Computes the continuous wavelet transform of a function y with point
 % spacing dt, compares it with the spectrum for a random process with 
 % the same autocorrelation structure, and plots the results. The optional
 % input argument ord allows the user to specify the autocorrelation of the
-% random process used to estimate the background spectrum: for an AR(1),
+% random ivprocess used to estimate the background spectrum: for an AR(1),
 % set ord=1; for an AR(2), set ord=2, etc.
 %
 %
@@ -119,9 +124,9 @@ figure
 subplot('position',[0.1 0.75 0.65 0.2])
 plot(t,y)
 set(gca,'XLim',xlim(:))
-xlabel('t')
+xlabel('alongshore distance (m)')
 ylabel('y')
-title('data')
+% title('data')
 set(gca,'FontSize',12)
 hold off
 
@@ -136,18 +141,18 @@ colormap gray
 set(gca,'FontSize',12)
 
 
-xlabel('t')
-ylabel('Period (units of t)')
-title('Wavelet Power Spectrum')
+xlabel('alongshore distance (m)')
+ylabel('Period')
+% title('Wavelet Power Spectrum')
 set(gca,'XLim',xlim(:))
 set(gca,'YLim',log2([min(period),max(period)]), ...
 	'YDir','reverse', ...
 	'YTick',log2(Yticks(:)), ...
 	'YTickLabel',Yticks)
 % % 95% significance contour, levels at -99 (fake) and 1 (95% signif)
-hold on
-contour(t,log2(period),sig95,[-99,1],'r','linewidth',1);
-set(gca,'FontSize',12)
+% hold on
+% contour(t,log2(period),sig95,[-99,1],'r','linewidth',1);
+% set(gca,'FontSize',12)
 % hold on
 % cone-of-influence, anything "below" is dubious
 % plot(t,log2(coi),'k')
@@ -160,9 +165,10 @@ semilogx(fft_theor,log2(period),'k')
 hold on
 semilogx(global_signif,log2(period),'r')
 semilogx(global_ws,log2(period))
+global_Save = global_ws;
 hold off
 xlabel('Power (amplitude^2)')
-title('Global Wavelet Spectrum')
+% title('Global Wavelet Spectrum')
 set(gca,'YLim',log2([min(period),max(period)]), ...
 	'YDir','reverse', ...
 	'YTick',log2(Yticks(:)), ...
@@ -194,65 +200,118 @@ powernorm = power./repmat(global_ws(:),[1 n]);
 % over that range of periods as a measure of relative roughness within that
 % wavelength range.
 
-% Ligeia Mare
-pmin1 = 2^11;
-pmax1 = 2^17; 
-pmin2 = 2^10;
-pmax2 = 2^15;
+if i ==1
+    % Ligeia Mare
+    pmin1 = 2^10;
+    pmax1 = 2^15;
+    pmin2 = 2^10;
+    pmax2 = 2^15;
+end
 
 
-% Model lakes 
-pmin1 = 8;
-pmax1 = 256; 
-pmin2 = 8;
-pmax2 = 16;
+if i == 2|i == 3|i == 4|i == 5
+    %Model lakes
+    pmin1 = 2^2;
+    pmax1 = 2^7;
+    pmin2 = 2^3;
+    pmax2 = 2^4;
+end
 
-% % test new
-% pmin1 = 8;
-% pmax1 = 16;
+if i == 6| i == 7
+    %Lake Powell or scotland
+    pmin1 = 2^9;
+    pmax1 = 2^14;
+    pmin2 = 2^9;
+    pmax2 = 2^14;
+end
 
-
-
-%Lake Powell
-% pmin1 = 2^9;
-% pmax1 = 2^14; 
-% pmin2 = 2^9;
-% pmax2 = 2^14;
 
 pband1 = period >= pmin1 & period <= pmax1;
 powernorm_sub = powernorm(pband1,:);
 
 rness = sum(powernorm_sub);
-norm_rness_unsmoothed = rness./mean(global_ws);
+norm_rness_unsmoothed = rness;
+% norm_rness_unsmoothed = rness./sum(global_ws);
+% norm_rness_unsmoothed = rness./sum(global_ws(pband1));
+% norm_rness_unsmoothed = rness./mean(global_ws);
 % norm_rness_unsmoothed = (rness-min(rness))./max(rness);
+% norm_rness_unsmoothed = rness./mean(rness);
+% norm_rness_unsmoothed = (rness)./max(rness);
 % norm_rness_unsmoothed = (rness)./max(max(power));
 % norm_rness_unsmoothed = (rness)./mean(power(pband1,:));
 figure
-plot(t/1000,norm_rness_unsmoothed,'-b')
+plot(t/1000,norm_rness_unsmoothed,'g')
 xlabel('distance along coast (km)')
 ylabel('roughness')
 set(gca,'FontSize',14)
+ylim([0 90])
 if save_on
     fig = '.png'; rn ='rn'; figname = strcat(savename,rn,fig);
     saveas(gca,figname)
 end
 
-rms(norm_rness_unsmoothed)
-var(norm_rness_unsmoothed)
+figure()
+% h = histogram(rness(1:length(y)/2),10,'Normalization','probability')
+% h = histogram(rness(length(y)/2:end),10,'Normalization','probability')
+h = histogram(rness,10,'Normalization','probability')
+% h = findobj(gca,'Type','patch');
+h.FaceColor = 'k';
+% h.FaceColor = [0.6 0.6 0.6];
+h.EdgeColor = 'w';
+xlabel('roughness')
+ylabel('frequency')
+set(gca,'FontSize',20)
+ylim([0 0.5])
+set(gca,'xlim',[0 90])
+yticks([0 0.25 0.5])
+xticks([0 20 40 60 80])
 
 
+
+rms_ness = rms(norm_rness_unsmoothed)
+var_ness = var(norm_rness_unsmoothed)
+mean_ness = mean(norm_rness_unsmoothed)
+median_ness = median(norm_rness_unsmoothed)
+skewness_ness = skewness(norm_rness_unsmoothed)
+
+% if ~isempty(fetch)
+%     figure()
+%     scatter(fetch,norm_rness_unsmoothed,'.','k')
+%     xlabel('Wave Weighting')
+%     ylabel('Roughness')
+% end
 
 figure
+% if ~isempty(fetch)
+%     subplot(1,2,1)
+% end
 scatter3(xx/1e3,yy/1e3,norm_rness_unsmoothed,[],norm_rness_unsmoothed,'.')
 colormap jet
 colorbar
 view(2)
 axis equal tight
-xlabel('km')
-ylabel('km')
-title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
-%set(gca,'Clim',[0 1])
+% xlabel('km')
+% ylabel('km')
+% title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
+% set(gca,'Clim',[0 mean(rness)+2*std(rness)])
+set(gca,'Clim',[0 90])
 set(gca,'FontSize',14)
+set(gca,'xtick',[],'ytick',[])
+set(gca,'xticklabel',[],'yticklabel',[])
+
+% if ~isempty(fetch)
+%     subplot(1,2,2)
+%     scatter3(xx/1e3,yy/1e3,fetch,[],fetch,'.')
+%     colormap jet
+%     colorbar
+%     view(2)
+%     axis equal tight
+%     xlabel('km')
+%     ylabel('km')
+%     % title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
+%     % set(gca,'Clim',[0 0.75])
+%     set(gca,'FontSize',14)
+% end
 if save_on
     fig = '.png'; rn3 ='rn3'; figname = strcat(savename,rn3,fig);
     saveas(gca,figname)
@@ -265,11 +324,14 @@ colormap jet
 colorbar
 view(2)
 axis equal tight
-xlabel('km')
-ylabel('km')
-title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
-set(gca,'XLim',([0.5 0.8])); set(gca,'YLim',([0.5 0.8])); %set(gca,'Clim',[0 0.75])
+% xlabel('km')
+% ylabel('km')
+% title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
+set(gca,'XLim',([0.5 0.8])); set(gca,'YLim',([0.5 0.8])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
 set(gca,'FontSize',14)
+set(gca,'Clim',[0 90])
+set(gca,'xtick',[],'ytick',[])
+set(gca,'xticklabel',[],'yticklabel',[])
 if save_on
     fig = '.png'; rn3z ='rn3z'; figname = strcat(savename,rn3z,fig);
     saveas(gca,figname)
@@ -444,32 +506,64 @@ rnesssm = movmean([rness rness rness],round(Lsm/dt)); rnesssm = rnesssm(n+1:2*n)
 % set(gca,'Fontsize', 16)
 % 
 % 
-% %plot wavelet power spectrum
-% ax2 = subplot(2,1,2)
-% Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
-% imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
-% colormap parula
-% hold on
-% contour(t,log2(period),sig95,[-99,1],'r','linewidth',1);
-% xlabel('alongshore distance (m)')
-% ylabel('Period (units of t)')
-% set(gca,'XLim',xlim(:))
-% set(gca,'YLim',log2([min(period),max(period)]), ...
-% 	'YDir','reverse', ...
-% 	'YTick',log2(Yticks(:)), ...
-% 	'YTickLabel',Yticks)
-% set(gca,'Fontsize', 16)
+ff = figure()
+ff.Position = [793 267 560 538];
+%plot wavelet power spectrum
+ax2 = subplot(2,1,2)
+% figure()
+Yticks = (floor(log2(min(period)))):ceil((log2(max(period))));
+if i ==1
+    imagesc(t./1e6,log2(period),log2(power));  %*** uncomment for 'image' plot
+else
+    imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
+end
+colormap gray
+colorbar
+if i == 1
+    xlabel('alongshore distance (1000s of km)')
+else
+    xlabel('alongshore distance (m)')
+end
+ylabel('wavelength')
+if i == 1
+    set(gca,'XLim',xlim(:)./1e6)
+else
+    set(gca,'XLim',xlim(:))
+end
+set(gca,'cLim',[-25 10])
+set(gca,'YLim',log2([min(period),max(period)]), ...
+	'YDir','reverse', ...
+	'YTick',(Yticks(:)), ...
+	'YTickLabel',Yticks)
+set(gca,'Fontsize', 16)
 % linkaxes([ax1,ax2],'x')
 % 
 % %plot just time series
-% figure
-% ax1 = subplot(2,1,1)
-% scatter3(t,y,t,[],t,'.')
-% set(gca,'XLim',xlim(:))
-% xlabel('alongshore distance (m)')
-% ylabel('azimuth (radians)')
-% set(gca,'Fontsize', 16)
-% view(2)
+fff = figure()
+fff.Position = [793 267 560 538];ax1 = subplot(2,1,1)
+z = zeros(size(t));
+yplot = y';
+if i == 1
+surface([t./1e6;t./1e6],[yplot;yplot],[z;z],[t;t],...
+        'facecol','no',...
+        'edgecol','interp',...
+        'linew',2);
+else
+surface([t;t],[yplot;yplot],[z;z],[t;t],...
+        'facecol','no',...
+        'edgecol','interp',...
+        'linew',2);
+end
+% set(gca,'XLim',xlim(:)./1e6)
+if i == 1
+    xlabel('alongshore distance (1000s of km)')
+else
+    xlabel('alongshore distance (m)')
+end
+ylabel('azimuth (radians)')
+colormap parula
+set(gca,'Fontsize', 16)
+view(2)
 % title('time series with alongshore coloring')
 % 
 % 

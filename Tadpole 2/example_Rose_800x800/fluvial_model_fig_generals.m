@@ -29,8 +29,9 @@ plot(x_1m_t3/1000,y_1m_t3/1000,'Color',[0.7 0.7 0.7])
 axis equal tight
 
 
-figure()
-subplot(1,2,1)
+h = figure();
+h.Position = [440,378,974,420];
+subaxis(1,2,1,'Spacing',0.05,'Margin',0.05)
 plot(x_1m_t1/1000,y_1m_t1/1000,'k')
 hold on
 plot(x_1m_t2/1000,y_1m_t2/1000,'Color',[0.3 0.3 0.3])
@@ -39,7 +40,7 @@ axis equal tight
 set(gca,'xtick',[],'ytick',[])
 set(gca,'xticklabel',[],'yticklabel',[])
 
-subplot(1,2,2)
+subaxis(1,2,2,'Spacing',0.05,'Margin',0.05)
 plot(x_1m_t1/1000,y_1m_t1/1000,'k')
 hold on
 plot(x_1m_t2/1000,y_1m_t2/1000,'Color',[0.3 0.3 0.3])

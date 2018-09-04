@@ -20,80 +20,134 @@ y0 = yuniform;
 savename = 'trash';
 
 %%
-% Lake Powell
-% filename = 'LakePowell_gp.csv';
-% M = csvread(filename);
-% %get rid of duplicate points (when it goes exactly around a pixel)
-% % indices to unique values in column 3
-% [~, ind] = unique(M(:, 4:5), 'rows');
-% % duplicate indices
-% duplicate_ind = setdiff(1:size(M, 1), ind);
-% % duplicate values
-% duplicate_val = [M(duplicate_ind, 4) M(duplicate_ind, 5)];
-% M(duplicate_ind,:)=[];
-% 
-% x0=M(:,4);
-% y0=M(:,5);
-% lat = 110.978;
-% lon = 89.012;
-% x0 = (x0-min(x0)) * lon;%changed from lon/lat*lon to just lon
-% y0 = (y0-min(y0)) * lat;
-% 
-% dist = sqrt((x0(2:end) - x0(1:end-1)).^2 +  (y0(2:end) - y0(1:end-1)).^2);
-% dist_off = find(dist>1);
-% x0_fixed = [x0(1:dist_off(1)-1);x0(dist_off(2)+1:dist_off(3)-1);x0(dist_off(1)+1:dist_off(2)-1);x0(dist_off(12)+1:dist_off(13)-1);x0(dist_off(13)+1:end);x0(dist_off(11)+1:dist_off(12)-1);x0(dist_off(10)+1:dist_off(11)-1);x0(dist_off(6)+1:dist_off(7)-1);x0(dist_off(9)+1:dist_off(10)-1);x0(dist_off(3)+1:dist_off(4)-1);x0(dist_off(7)+1:dist_off(8)-1);x0(dist_off(5)+1:dist_off(6)-1);x0(dist_off(4)+1:dist_off(5)-1)];
-% y0_fixed = [y0(1:dist_off(1)-1);y0(dist_off(2)+1:dist_off(3)-1);y0(dist_off(1)+1:dist_off(2)-1);y0(dist_off(12)+1:dist_off(13)-1);y0(dist_off(13)+1:end);y0(dist_off(11)+1:dist_off(12)-1);y0(dist_off(10)+1:dist_off(11)-1);y0(dist_off(6)+1:dist_off(7)-1);y0(dist_off(9)+1:dist_off(10)-1);y0(dist_off(3)+1:dist_off(4)-1);y0(dist_off(7)+1:dist_off(8)-1);y0(dist_off(5)+1:dist_off(6)-1);y0(dist_off(4)+1:dist_off(5)-1)];
-% x0_fixed(1245) = []; y0_fixed(1245) = [];
-% x0 = x0_fixed*1000; y0 = y0_fixed*1000; % convert to meters
-% 
-% 
-% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/Scotland_gp_wavelet'; 
-% 
+clearvars -except period global_Save
+save_on = false;
+load('waveandfetch_4generalssls_u30.mat')
+% 1 = LGM
+savename{1} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/lg_4wavelets_wavelet_updated'; 
+% 2 = REDNOISE
+savename{2} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/rednoise_wavelet_updated'; 
+% 3 = WAVE
+savename{3} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/wave_wavelet_updated'; 
+% 4 = RIVERS
+savename{4} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/rivert2_wavelet_updated'; 
+% 5 = UNIFORM
+savename{5} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/uniform_wavelet_updated'; 
+% 6 = Lake Powell
+savename{6} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/LakePowell_wavelet_updated'; 
+% 7 = Scotland
+savename{7} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/scotland_wavelet_updated'; 
+
+
+
+i = 4
+savename = savename{i};
+if i < 6 
+    xx = A(5).cord{1,1}(:,2); yy = A(5).cord{1,1}(:,1);
+    A(5).cord{1,1}(:,1) = yy;
+    A(5).cord{1,1}(:,2) = xx;
+x0 = A(i).cord{1,1}(:,1);
+y0 = A(i).cord{1,1}(:,2);
+
+fetch = WaveArea_save{1, i}{1, 1};
+M = [x0 y0];
+% indices to unique values in column 3
+[~, ind] = unique(M, 'rows');
+% duplicate indices
+duplicate_ind = setdiff(1:size(M, 1), ind);
+% duplicate values
+duplicate_val = [M(duplicate_ind, 1) M(duplicate_ind, 2)];
+M(duplicate_ind,:)=[];
+fetch(duplicate_ind) = [];
+
+x0=M(:,1);
+y0=M(:,2);
+end
+
+if i == 6
+% %Lake Powell
+filename = 'LakePowell_gp.csv';
+M = csvread(filename);
+%get rid of duplicate points (when it goes exactly around a pixel)
+% indices to unique values in column 3
+[~, ind] = unique(M(:, 4:5), 'rows');
+% duplicate indices
+duplicate_ind = setdiff(1:size(M, 1), ind);
+% duplicate values
+duplicate_val = [M(duplicate_ind, 4) M(duplicate_ind, 5)];
+M(duplicate_ind,:)=[];
+
+x0=M(:,4);
+y0=M(:,5);
+lat = 110.978;
+lon = 89.012;
+x0 = (x0-min(x0)) * lon;%changed from lon/lat*lon to just lon
+y0 = (y0-min(y0)) * lat;
+
+dist = sqrt((x0(2:end) - x0(1:end-1)).^2 +  (y0(2:end) - y0(1:end-1)).^2);
+dist_off = find(dist>1);
+x0_fixed = [x0(1:dist_off(1)-1);x0(dist_off(2)+1:dist_off(3)-1);x0(dist_off(1)+1:dist_off(2)-1);x0(dist_off(12)+1:dist_off(13)-1);x0(dist_off(13)+1:end);x0(dist_off(11)+1:dist_off(12)-1);x0(dist_off(10)+1:dist_off(11)-1);x0(dist_off(6)+1:dist_off(7)-1);x0(dist_off(9)+1:dist_off(10)-1);x0(dist_off(3)+1:dist_off(4)-1);x0(dist_off(7)+1:dist_off(8)-1);x0(dist_off(5)+1:dist_off(6)-1);x0(dist_off(4)+1:dist_off(5)-1)];
+y0_fixed = [y0(1:dist_off(1)-1);y0(dist_off(2)+1:dist_off(3)-1);y0(dist_off(1)+1:dist_off(2)-1);y0(dist_off(12)+1:dist_off(13)-1);y0(dist_off(13)+1:end);y0(dist_off(11)+1:dist_off(12)-1);y0(dist_off(10)+1:dist_off(11)-1);y0(dist_off(6)+1:dist_off(7)-1);y0(dist_off(9)+1:dist_off(10)-1);y0(dist_off(3)+1:dist_off(4)-1);y0(dist_off(7)+1:dist_off(8)-1);y0(dist_off(5)+1:dist_off(6)-1);y0(dist_off(4)+1:dist_off(5)-1)];
+x0_fixed(1245) = []; y0_fixed(1245) = [];
+x0 = x0_fixed*1000; y0 = y0_fixed*1000; % convert to meters
+
+fetch = [];
+end
+% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/LakePowell_gp_wavelet'; 
+% % 
 
 
 %% Scotland
-% filename = 'Scotland_gp.csv';
-% M = csvread(filename);
-% %get rid of duplicate points (when it goes exactly around a pixel)
-% % indices to unique values in column 3
-% [~, ind] = unique(M(:, 4:5), 'rows');
-% % duplicate indices
-% duplicate_ind = setdiff(1:size(M, 1), ind);
-% % duplicate values
-% duplicate_val = [M(duplicate_ind, 4) M(duplicate_ind, 5)];
-% M(duplicate_ind,:)=[];
-% 
-% x0=M(:,4);
-% y0=M(:,5);
-% lat = 111360;
-% lon = 60772;
-% x0 = (x0-min(x0)) * lon;%changed from lon/lat*lon to just lon
-% y0 = (y0-min(y0)) * lat;
+if i == 7
+filename = 'Scotland_gp.csv';
+M = csvread(filename);
+%get rid of duplicate points (when it goes exactly around a pixel)
+% indices to unique values in column 3
+[~, ind] = unique(M(:, 4:5), 'rows');
+% duplicate indices
+duplicate_ind = setdiff(1:size(M, 1), ind);
+% duplicate values
+duplicate_val = [M(duplicate_ind, 4) M(duplicate_ind, 5)];
+M(duplicate_ind,:)=[];
 
-
+x0=M(:,4);
+y0=M(:,5);
+lat = 111360;
+lon = 60772;
+x0 = (x0-min(x0)) * lon;%changed from lon/lat*lon to just lon
+y0 = (y0-min(y0)) * lat;
+dist = sqrt((x0(2:end) - x0(1:end-1)).^2 +  (y0(2:end) - y0(1:end-1)).^2);
+dist_off = find(dist>1000);
+x0_fixed = [flipud(x0(924:2345));x0(1:923);x0(2346:end)];
+y0_fixed = [flipud(y0(924:2345));y0(1:923);y0(2346:end)];
+plot(x0_fixed,y0_fixed)
+x0 = x0_fixed; y0 = y0_fixed;
+fetch = [];
+end
 
 %% load Ligeia Mare
 % clear
-% filename = 'lg_4wavelets.xls';
-% M = xlsread(filename);
-% 
-% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/lg_4wavelets_wavelet'; 
-% 
-% %get rid of duplicate points (when it goes exactly around a pixel)
-% % indices to unique values in column 3
-% [~, ind] = unique(M(:, 4:5), 'rows');
-% % duplicate indices
-% duplicate_ind = setdiff(1:size(M, 1), ind);
-% % duplicate values
-% duplicate_val = [M(duplicate_ind, 4) M(duplicate_ind, 5)];
-% M(duplicate_ind,:)=[];
-% 
-% x0=M(:,4);
-% y0=M(:,5);
+if i == 1
+filename = 'lg_4wavelets.xls';
+M = xlsread(filename);
+
+savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/lg_4wavelets_wavelet_updated'; 
+%get rid of duplicate points (when it goes exactly around a pixel)
+% indices to unique values in column 3
+[~, ind] = unique(M(:, 4:5), 'rows');
+% duplicate indices
+duplicate_ind = setdiff(1:size(M, 1), ind);
+% duplicate values
+duplicate_val = [M(duplicate_ind, 4) M(duplicate_ind, 5)];
+M(duplicate_ind,:)=[];
+
+x0=M(:,4);
+y0=M(:,5);
+end
 
 %%  Red noise eroded by waves
 % clear
-% load('wave_rednoise.mat')
+% load('wave_rednoise_wrong.mat')
 % x0 = ordered_sl_save{7,1}{1,1}(:,1);
 % y0 = ordered_sl_save{7,1}{1,1}(:,2);
 % M = [x0 y0];
@@ -108,6 +162,7 @@ savename = 'trash';
 % x0 = M(:,1);
 % y0 = M(:,2);
 % savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/wave_rednoise_wavelet'; 
+% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/wave_rednoise_wavelet_updated'; 
 
 %%  Red noise t1
 % clear
@@ -125,7 +180,7 @@ savename = 'trash';
 % M(duplicate_ind,:)=[];
 % x0 = M(:,1);
 % y0 = M(:,2);
-% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/rednoiset1_wavelet'; 
+% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/rednoiset1_wavelet_updated';
 
 
 %% red noise eroded by rivers at t = 2
@@ -133,7 +188,7 @@ savename = 'trash';
 % load('xycontours.mat')
 % x0 = x_1m_t2(1:4:end)';
 % y0 = y_1m_t2(1:4:end)';
-% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/x_1m_t2_wavelet'; 
+% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/x_1m_t2_wavelet_updated'; 
 
 
 %% Red noise eroded by uniform model
@@ -143,7 +198,7 @@ savename = 'trash';
 % [sl_cell,cells2trash] = order_cw_lastpoint(lake_save{30,1},shoreline);
 % x0 = X(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:,2)));
 % y0 = Y(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:,2)));
-% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/Figures in prep/uniform_rednoise_wavelet';
+% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/uniform_rednoise_wavelet_updated';
 %%
 % CONSIDER NOT INTERPOLATING HERE. WE DON'T NEED EVENLY SPACED POINTS TO
 % COMPUTE AZIMUTHS, AND IT CAN CREATE STEPS IN THE AZIMUTH VS. DISTANCE
@@ -214,7 +269,7 @@ y = y(1:end-2);
 % autoregressive process of order n (a.k.a. an AR(n) process)
 n=2;
 % dowave_duplicate(theta,deltad,n,x,y,savename);
-dowave(theta,deltad,n,x,y,savename,save_on);
+[period{i},global_Save{i}] = dowave(theta,deltad,n,x,y,savename,save_on,fetch,i);
 
 %plot where the first point is
 figure
@@ -223,6 +278,7 @@ hold on
 scatter(x,y,'.','k')
 scatter(x(1),y(1),'*','r')
 scatter(x(30),y(30),'*','b')
+scatter(x(ceil(length(x)/3)),y(ceil(length(y)/3)),'*','m')
 xlabel('X')
 ylabel('Y')
 axis tight
