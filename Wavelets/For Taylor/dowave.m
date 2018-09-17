@@ -10,7 +10,7 @@ function [period, global_Save] = dowave(y,dt,ord,xx,yy,savename,save_on,fetch,i)
 % the same autocorrelation structure, and plots the results. The optional
 % input argument ord allows the user to specify the autocorrelation of the
 % random ivprocess used to estimate the background spectrum: for an AR(1),
-% set ord=1; for an AR(2), set ord=2, etc.
+% set ord=1; for an AR(2), set ord=2, etc.e
 %
 %
 % Modified from Torrence & Compo's routine.
@@ -187,8 +187,8 @@ end
 % normalize the wavelet spectrum by the global wavelet spectrum and display
 % it
 
-powernorm = power./repmat(global_ws(:),[1 n]);
-% powernorm = power; % should be normalized by global otherwise as the power increases with period, higher periods will dominate roughness
+% powernorm = power./repmat(global_ws(:),[1 n]);
+powernorm = power; % should be normalized by global otherwise as the power increases with period, higher periods will dominate roughness
 % figure
 % imagesc(t,log2(period),log2(powernorm));
 % colorbar
@@ -212,7 +212,7 @@ end
 if i == 2|i == 3|i == 4|i == 5
     %Model lakes
     pmin1 = 2^2;
-    pmax1 = 2^7;
+    pmax1 = 2^4;
     pmin2 = 2^3;
     pmax2 = 2^4;
 end
@@ -244,7 +244,7 @@ plot(t/1000,norm_rness_unsmoothed,'g')
 xlabel('distance along coast (km)')
 ylabel('roughness')
 set(gca,'FontSize',14)
-ylim([0 90])
+% ylim([0 90])
 if save_on
     fig = '.png'; rn ='rn'; figname = strcat(savename,rn,fig);
     saveas(gca,figname)
@@ -262,10 +262,13 @@ xlabel('roughness')
 ylabel('frequency')
 set(gca,'FontSize',20)
 ylim([0 0.5])
-set(gca,'xlim',[0 90])
-yticks([0 0.25 0.5])
-xticks([0 20 40 60 80])
-
+% set(gca,'xlim',[0 90])
+% yticks([0 0.25 0.5])
+% xticks([0 20 40 60 80])
+if save_on
+    fig = '.png'; his ='his'; figname = strcat(savename,his,fig);
+    saveas(gca,figname)
+end
 
 
 rms_ness = rms(norm_rness_unsmoothed)
@@ -281,65 +284,67 @@ skewness_ness = skewness(norm_rness_unsmoothed)
 %     ylabel('Roughness')
 % end
 
-figure
-% if ~isempty(fetch)
-%     subplot(1,2,1)
-% end
-scatter3(xx/1e3,yy/1e3,norm_rness_unsmoothed,[],norm_rness_unsmoothed,'.')
-colormap jet
-colorbar
-view(2)
-axis equal tight
-% xlabel('km')
-% ylabel('km')
-% title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
-% set(gca,'Clim',[0 mean(rness)+2*std(rness)])
-set(gca,'Clim',[0 90])
-set(gca,'FontSize',14)
-set(gca,'xtick',[],'ytick',[])
-set(gca,'xticklabel',[],'yticklabel',[])
-
-% if ~isempty(fetch)
-%     subplot(1,2,2)
-%     scatter3(xx/1e3,yy/1e3,fetch,[],fetch,'.')
-%     colormap jet
-%     colorbar
-%     view(2)
-%     axis equal tight
-%     xlabel('km')
-%     ylabel('km')
-%     % title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
-%     % set(gca,'Clim',[0 0.75])
-%     set(gca,'FontSize',14)
-% end
-if save_on
-    fig = '.png'; rn3 ='rn3'; figname = strcat(savename,rn3,fig);
-    saveas(gca,figname)
-end
-
-% norm_rness zoomed
-figure
-scatter3(xx/1e3,yy/1e3,norm_rness_unsmoothed,[],norm_rness_unsmoothed,'.')
-colormap jet
-colorbar
-view(2)
-axis equal tight
-% xlabel('km')
-% ylabel('km')
-% title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
-set(gca,'XLim',([0.5 0.8])); set(gca,'YLim',([0.5 0.8])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
-set(gca,'FontSize',14)
-set(gca,'Clim',[0 90])
-set(gca,'xtick',[],'ytick',[])
-set(gca,'xticklabel',[],'yticklabel',[])
-if save_on
-    fig = '.png'; rn3z ='rn3z'; figname = strcat(savename,rn3z,fig);
-    saveas(gca,figname)
-end
-
-if save_on
-    save(savename,'xx','yy','norm_rness_unsmoothed','pmin1','pmax1','period','power')
-end
+% % figure
+% % % if ~isempty(fetch)
+% % %     subplot(1,2,1)
+% % % end
+% % scatter3(xx/1e3,yy/1e3,norm_rness_unsmoothed,[],norm_rness_unsmoothed,'.')
+% % colormap jet
+% % colorbar
+% % view(2)
+% % axis equal tight
+% % % xlabel('km')
+% % % ylabel('km')
+% % % title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
+% % % set(gca,'Clim',[0 mean(rness)+2*std(rness)])
+% % % set(gca,'Clim',[0 90])
+% % % set(gca,'Clim',[0 9])
+% % set(gca,'FontSize',14)
+% % set(gca,'xtick',[],'ytick',[])
+% % set(gca,'xticklabel',[],'yticklabel',[])
+% % 
+% % % if ~isempty(fetch)
+% % %     subplot(1,2,2)
+% % %     scatter3(xx/1e3,yy/1e3,fetch,[],fetch,'.')
+% % %     colormap jet
+% % %     colorbar
+% % %     view(2)
+% % %     axis equal tight
+% % %     xlabel('km')
+% % %     ylabel('km')
+% % %     % title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
+% % %     % set(gca,'Clim',[0 0.75])
+% % %     set(gca,'FontSize',14)
+% % % end
+% % if save_on
+% %     fig = '.png'; rn3 ='rn3'; figname = strcat(savename,rn3,fig);
+% %     saveas(gca,figname)
+% % end
+% % 
+% % % norm_rness zoomed
+% % figure
+% % scatter3(xx/1e3,yy/1e3,norm_rness_unsmoothed,[],norm_rness_unsmoothed,'.')
+% % colormap jet
+% % colorbar
+% % view(2)
+% % axis equal tight
+% % % xlabel('km')
+% % % ylabel('km')
+% % % title(['normalized sum of the power spectrum in the ' num2str(pmin1/1e3) '-' num2str(pmax1/1e3) ' km band'])
+% % set(gca,'XLim',([0.5 0.8])); set(gca,'YLim',([0.5 0.8])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
+% % set(gca,'FontSize',14)
+% % % set(gca,'Clim',[0 90])
+% % set(gca,'Clim',[0 9])
+% % set(gca,'xtick',[],'ytick',[])
+% % set(gca,'xticklabel',[],'yticklabel',[])
+% % if save_on
+% %     fig = '.png'; rn3z ='rn3z'; figname = strcat(savename,rn3z,fig);
+% %     saveas(gca,figname)
+% % end
+% % 
+% % if save_on
+% %     save(savename,'xx','yy','norm_rness_unsmoothed','pmin1','pmax1','period','power')
+% % end
 
 
 % there's a signal there, but it's noisy, so let's smooth it 

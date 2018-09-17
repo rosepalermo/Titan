@@ -1,47 +1,60 @@
 % This code does the wavelet analysis for shorelines as described in Rose's
 % Generals paper. 
 save_on = false;
-%% uniform applied to river t3
-
-load('uniform_t3_15.mat')
-x0 = xuniform;
-y0 = yuniform;
-% M = [x0 y0];
-% %get rid of duplicate points (when it goes exactly around a pixel)
-% % indices to unique values in column 3
-% [~, ind] = unique(M, 'rows');
-% % duplicate indices
-% duplicate_ind = setdiff(1:size(M, 1), ind);
-% % duplicate values
-% duplicate_val = [M(duplicate_ind, 1) M(duplicate_ind, 2)];
-% M(duplicate_ind,:)=[];
-% x0 = M(:,1);
-% y0 = M(:,2);
-savename = 'trash';
+i=2;
+ %% uniform applied to river t3
+% 
+% load('uniform_t3_15.mat')
+% x0 = xuniform;
+% y0 = yuniform;
+% % M = [x0 y0];
+% % %get rid of duplicate points (when it goes exactly around a pixel)
+% % % indices to unique values in column 3
+% % [~, ind] = unique(M, 'rows');
+% % % duplicate indices
+% % duplicate_ind = setdiff(1:size(M, 1), ind);
+% % % duplicate values
+% % duplicate_val = [M(duplicate_ind, 1) M(duplicate_ind, 2)];
+% % M(duplicate_ind,:)=[];
+% % x0 = M(:,1);
+% % y0 = M(:,2);
+% savename = 'trash';
 
 %%
-clearvars -except period global_Save
-save_on = false;
+clearvars -except period global_Save i save_on
 load('waveandfetch_4generalssls_u30.mat')
+% % 1 = LGM
+% savename{1} = '/Users/rosepalermo/Documents/Research/Titan/Notes/NewRoughness_nonorm/lg_4wavelets_wavelet_updated'; 
+% % 2 = REDNOISE
+% savename{2} = '/Users/rosepalermo/Documents/Research/Titan/Notes/NewRoughness_nonorm/rednoise_wavelet_updated'; 
+% % 3 = WAVE
+% savename{3} = '/Users/rosepalermo/Documents/Research/Titan/Notes/NewRoughness_nonorm/wave_wavelet_updated'; 
+% % 4 = RIVERS
+% savename{4} = '/Users/rosepalermo/Documents/Research/Titan/Notes/NewRoughness_nonorm/rivert2_wavelet_updated'; 
+% % 5 = UNIFORM
+% savename{5} = '/Users/rosepalermo/Documents/Research/Titan/Notes/NewRoughness_nonorm/uniform_wavelet_updated'; 
+% % 6 = Lake Powell
+% savename{6} = '/Users/rosepalermo/Documents/Research/Titan/Notes/NewRoughness_nonorm/LakePowell_wavelet_updated'; 
+% % 7 = Scotland
+% savename{7} = '/Users/rosepalermo/Documents/Research/Titan/Notes/NewRoughness_nonorm/scotland_wavelet_updated'; 
 % 1 = LGM
-savename{1} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/lg_4wavelets_wavelet_updated'; 
+savename{1} = 'C:\Users\Rose Palermo\Documents\Titan\Notes\NewRoughness_nonorm\lg_4wavelets_wavelet_updated'; 
 % 2 = REDNOISE
-savename{2} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/rednoise_wavelet_updated'; 
+savename{2} = 'C:\Users\Rose Palermo\Documents\Titan\Notes\NewRoughness_nonorm\rednoise_wavelet_updated'; 
 % 3 = WAVE
-savename{3} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/wave_wavelet_updated'; 
+savename{3} = 'C:\Users\Rose Palermo\Documents\Titan\Notes\NewRoughness_nonorm\wave_wavelet_updated'; 
 % 4 = RIVERS
-savename{4} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/rivert2_wavelet_updated'; 
+savename{4} = 'C:\Users\Rose Palermo\Documents\Titan\Notes\NewRoughness_nonorm\rivert2_wavelet_updated'; 
 % 5 = UNIFORM
-savename{5} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/uniform_wavelet_updated'; 
+savename{5} = 'C:\Users\Rose Palermo\Documents\Titan\Notes\NewRoughness_nonorm\uniform_wavelet_updated'; 
 % 6 = Lake Powell
-savename{6} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/LakePowell_wavelet_updated'; 
+savename{6} = 'C:\Users\Rose Palermo\Documents\Titan\Notes\NewRoughness_nonorm\LakePowell_wavelet_updated'; 
 % 7 = Scotland
-savename{7} = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/scotland_wavelet_updated'; 
+savename{7} = 'C:\Users\Rose Palermo\Documents\Titan\Notes\NewRoughness_nonorm\scotland_wavelet_updated'; 
 
-
-
-i = 4
+if save_on
 savename = savename{i};
+end
 if i < 6 
     xx = A(5).cord{1,1}(:,2); yy = A(5).cord{1,1}(:,1);
     A(5).cord{1,1}(:,1) = yy;
@@ -241,10 +254,10 @@ y = y(1:end-2);
 
 
 %% Taylor's synthetic coast tests
-% % % TRY SMOOTHING AZIMUTH
-% % Lsm = 7; % smoothing window length in # points
-% % thetasm = movmean([theta; theta; theta],Lsm); thetasm = thetasm(length(x)+1:2*length(x)); % note that we took advantage of the periodicity of the spectrum in t
-% 
+% % TRY SMOOTHING AZIMUTH
+% Lsm = 7; % smoothing window length in # points
+% thetasm = movmean([theta; theta; theta],Lsm); thetasm = thetasm(length(x)+1:2*length(x)); % note that we took advantage of the periodicity of the spectrum in t
+
 % % HERE IS A SYNTHETIC SIGNAL WITH THE SAME LENGTH AS theta
 % 
 % t=deltad*(0:length(theta)-1);
@@ -253,8 +266,36 @@ y = y(1:end-2);
 % hwin = 0.5*(1-cos(2*pi*t/T));
 % synth = 4*sin(2*pi*t/(T/4)) + hwin.*( 1*sin(2*pi*t/(T/64)) );
 % 
+% n=2; i = 2;
+% dowave(synth,deltad,n,x,y,savename,save_on,[],i);
+% 
+% 
+% th = linspace(0,2*pi,60);
+% r = 2 + rand(size(th))-0.5;
+% x = r.*cos(th);
+% y = r.*sin(th);
+% N=100; %1000 data points
+% th = linspace(0,2*pi,N)'; %theta from 0 to 2pi
+% amp = 2*ones(N,1);
+% for i=1:5 %higher numbers here make more higher frequency fluctuations
+%     a = rand()-0.5; %random number from -0.5 to 0.5
+%     b = rand()-0.5;
+%     amp = amp + a/i*cos(i*th) + b/i*sin(i*th); %change circle by a fourier function over it
+% end
+% x=(amp.*cos(th))'; y = (amp.*sin(th))';
+% % add first AND SECOND points to the end for meander
+% x = [x0;x0(1:2)];
+% y = [y0;y0(1:2)];
+% 
+% % transform into azimuth and d(azimuth)/d(distance), evenly spaced in
+% % streamwise distance
+% [theta, dtheta, deltad] = meander_titan(x,y);
+% x = x(1:end-2);
+% y = y(1:end-2);
+% 
+% i=2;
 % n=2;
-% dowave(synth,deltad,n,x,y,savename);
+% dowave(theta,deltad,n,x,y,savename,save_on,[],i);
 % 
 % % NOW SHUFFLE ORDER AS A TEST:
 % ihalf = round(length(t)/2);
@@ -271,7 +312,7 @@ n=2;
 % dowave_duplicate(theta,deltad,n,x,y,savename);
 [period{i},global_Save{i}] = dowave(theta,deltad,n,x,y,savename,save_on,fetch,i);
 
-%plot where the first point is
+% plot where the first point is
 figure
 % plot(x,y,'k','LineWidth',2)
 hold on
