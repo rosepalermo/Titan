@@ -37,7 +37,7 @@ for i=1:500 %higher numbers here make more higher frequency fluctuations
 end
 lakex_mr{3,1}(1,:)=amp.*cos(th); lakey_mr{3,1}(1,:) = amp.*sin(th);
 eps_mr(3) = 5;
-dx_mr(3) = 0.1; dy_mr(3) = 0.1;
+dx_mr(3) = 0.001; dy_mr(3) = 0.001;
 
 % for modelrun = 1:1
 modelrun = 3;
