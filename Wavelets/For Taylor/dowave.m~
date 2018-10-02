@@ -17,13 +17,13 @@ function [period, global_Save] = dowave(y,dt,ord,xx,yy,savename,save_on,fetch,i)
 
 % remove the mean and normalize to unit variance. Could also do first-order
 % detrending if desired.
-variance = std(y)^2;
-y = (y - mean(y))/sqrt(variance);
+% variance = std(y)^2;
+% y = (y - mean(y))/sqrt(variance);
 
 n = length(y);
 t = (0:length(y)-1)*dt;  % construct time array
 xlim = [min(t),max(t)];  % plotting range
-pad = 0;      % pad the time series with zeroes (recommended - not doing this for Titan because closed loop)
+pad = 0;      % pad the time series with zeroes (recommended)
 dj = 0.25;    % this will do 4 sub-octaves per octave
 s0 = 2*dt;    % this says start at a scale of 2*dt (analogous to the Nyquist wavelength of a time series)
 % npow = 10;   % number of powers of two to do.
@@ -37,9 +37,7 @@ power = (abs(wave)).^2 ;  % compute wavelet power spectrum
 figure()
 plot(power,period)
 
-energy = power*dt;
-figure()
-plot(energy,period)
+ener
 
 % Background spectrum and significance levels:
 
