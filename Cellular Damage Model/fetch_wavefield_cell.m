@@ -84,7 +84,8 @@ for obj = 1:length(shoreline_fetch)
         yseg = [ones(size(theta))*y(iv)+dy_eps; yend; nan(size(theta))];
 %         [xi,yi] = polyxpoly(xseg(:), yseg(:), x_bounding, y_bounding);
 %         THIS IS SLOWER THAN POLYXPOLY[xi,yi] = intersections(xseg(:),yseg(:),[x_bounding x_bounding(1)],[y_bounding y_bounding(1)],0);
-        [P] = InterX([xseg(:),yseg(:)]',[[x_bounding x_bounding(1)];[y_bounding y_bounding(1)]]);
+%         [P] = InterX([xseg(:),yseg(:)]',[[x_bounding x_bounding(1)];[y_bounding y_bounding(1)]]);
+        [P] = InterX_mex([xseg(:),yseg(:)]',[[x_bounding x_bounding(1)];[y_bounding y_bounding(1)]]);
         xi = P(1,:)'; yi = P(2,:)';
         if length(shoreline_fetch) > 1
             for ii = 2:length(shoreline_fetch)

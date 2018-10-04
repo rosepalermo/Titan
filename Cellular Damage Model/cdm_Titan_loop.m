@@ -27,7 +27,7 @@
 % load('testlake_rand.mat')
 
 rng(2)
-N=1000; %1000 data points
+N=100; %1000 data points
 th = linspace(0,2*pi,N)'; %theta from 0 to 2pi
 amp = 2*ones(N,1);
 for i=1:500 %higher numbers here make more higher frequency fluctuations

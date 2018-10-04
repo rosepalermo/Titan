@@ -3,6 +3,7 @@
 #include <matrix.h>
 #include <mex.h>
 #include <vector>
+#include <unistd.h>
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   /*
@@ -68,6 +69,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   double dx2[L2_length-1];
   double dy2[L2_length-1];
 
+  
   // Diff x and Diff y for L1
   for (int i=0; i<L1_length-1; i++){
     dx1[i] = L1[2*(i+1)] - L1[2*i];
@@ -104,6 +106,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
   }
 
+  //////////// This is making Matlab crash, probably because temp1 is too big.
+  ////////////   see if you can combine all of these double for loops so we don't
+  ////////////   need all of these big temporary variables.
+  mexPrintf("%f", temp1[0][0]);
+  ////////////
+  P_out_m = plhs[0] = mxCreateDoubleMatrix(2, 0, mxREAL); return;
+  
   double temp2[L2_length-1][L1_length];
   for (int j=0; j<L1_length; j++){
     for (int i=0; i<L2_length-1; i++){
@@ -116,6 +125,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   int C1[L1_length-1][L2_length-1];
   // mexPrintf("D1: %dx%d\n", L1_length-1, L2_length-1);
 
+
+
   for (int j = 0; j < L2_length-1; j++){
     for (int i=0; i<L1_length-1; i++){
       D1[i][j] = (temp1[i][j]-S1[i])*(temp1[i][j+1]-S1[i]);
@@ -126,6 +137,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
       // mexPrintf("C1[%d][%d]: %d \n", i, j, C1[i][j]);
     }
   }
+  
 
   double D2[L2_length-1][L1_length-1];
   int C2[L1_length-1][L2_length-1];
@@ -134,7 +146,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   for (int j = 0; j < L1_length-1; j++){
     for (int i=0; i<L2_length-1; i++){
       D2[i][j] = (temp2[i][j]-S2[i])*(temp2[i][j+1]-S2[i]);
-      C2[j][i] = D2[i][j] <= 0;
+      C2[j][i] = (int) D2[i][j] <= 0;
       // mexPrintf("first part [%d][%d]: %f \n", i, j, (temp2[i][j]-S2[i]));
       // mexPrintf("second part [%d][%d]: %f \n", i, j, (temp1[i][j+1]-S1[i]));
       // mexPrintf("D2[%d][%d]: %f \n", i, j, D2[i][j]);
@@ -145,10 +157,16 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   // find where C1 & C2
   std::vector<int> ii;
   std::vector<int> jj;
+  
+  ii.reserve((L2_length-1)*(L1_length-1));
+  jj.reserve((L2_length-1)*(L1_length-1));
 
-  for (int j = 0; j < L2_length-1; j++){
-    for (int i=0; i<L1_length-1; i++){
-      if (C1[i][j] && C2[i][j]){
+
+  for (int j = 0; j < L2_length - 1; j++){
+    for (int i = 0; i < L1_length - 1; i++){
+      usleep(1);
+      // mexPrintf("Checking index: %d, %d\n", i, j);
+      if ((C1[i][j] == 1) && (C2[i][j] == 1)){
         ii.push_back(i);
         jj.push_back(j);
         // mexPrintf("Adding index: %d, %d\n", i, j);
@@ -187,7 +205,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
     // solve system of equations to get the common points
     P[2*P_idx] = (dx2[jj[i]]*S1[ii[i]] - dx1[ii[i]]*S2[jj[i]])/L[i];// x coordinate
-    P[1 + 2*P_idx] = (dy2[jj[i]]*S1[ii[i]] - dy1[ii[i]]*S2[jj[i]])/L[i];// x coordinate
+    P[1 + 2*P_idx] = (dy2[jj[i]]*S1[ii[i]] - dy1[ii[i]]*S2[jj[i]])/L[i];// y coordinate
     P_idx++;
   }
 
