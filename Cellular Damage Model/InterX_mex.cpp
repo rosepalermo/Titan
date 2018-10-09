@@ -69,92 +69,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   double dx2[L2_length-1];
   double dy2[L2_length-1];
 
-  
-  // Diff x and Diff y for L1
-  for (int i=0; i<L1_length-1; i++){
-    dx1[i] = L1[2*(i+1)] - L1[2*i];
-    dy1[i] = L1[1 + 2*(i+1)] - L1[1 + 2*i];
-    // mexPrintf("diffx1 %f \n", dx1[i]);
-  }
-
-  // Diff x and Diff y for L2
-  for (int i=0; i<L2_length-1; i++){
-    dx2[i] = L2[2*(i+1)] - L2[2*i];
-    dy2[i] = L2[1 + 2*(i+1)] - L2[1 + 2*i];
-  }
-
-  // Determine 'signed distances'
   double S1[L1_length-1];
   double S2[L2_length-1];
 
-  for (int i=0; i<L1_length-1; i++){
-      S1[i] = dx1[i]*L1[1 + 2*i] - dy1[i]*L1[2*i];
-      // mexPrintf("S1[%d]: %f \n", i, S1[i]);
-  }
+  // int C1[L1_length-1][L2_length-1];
 
-  for (int i=0; i<L2_length-1; i++){
-      S2[i] = dx2[i]*L2[1 + 2*i] - dy2[i]*L2[2*i];
-      // mexPrintf("S2[%d]: %f \n", i, S2[i]);
-  }
-
-  // Some mysterious temporary variables
-  double temp1[L1_length-1][L2_length];
-  for (int j=0; j<L2_length; j++){
-    for (int i=0; i<L1_length-1; i++){
-      temp1[i][j] = dx1[i]*L2[1+2*j] - dy1[i]*L2[2*j];
-      // mexPrintf("temp1[%d][%d]: %f \n", i, j, temp1[i][j]);
-    }
-  }
-
-  //////////// This is making Matlab crash, probably because temp1 is too big.
-  ////////////   see if you can combine all of these double for loops so we don't
-  ////////////   need all of these big temporary variables.
-  mexPrintf("%f", temp1[0][0]);
-  ////////////
-  P_out_m = plhs[0] = mxCreateDoubleMatrix(2, 0, mxREAL); return;
-  
-  double temp2[L2_length-1][L1_length];
-  for (int j=0; j<L1_length; j++){
-    for (int i=0; i<L2_length-1; i++){
-      temp2[i][j] = dx2[i]*L1[1+2*j] - dy2[i]*L1[2*j];
-      // mexPrintf("temp2[%d][%d]: %f \n", i, j, temp2[i][j]);
-    }
-  }
-
-  double D1[L1_length-1][L2_length-1];
-  int C1[L1_length-1][L2_length-1];
-  // mexPrintf("D1: %dx%d\n", L1_length-1, L2_length-1);
-
-
-
-  for (int j = 0; j < L2_length-1; j++){
-    for (int i=0; i<L1_length-1; i++){
-      D1[i][j] = (temp1[i][j]-S1[i])*(temp1[i][j+1]-S1[i]);
-      C1[i][j] = D1[i][j] <= 0;
-      // mexPrintf("first part [%d][%d]: %f \n", i, j, (temp1[i][j]-S1[i]));
-      // mexPrintf("second part [%d][%d]: %f \n", i, j, (temp1[i][j+1]-S1[i]));
-      // mexPrintf("D1[%d][%d]: %f \n", i, j, D1[i][j]);
-      // mexPrintf("C1[%d][%d]: %d \n", i, j, C1[i][j]);
-    }
-  }
-  
-
-  double D2[L2_length-1][L1_length-1];
-  int C2[L1_length-1][L2_length-1];
-  // mexPrintf("D2: %dx%d\n", L2_length-1, L1_length-1);
-
-  for (int j = 0; j < L1_length-1; j++){
-    for (int i=0; i<L2_length-1; i++){
-      D2[i][j] = (temp2[i][j]-S2[i])*(temp2[i][j+1]-S2[i]);
-      C2[j][i] = (int) D2[i][j] <= 0;
-      // mexPrintf("first part [%d][%d]: %f \n", i, j, (temp2[i][j]-S2[i]));
-      // mexPrintf("second part [%d][%d]: %f \n", i, j, (temp1[i][j+1]-S1[i]));
-      // mexPrintf("D2[%d][%d]: %f \n", i, j, D2[i][j]);
-      // mexPrintf("C2[%d][%d]: %d \n", j, i, C2[j][i]);
-    }
-  }
-
-  // find where C1 & C2
+  // int C2[L1_length-1][L2_length-1];
   std::vector<int> ii;
   std::vector<int> jj;
   
@@ -162,17 +82,55 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   jj.reserve((L2_length-1)*(L1_length-1));
 
 
-  for (int j = 0; j < L2_length - 1; j++){
-    for (int i = 0; i < L1_length - 1; i++){
-      usleep(1);
-      // mexPrintf("Checking index: %d, %d\n", i, j);
-      if ((C1[i][j] == 1) && (C2[i][j] == 1)){
+     // double temp1[L1_length-1][L2_length];
+     // double temp2[L2_length-1][L1_length];
+     // double D1[L1_length-1][L2_length-1];
+     // double D2[L2_length-1][L1_length-1];
+
+ double temp1, temp1_2, temp2, temp2_2, D1, D2;
+ int C1, C2;
+
+
+  for (int i=0; i<L1_length-1; i++){
+
+    dx1[i] = L1[2*(i+1)] - L1[2*i];
+    dy1[i] = L1[1 + 2*(i+1)] - L1[1 + 2*i];
+    S1[i] = dx1[i]*L1[1 + 2*i] - dy1[i]*L1[2*i];
+  }
+
+  for (int j=0; j<L2_length-1; j++){
+
+    dx2[j] = L2[2*(j+1)] - L2[2*j];
+    dy2[j] = L2[1 + 2*(j+1)] - L2[1 + 2*j];
+    S2[j] = dx2[j]*L2[1 + 2*j] - dy2[j]*L2[2*j];
+  }
+
+  // Diff x and Diff y for L1
+  for (int i=0; i<L1_length-1; i++){
+    for (int j=0; j<L2_length-1; j++){
+
+     temp1 = dx1[i]*L2[1+2*j] - dy1[i]*L2[2*j];
+     temp1_2 = dx1[i]*L2[1+2*(j+1)] - dy1[i]*L2[2*(j+1)];
+     temp2 = dx2[j]*L1[1+2*i] - dy2[j]*L1[2*i];
+     temp2_2 = dx2[j]*L1[1+2*(i+1)] - dy2[j]*L1[2*(i+1)];
+     D1 = (temp1-S1[i])*(temp1_2-S1[i]);
+     C1 = D1 <= 0;
+     D2 = (temp2-S2[j])*(temp2_2-S2[j]);
+     C2 = (int) D2 <= 0;
+     if ((C1 ==1) && (C2 ==1)){
         ii.push_back(i);
         jj.push_back(j);
-        // mexPrintf("Adding index: %d, %d\n", i, j);
-      }
+     }
+     
+
+      // int test;
+      // test = ((C1[i][j] == 1) && (C2[i][j] == 1));
+      // mexPrintf("test: %d", test);
+
     }
   }
+  // P_out_m = plhs[0] = mxCreateDoubleMatrix(2, 0, mxREAL); return;
+
 
   //associate outputs
   if (ii.size() == 0){

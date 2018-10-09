@@ -89,7 +89,8 @@ for obj = 1:length(shoreline_fetch)
         xi = P(1,:)'; yi = P(2,:)';
         if length(shoreline_fetch) > 1
             for ii = 2:length(shoreline_fetch)
-            [xi_add,yi_add] = polyxpoly(xseg(:), yseg(:), [shoreline_fetch{ii,1}(:,1); shoreline_fetch{ii,1}(1,1)],[shoreline_fetch{ii,1}(:,2);shoreline_fetch{ii,1}(1,2)]);
+%             [xi_add,yi_add] = polyxpoly(xseg(:), yseg(:), [shoreline_fetch{ii,1}(:,1); shoreline_fetch{ii,1}(1,1)],[shoreline_fetch{ii,1}(:,2);shoreline_fetch{ii,1}(1,2)]);
+            [xi_add,yi_add] = InterX_mex([xseg(:) yseg(:)], [[shoreline_fetch{ii,1}(:,1) shoreline_fetch{ii,1}(1,1)] [shoreline_fetch{ii,1}(:,2);shoreline_fetch{ii,1}(1,2)]]);
             xi_add = xi_add(1:end-1); yi_add = yi_add(1:end-1);
             xi = [xi;xi_add]; yi = [yi;yi_add];
             end
