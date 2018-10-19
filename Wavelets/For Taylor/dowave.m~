@@ -23,7 +23,7 @@ function [period, global_Save] = dowave(y,dt,ord,xx,yy,savename,save_on,fetch,i)
 n = length(y);
 t = (0:length(y)-1)*dt;  % construct time array
 xlim = [min(t),max(t)];  % plotting range
-pad = 0;      % pad the time series with zeroes (recommended)
+pad = 0;      % pad the time series with zeroes (recommended - not doing this for Titan because closed loop)
 dj = 0.25;    % this will do 4 sub-octaves per octave
 s0 = 2*dt;    % this says start at a scale of 2*dt (analogous to the Nyquist wavelength of a time series)
 % npow = 10;   % number of powers of two to do.
@@ -37,7 +37,9 @@ power = (abs(wave)).^2 ;  % compute wavelet power spectrum
 figure()
 plot(power,period)
 
-ener
+energy = power*dt;
+figure()
+plot(energy,period)
 
 % Background spectrum and significance levels:
 
@@ -120,6 +122,7 @@ dof = n - scale;  % the -scale corrects for padding at edges
 % global_signif = wave_signif(std(y)^2,dt,scale,1,lag1,-1,dof,mother);
 global_signif = wave_signif_ARn(std(y)^2,dt,scale,1,fft_theor,-1,dof,mother);
 
+eq14 = dj.*dt./0.776./length(y)*sum(sum(power./scale'));
 
 % PLOTTING
 figure
@@ -230,12 +233,43 @@ if i == 6| i == 7
     pmax2 = 2^14;
 end
 
+if i == 12
+    pmin1 = 0;
+    pmax1 = 6;
+end
 
 pband1 = period >= pmin1 & period <= pmax1;
 powernorm_sub = powernorm(pband1,:);
+eq14 = dj.*dt./0.776./length(y)*sum(powernorm_sub./scale(pband1)');
+figure()
+scatter3(t,y,eq14,[],eq14,'.')
+title('eq14')
+view(2)
+figure() 
+plot(t,eq14)
+title('eq14')
+figure()
+h = histogram(eq14,10,'Normalization','probability')
+% h = findobj(gca,'Type','patch');
+h.FaceColor = 'k';
+% h.FaceColor = [0.6 0.6 0.6];
+h.EdgeColor = 'w';
+title('eq14')
+
+if i == 12
+    
+
+
+
 
 rness = sum(powernorm_sub);
 norm_rness_unsmoothed = rness;
+
+figure()
+scatter3(t,y,norm_rness_unsmoothed,[],norm_rness_unsmoothed,'.')
+title('eq14')
+view(2)
+
 % norm_rness_unsmoothed = rness./sum(global_ws);
 % norm_rness_unsmoothed = rness./sum(global_ws(pband1));
 % norm_rness_unsmoothed = rness./mean(global_ws);
@@ -244,36 +278,38 @@ norm_rness_unsmoothed = rness;
 % norm_rness_unsmoothed = (rness)./max(rness);
 % norm_rness_unsmoothed = (rness)./max(max(power));
 % norm_rness_unsmoothed = (rness)./mean(power(pband1,:));
-% % figure
-% % plot(t/1000,norm_rness_unsmoothed,'g')
-% % xlabel('distance along coast (km)')
-% % ylabel('roughness')
-% % set(gca,'FontSize',14)
-% % % ylim([0 90])
-% % if save_on
-% %     fig = '.png'; rn ='rn'; figname = strcat(savename,rn,fig);
-% %     saveas(gca,figname)
-% % end
-% % 
-% % figure()
-% % % h = histogram(rness(1:length(y)/2),10,'Normalization','probability')
-% % % h = histogram(rness(length(y)/2:end),10,'Normalization','probability')
-% % h = histogram(rness,10,'Normalization','probability')
-% % % h = findobj(gca,'Type','patch');
-% % h.FaceColor = 'k';
-% % % h.FaceColor = [0.6 0.6 0.6];
-% % h.EdgeColor = 'w';
-% % xlabel('roughness')
-% % ylabel('frequency')
-% % set(gca,'FontSize',20)
-% % ylim([0 0.5])
-% % % set(gca,'xlim',[0 90])
-% % % yticks([0 0.25 0.5])
-% % % xticks([0 20 40 60 80])
-% % if save_on
-% %     fig = '.png'; his ='his'; figname = strcat(savename,his,fig);
-% %     saveas(gca,figname)
-% % end
+figure
+plot(t/1000,norm_rness_unsmoothed,'g')
+xlabel('distance along coast (km)')
+ylabel('roughness')
+title('roughness')
+set(gca,'FontSize',14)
+% ylim([0 90])
+if save_on
+    fig = '.png'; rn ='rn'; figname = strcat(savename,rn,fig);
+    saveas(gca,figname)
+end
+
+figure()
+% h = histogram(rness(1:length(y)/2),10,'Normalization','probability')
+% h = histogram(rness(length(y)/2:end),10,'Normalization','probability')
+h = histogram(rness,10,'Normalization','probability')
+% h = findobj(gca,'Type','patch');
+h.FaceColor = 'k';
+% h.FaceColor = [0.6 0.6 0.6];
+h.EdgeColor = 'w';
+xlabel('roughness')
+ylabel('frequency')
+set(gca,'FontSize',20)
+ylim([0 0.5])
+title('roughness')
+% set(gca,'xlim',[0 90])
+% yticks([0 0.25 0.5])
+% xticks([0 20 40 60 80])
+if save_on
+    fig = '.png'; his ='his'; figname = strcat(savename,his,fig);
+    saveas(gca,figname)
+end
 
 
 rms_ness = rms(norm_rness_unsmoothed)

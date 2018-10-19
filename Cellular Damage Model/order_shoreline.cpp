@@ -25,9 +25,6 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   bool *lake;
   int nx;
 
-  // int sub2ind(const int row,const int col,const int cols,const int rows){
-  //  return row*cols+col;
-  //   }
 
   // Order for checking the points
   //       |      | 
@@ -99,33 +96,3 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 
 }
 
-// int main() {
-//   std::vector<int> ii;
-//   std::vector<int> jj;
-
-//   // Create a 7x7 example lake.
-//   bool lake[49] = {0, 0, 0, 0, 0, 0, 0,
-//                    0, 0, 0, 0, 0, 0, 0,
-//                    0, 0, 0, 1, 1, 0, 0,
-//                    0, 0, 1, 1, 1, 0, 0,
-//                    0, 0, 1, 1, 1, 0, 0,
-//                    0, 0, 0, 0, 0, 0, 0,
-//                    0, 0, 0, 0, 0, 0, 0};
-//   // Specify the lake width.
-//   int nx = 7;
-
-//   // Choose a starting coordinate.
-//   int i_start = 2;
-//   int j_start = 2;
-
-//   // Get the ordered shoreline.
-//   get_ordered_shoreline(i_start, j_start, ii, jj, lake, nx);
-
-//   // Print the solution.
-//   printf("shoreline indices:\n");
-//   for (int i = 0; i < ii.size(); i++) {
-//     printf("(%d, %d)\n", ii[i], jj[i]);
-//   }
-
-//   return 0;
-// }

@@ -39,7 +39,7 @@ T = t(end)+deltad;
 hwin = 0.5*(1-cos(2*pi*t/T));
 synth = 4*sin(2*pi*t/(T/4)) + hwin.*( 1*sin(2*pi*t/(T/64)) );
 
-n=2; i = 2;
+n=2; i = 12;
 % dowave(synth,deltad,n,x,y,[],save_on,[],i);
 
 % PLAIN SINE WAVE- increase amplitude
@@ -48,7 +48,7 @@ n=2; i = 2;
 % t = t(:);
 % T = t(end)+deltad;
 % synth = sin(t);
-% n=2; i = 2;
+% n=2; i = 12;
 % % dowave(synth,deltad,n,x,y,[],save_on,[],i);
 % 
 % deltad = pi/2;
@@ -56,36 +56,36 @@ n=2; i = 2;
 % t = t(:);
 % T = t(end)+deltad;
 % synth = 4*sin(t);
-% n=2; i = 2;
+% n=2; i = 12;
 % dowave(synth,deltad,n,x,y,[],save_on,[],i);
 
 % PLAIN SINE WAVE- change deltad
-deltad = pi/2;
-t=0:deltad:50*pi;
-t = t(:);
-T = t(end)+deltad;
-synth = sin(t);
+% deltad = pi/2;
+% t=0:deltad:50*pi;
+% t = t(:);
+% T = t(end)+deltad;
+% synth = sin(t);
+% 
+% n=2; i = 12;
+% dowave(synth,deltad,n,x,y,[],save_on,[],i);
 
-n=2; i = 2;
-dowave(synth,deltad,n,x,y,[],save_on,[],i);
-
-deltad = pi/16;
-t=0:deltad:50*pi;
-t = t(:);
-T = t(end)+deltad;
-synth = sin(t);
-
-n=2; i = 2;
-dowave(synth,deltad,n,x,y,[],save_on,[],i);
-
-deltad = pi/128;
-t=0:deltad:50*pi;
-t = t(:);
-T = t(end)+deltad;
-synth = sin(t);
-
-n=2; i = 2;
-dowave(synth,deltad,n,x,y,[],save_on,[],i);
+% deltad = pi/16;
+% t=0:deltad:50*pi;
+% t = t(:);
+% T = t(end)+deltad;
+% synth = sin(t);
+% 
+% n=2; i = 12;
+% dowave(synth,deltad,n,x,y,[],save_on,[],i);
+% 
+% deltad = pi/128;
+% t=0:deltad:50*pi;
+% t = t(:);
+% T = t(end)+deltad;
+% synth = sin(t);
+% 
+% n=2; i = 12;
+% dowave(synth,deltad,n,x,y,[],save_on,[],i);
 
 % % PLAIN SINE WAVE - longer signal
 % deltad = pi/2;
@@ -94,7 +94,7 @@ dowave(synth,deltad,n,x,y,[],save_on,[],i);
 % T = t(end)+deltad;
 % synth = sin(t);
 % 
-% n=2; i = 2;
+% n=2; i = 12;
 % dowave(synth,deltad,n,x,y,[],save_on,[],i);
 % 
 % deltad = pi/2;
@@ -103,7 +103,7 @@ dowave(synth,deltad,n,x,y,[],save_on,[],i);
 % T = t(end)+deltad;
 % synth = sin(t);
 % 
-% n=2; i = 2;
+% n=2; i = 12;
 % dowave(synth,deltad,n,x,y,[],save_on,[],i);
 % 
 % deltad = pi/2;
@@ -112,45 +112,54 @@ dowave(synth,deltad,n,x,y,[],save_on,[],i);
 % T = t(end)+deltad;
 % synth = sin(t);
 % 
-% n=2; i = 2;
+% n=2; i = 12;
 % dowave(synth,deltad,n,x,y,[],save_on,[],i);
 
 % SINE WAVE WITH SINE NOISE
-deltad = pi/2;
-t=0:deltad:200*pi;
+% deltad = pi/50;
+% t=0:deltad:40*pi;
+% T = t(end)+deltad;
+% synth = sin(t);
+% figure()
+% plot(t,sin(t))
+% n=2; i = 12;
+% dowave(synth,deltad,n,x,y,[],save_on,[],i);
+
+% deltad = pi/2;
+% t=0:deltad:200*pi;
+% T = t(end)+deltad;
+% synth = sin(t/(T/64));
+% figure()
+% plot(t,sin(t/(T/64)))
+% n=2; i = 12;
+% dowave(synth,deltad,n,x,y,[],save_on,[],i);
+
+% deltad = pi/50;
+% t=0:deltad:50*pi;
+% T = t(end)+deltad;
+% synth = sin(t) + sin(t/(T/64));
+% figure()
+% plot(t,sin(t),t,sin(t/(T/64)),t,sin(t) + sin(t/(T/64)))
+% n=2; i = 12;
+% dowave(synth,deltad,n,x,y,[],save_on,[],i);
+
+deltad = pi/50;
+t=0:deltad:50*pi;
 T = t(end)+deltad;
-synth = sin(t);
+synth = sin(t) + [sin(t(1:floor(0.5*length(t)))/(T/64)) zeros(1,ceil(0.5*length(t)))];
 figure()
-plot(t,sin(t))
-n=2; i = 2;
+plot(t,sin(t),t,[sin(t(1:floor(0.5*length(t)))/(T/64)) zeros(1,ceil(0.5*length(t)))],t,synth)
+n=2; i = 12;
 dowave(synth,deltad,n,x,y,[],save_on,[],i);
 
-deltad = pi/2;
-t=0:deltad:200*pi;
-T = t(end)+deltad;
-synth = sin(t/(T/64));
-figure()
-plot(t,sin(t/(T/64)))
-n=2; i = 2;
-dowave(synth,deltad,n,x,y,[],save_on,[],i);
-
-deltad = pi/2;
-t=0:deltad:200*pi;
-T = t(end)+deltad;
-synth = sin(t) + sin(t/(T/64));
-figure()
-plot(t,sin(t),t,sin(t/(T/64)),t,sin(t) + sin(t/(T/64)))
-n=2; i = 2;
-dowave(synth,deltad,n,x,y,[],save_on,[],i);
-
-deltad = pi/2;
-t=0:deltad:200*pi;
-T = t(end)+deltad;
-synth = 4*sin(t) + sin(t/(T/64));
-figure()
-plot(t,4*sin(t),t,sin(t/(T/64)),t,4*sin(t) + sin(t/(T/64)))
-n=2; i = 2;
-dowave(synth,deltad,n,x,y,[],save_on,[],i);
+% deltad = pi/2;
+% t=0:deltad:200*pi;
+% T = t(end)+deltad;
+% synth = 4*sin(t) + sin(t/(T/64));
+% figure()
+% plot(t,4*sin(t),t,sin(t/(T/64)),t,4*sin(t) + sin(t/(T/64)))
+% n=2; i = 12;
+% dowave(synth,deltad,n,x,y,[],save_on,[],i);
 
 
 % % CIRCLE WITH SINE WAVE?
