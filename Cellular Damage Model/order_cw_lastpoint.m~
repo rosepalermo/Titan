@@ -4,8 +4,8 @@ function [sl_cell,cells2trash] = order_cw_lastpoint(lake,shoreline)
 % at the 8-connected neighbors to find the next shoreline point, and
 % continue to order the shoreline points in counter clockwise direction.
 % Flips so clockwise at the end. Last point is the starting point for look
-% direction.
-% THIS CODE DOES NOT FIND CORNERS. ONLY CARDINAL DIRECTION.
+% dire
+% THIS CODE DOES NOT FIND CORNERS. ONLY CARDINAL DIRECTION
 
 %inputs
 % lake - logical matrix that defines lake as true and not lake as false

@@ -1,7 +1,7 @@
 % This code does the wavelet analysis for shorelines as described in Rose's
 % Generals paper. 
 save_on = false;
-i=2;
+i=4;
  %% uniform applied to river t3
 % 
 % load('uniform_t3_15.mat')
