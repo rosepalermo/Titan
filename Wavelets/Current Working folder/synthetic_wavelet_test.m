@@ -63,20 +63,24 @@ n=2; i = 12;
 % dowave(synth,deltad,n,t,synth,[],save_on,[],i);
 
 % PLAIN SINE WAVE- change deltad
-% deltad = pi/2;
-% t=0:deltad:50*pi;
-% t = t(:);
-% T = t(end)+deltad;
-% synth = sin(t);
+deltad = pi/2;
+t=0:deltad:50*pi;
+t = t(:);
+T = t(end)+deltad;
+synth = sin(t);
+figure()
+plot(t,synth)
 % 
 % 
 % dowave(synth,deltad,n,t,synth,[],save_on,[],i);
 % 
-% deltad = pi/16;
-% t=0:deltad:50*pi;
-% t = t(:);
-% T = t(end)+deltad;
-% synth = sin(t);
+deltad = pi/16;
+t=0:deltad:50*pi;
+t = t(:);
+T = t(end)+deltad;
+synth = sin(t);
+figure()
+plot(t,synth)
 % 
 % 
 % dowave(synth,deltad,n,t,synth,[],save_on,[],i);
@@ -86,28 +90,31 @@ n=2; i = 12;
 % t = t(:);
 % T = t(end)+deltad;
 % synth = sin(t);
+figure()
+plot(t,synth)
 % 
 
 % dowave(synth,deltad,n,t,synth,[],save_on,[],i);
 
 % % PLAIN SINE WAVE - longer signal
-deltad = pi/2;
-t=0:deltad:10*pi;
-t = t(:);
-T = t(end)+deltad;
-synth = sin(t);
+% deltad = pi/2;
+% t=0:deltad:10*pi;
+% t = t(:);
+% T = t(end)+deltad;
+% synth = sin(t);
+
+% dowave(synth,deltad,n,t,synth,[],save_on,[],i);
+
+% deltad = pi/2;
+% t=0:deltad:50*pi;
+% t = t(:);
+% T = t(end)+deltad;
+% synth = sin(t);
 
 
-dowave(synth,deltad,n,t,synth,[],save_on,[],i);
-
-deltad = pi/2;
-t=0:deltad:50*pi;
-t = t(:);
-T = t(end)+deltad;
-synth = sin(t);
 
 
-dowave(synth,deltad,n,t,synth,[],save_on,[],i);
+% dowave(synth,deltad,n,t,synth,[],save_on,[],i);
 % 
 % deltad = pi/2;
 % t=0:deltad:100*pi;

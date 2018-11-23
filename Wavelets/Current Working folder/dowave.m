@@ -34,12 +34,12 @@ mother = 'Morlet'; % Mother wavelet
 % Wavelet transform:
 [wave,period,scale,coi] = wavelet(y,dt,pad,dj,s0,j1,mother);
 power = (abs(wave)).^2 ;  % compute wavelet power spectrum
-figure()
-plot(power,period)
+% figure()
+% plot(power,period)
 
 energy = power*dt;
-figure()
-plot(energy,period)
+% figure()
+% plot(energy,period)
 
 % Background spectrum and significance levels:
 
@@ -195,8 +195,7 @@ end
 % normalize the wavelet spectrum by the global wavelet spectrum and display
 % it
 
-% powernorm = power./repmat(global_ws(:),[1 n]);
-powernorm = power; % should be normalized by global otherwise as the power increases with period, higher periods will dominate roughness
+% powernorm = power./repmat(global_ws(:),[1 n]); % should be normalized by global otherwise as the power increases with period, higher periods will dominate roughness
 % figure
 % imagesc(t,log2(period),log2(powernorm));
 % colorbar
@@ -220,7 +219,7 @@ end
 if i == 2|i == 3|i == 4|i == 5
     %Model lakes
     pmin1 = 2^2;
-    pmax1 = 2^4;
+    pmax1 = 2^5;
     pmin2 = 2^3;
     pmax2 = 2^4;
 end
@@ -239,44 +238,201 @@ if i == 12
 end
 
 pband1 = period >= pmin1 & period <= pmax1;
-powernorm_sub = powernorm(pband1,:);
+powernorm_sub = power(pband1,:);
 eq14 = dj.*dt./0.776./length(y)*sum(powernorm_sub./scale(pband1)');
 figure() 
-plot(t,eq14)
-title('eq14')
+plot(t/100,eq14)
+xlabel('distance along coast (km)')
+title('sum of eq14')
+if save_on
+    fig = '.png'; EQ14vt ='EQ14vt'; figname = strcat(savename,EQ14vt,fig);
+    saveas(gca,figname)
+end
 figure()
 h = histogram(eq14,10,'Normalization','probability')
 % h = findobj(gca,'Type','patch');
 h.FaceColor = 'k';
 % h.FaceColor = [0.6 0.6 0.6];
 h.EdgeColor = 'w';
-title('eq14')
+title('sum of eq14')
+if save_on
+    fig = '.png'; EQ14hist ='EQ14hist'; figname = strcat(savename,EQ14hist,fig);
+    saveas(gca,figname)
+end
+
 if i == 12
     figure()
     scatter3(t,y,eq14,[],eq14,'.')
-    title('eq14')
+    title('sum of eq14')
     view(2)
+    colorbar
+    set(gca,'Clim',[0 0.00025])
+    axis equal tight
+elseif i == 2|i == 3|i == 4|i == 5
+    figure()
+    scatter3(xx/1e3,yy/1e3,eq14,[],eq14,'.')
+    view(2)
+    axis equal tight
+    set(gca,'XLim',([0.5 0.8])); set(gca,'YLim',([0.5 0.8])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
+    set(gca,'Clim',[0 0.00025])
+    set(gca,'FontSize',14)
+    set(gca,'xtick',[],'ytick',[])
+    set(gca,'xticklabel',[],'yticklabel',[])
+    if save_on
+        fig = '.png'; rn3z ='eq14zoom'; figname = strcat(savename,rn3z,fig);
+        saveas(gca,figname)
+    end
+    figure()
+    scatter3(xx,yy,eq14,[],eq14,'.')
+    title('sum of eq14')
+    view(2)
+    colorbar
+    set(gca,'Clim',[0 0.00025])
+    axis equal tight
 else
     figure()
     scatter3(xx,yy,eq14,[],eq14,'.')
-    title('eq14')
+    title('sum of eq14')
     view(2)
+    colorbar
+    set(gca,'Clim',[0 0.00025])
+    axis equal tight
+end
+if save_on
+    fig = '.png'; EQ14_ ='EQ14'; figname = strcat(savename,EQ14_,fig);
+    saveas(gca,figname)
 end
 
 rness = sum(powernorm_sub);
-norm_rness_unsmoothed = rness;
+figure() 
+plot(t/100,rness)
+xlabel('distance along coast (km)')
+title('sum of wavelet power')
+if save_on
+    fig = '.png'; rnessvt ='rnessvt'; figname = strcat(savename,rnessvt,fig);
+    saveas(gca,figname)
+end
+if i == 12
+    figure()
+    scatter3(t,y,rness,[],rness,'.')
+    title('sum of wavelet power')
+    view(2)
+    set(gca,'Clim',[0 30])
+    colorbar
+    axis equal tight
+elseif i == 2|i == 3|i == 4|i == 5
+    figure()
+    scatter3(xx/1e3,yy/1e3,rness,[],rness,'.')
+    view(2)
+    axis equal tight
+    set(gca,'XLim',([0.5 0.8])); set(gca,'YLim',([0.5 0.8])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
+    set(gca,'Clim',[0 30])
+    set(gca,'FontSize',14)
+    set(gca,'xtick',[],'ytick',[])
+    set(gca,'xticklabel',[],'yticklabel',[])
+    if save_on
+        fig = '.png'; rn3z ='rnesszoom'; figname = strcat(savename,rn3z,fig);
+        saveas(gca,figname)
+    end
+    figure()
+    scatter3(xx,yy,rness,[],rness,'.')
+    title('sum of wavelet power')
+    view(2)
+    colorbar
+    set(gca,'Clim',[0 30])
+    axis equal tight
+else
+    figure()
+    scatter3(xx,yy,rness,[],rness,'.')
+    title('sum of wavelet power')
+%     set(gca,'Clim',[0 30])
+    view(2)
+    colorbar
+    axis equal tight
+end
+if save_on
+    fig = '.png'; RNESS_ ='RNESS'; figname = strcat(savename,RNESS_,fig);
+    saveas(gca,figname)
+end
+
+figure()
+h = histogram(rness,10,'Normalization','probability')
+% h = findobj(gca,'Type','patch');
+h.FaceColor = 'k';
+% h.FaceColor = [0.6 0.6 0.6];
+h.EdgeColor = 'w';
+title('sum of wavelet power')
+if save_on
+    fig = '.png'; rness_hist ='RNESShist'; figname = strcat(savename,rness_hist,fig);
+    saveas(gca,figname)
+end
+
+rness_energy = sum(energy(pband1,:));
+
+figure() 
+plot(t/100,rness_energy)
+title('sum of wavelet power*dt')
+xlabel('distance along coast (km)')
+if save_on
+    fig = '.png'; rness_energyvt ='rness_energyvt'; figname = strcat(savename,rness_energyvt,fig);
+    saveas(gca,figname)
+end
+
+figure()
+h = histogram(rness_energy,10,'Normalization','probability')
+% h = findobj(gca,'Type','patch');
+h.FaceColor = 'k';
+% h.FaceColor = [0.6 0.6 0.6];
+h.EdgeColor = 'w';
+title('sum of wavelet power*dt')
+if save_on
+    fig = '.png'; rness_energy_hist ='rness_energyhist'; figname = strcat(savename,rness_energy_hist,fig);
+    saveas(gca,figname)
+end
 
 if i == 12
     figure()
-    scatter3(t,y,norm_rness_unsmoothed,[],norm_rness_unsmoothed,'.')
-    title('norm_rness_unsmoothed')
+    scatter3(t,y,rness_energy,[],rness_energy,'.')
+    title('sum of wavelet power*dt')
     view(2)
+    colorbar
+    set(gca,'Clim',[0 30])
+    axis equal tight
+    elseif i == 2|i == 3|i == 4|i == 5
+    figure()
+    scatter3(xx/1e3,yy/1e3,rness_energy,[],rness_energy,'.')
+    view(2)
+    axis equal tight
+    set(gca,'XLim',([0.5 0.8])); set(gca,'YLim',([0.5 0.8])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
+    set(gca,'CLim',[0 30])
+    set(gca,'FontSize',14)
+    set(gca,'xtick',[],'ytick',[])
+    set(gca,'xticklabel',[],'yticklabel',[])
+    if save_on
+        fig = '.png'; rn3z ='Energyzoom'; figname = strcat(savename,rn3z,fig);
+        saveas(gca,figname)
+    end
+    figure()
+    scatter3(xx,yy,rness_energy,[],rness_energy,'.')
+    title('sum of wavelet power*dt')
+    view(2)
+    colorbar
+    set(gca,'CLim',[0 30])
+    axis equal tight
 else
     figure()
-    scatter3(xx,yy,norm_rness_unsmoothed,[],norm_rness_unsmoothed,'.')
-    title('norm_rness_unsmoothed')
+    scatter3(xx,yy,rness_energy,[],rness_energy,'.')
+    title('sum of wavelet power*dt')
     view(2)
+    colorbar
+%     set(gca,'CLim',[0 50])
+    axis equal tight
 end
+if save_on
+    fig = '.png'; RENERGY ='RENERGY'; figname = strcat(savename,RENERGY,fig);
+    saveas(gca,figname)
+end
+
 % norm_rness_unsmoothed = rness./sum(global_ws);
 % norm_rness_unsmoothed = rness./sum(global_ws(pband1));
 % norm_rness_unsmoothed = rness./mean(global_ws);
@@ -285,45 +441,45 @@ end
 % norm_rness_unsmoothed = (rness)./max(rness);
 % norm_rness_unsmoothed = (rness)./max(max(power));
 % norm_rness_unsmoothed = (rness)./mean(power(pband1,:));
-figure
-plot(t/1000,norm_rness_unsmoothed,'g')
-xlabel('distance along coast (km)')
-ylabel('roughness')
-title('roughness')
-set(gca,'FontSize',14)
+% figure
+% plot(t/1000,rness,'g')
+% xlabel('distance along coast (km)')
+% ylabel('roughness')
+% title('roughness')
+% set(gca,'FontSize',14)
 % ylim([0 90])
-if save_on
-    fig = '.png'; rn ='rn'; figname = strcat(savename,rn,fig);
-    saveas(gca,figname)
-end
+% if save_on
+%     fig = '.png'; rn ='rn'; figname = strcat(savename,rn,fig);
+%     saveas(gca,figname)
+% end
 
-figure()
-% h = histogram(rness(1:length(y)/2),10,'Normalization','probability')
-% h = histogram(rness(length(y)/2:end),10,'Normalization','probability')
-h = histogram(rness,10,'Normalization','probability')
-% h = findobj(gca,'Type','patch');
-h.FaceColor = 'k';
-% h.FaceColor = [0.6 0.6 0.6];
-h.EdgeColor = 'w';
-xlabel('roughness')
-ylabel('frequency')
-set(gca,'FontSize',20)
-ylim([0 0.5])
-title('roughness')
-% set(gca,'xlim',[0 90])
-% yticks([0 0.25 0.5])
-% xticks([0 20 40 60 80])
-if save_on
-    fig = '.png'; his ='his'; figname = strcat(savename,his,fig);
-    saveas(gca,figname)
-end
+% figure()
+% % h = histogram(rness(1:length(y)/2),10,'Normalization','probability')
+% % h = histogram(rness(length(y)/2:end),10,'Normalization','probability')
+% h = histogram(rness,10,'Normalization','probability')
+% % h = findobj(gca,'Type','patch');
+% h.FaceColor = 'k';
+% % h.FaceColor = [0.6 0.6 0.6];
+% h.EdgeColor = 'w';
+% xlabel('roughness')
+% ylabel('frequency')
+% set(gca,'FontSize',20)
+% ylim([0 0.5])
+% title('roughness')
+% % set(gca,'xlim',[0 90])
+% % yticks([0 0.25 0.5])
+% % xticks([0 20 40 60 80])
+% % if save_on
+% %     fig = '.png'; his ='his'; figname = strcat(savename,his,fig);
+% %     saveas(gca,figname)
+% % end
 
 
-rms_ness = rms(norm_rness_unsmoothed)
-var_ness = var(norm_rness_unsmoothed)
-mean_ness = mean(norm_rness_unsmoothed)
-median_ness = median(norm_rness_unsmoothed)
-skewness_ness = skewness(norm_rness_unsmoothed)
+rms_ness = rms(rness);
+var_ness = var(rness);
+mean_ness = mean(rness);
+median_ness = median(rness);
+skewness_ness = skewness(rness);
 
 % if ~isempty(fetch)
 %     figure()
@@ -396,8 +552,8 @@ skewness_ness = skewness(norm_rness_unsmoothed)
 
 
 % there's a signal there, but it's noisy, so let's smooth it 
-Lsm = 5*pmax1; % smoothing window length in meters
-rnesssm = movmean([rness rness rness],round(Lsm/dt)); rnesssm = rnesssm(n+1:2*n); % note that we took advantage of the periodicity of the spectrum in t
+% Lsm = 5*pmax1; % smoothing window length in meters
+% rnesssm = movmean([rness rness rness],round(Lsm/dt)); rnesssm = rnesssm(n+1:2*n); % note that we took advantage of the periodicity of the spectrum in t
 % hold on
 % plot(t/1000,rnesssm,'-r') % better!
 

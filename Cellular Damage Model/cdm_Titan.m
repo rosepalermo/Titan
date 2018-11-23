@@ -1,4 +1,4 @@
-% function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun)
+function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun,fetch_on,savename)
 
 % Titan analogue damage model for coastal erosion of a lake
 % Rose Palermo 2-2018
@@ -17,7 +17,7 @@
 % tic
 
 % fetch weighted?
-fetch_on = true;
+% fetch_on = true;
 
 % run time
 tmax = 1;
@@ -276,18 +276,18 @@ for i = 1:tmax
     if save_on
 %         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave',num2str(i),'.fig'])
 %         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\','wave_rednoise',num2str(i),'.fig'])
-        saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\8_18_riverandwave\','uniform_t3',num2str(i),'.fig'])
+        saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\11_18_riverandwave\',savename,num2str(i),'.fig'])
     end
     
 end
 if fetch_on
     if save_on
         %     save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave','.mat'],'shoreline_save')
-        save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\8_18_riverandwave\','uniform_t3','.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
+        save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\11_18_riverandwave\',savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
         
     end
 else
-    save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\8_18_riverandwave\','uniform_t3','.mat'],'shoreline_save','dam_save','X','Y','lake_save')
+    save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\11_18_riverandwave\',savename,'.mat'],'shoreline_save','dam_save','X','Y','lake_save')
 end
 %% plot
 eroded = eroded(2:end,:);
@@ -302,4 +302,4 @@ axis square
 % scatter(eroded(:,1),eroded(:,2),'c')
 
 % toc
-% end
+end

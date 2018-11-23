@@ -1,7 +1,9 @@
-% This code does the wavelet analysis for shorelines as described in Rose's
-% Generals paper. 
-save_on = false;
-i=4;
+
+save_on = true;
+i=1;
+
+for ii = 1:7
+    i = ii;
  %% uniform applied to river t3
 % 
 % load('uniform_t3_15.mat')
@@ -38,19 +40,19 @@ load('waveandfetch_4generalssls_u30.mat')
 % % 7 = Scotland
 % savename{7} = '/Users/rosepalermo/Documents/Research/Titan/Notes/NewRoughness_nonorm/scotland_wavelet_updated'; 
 % 1 = LGM
-savename{1} = 'C:\Users\Rose Palermo\Documents\Titan\Notes\NewRoughness_nonorm\lg_4wavelets_wavelet_updated'; 
+savename{1} = '/Users/rosepalermo/Documents/Research/Titan/Notes/11_19_18_wavepower/lg_4wavelets_'; 
 % 2 = REDNOISE
-savename{2} = 'C:\Users\Rose Palermo\Documents\Titan\Notes\NewRoughness_nonorm\rednoise_wavelet_updated'; 
+savename{2} = '/Users/rosepalermo/Documents/Research/Titan/Notes/11_19_18_wavepower/rednoise_'; 
 % 3 = WAVE
-savename{3} = 'C:\Users\Rose Palermo\Documents\Titan\Notes\NewRoughness_nonorm\wave_wavelet_updated'; 
+savename{3} = '/Users/rosepalermo/Documents/Research/Titan/Notes/11_19_18_wavepower/wave_'; 
 % 4 = RIVERS
-savename{4} = 'C:\Users\Rose Palermo\Documents\Titan\Notes\NewRoughness_nonorm\rivert2_wavelet_updated'; 
+savename{4} = '/Users/rosepalermo/Documents/Research/Titan/Notes/11_19_18_wavepower/rivert2_'; 
 % 5 = UNIFORM
-savename{5} = 'C:\Users\Rose Palermo\Documents\Titan\Notes\NewRoughness_nonorm\uniform_wavelet_updated'; 
+savename{5} = '/Users/rosepalermo/Documents/Research/Titan/Notes/11_19_18_wavepower/uniform_'; 
 % 6 = Lake Powell
-savename{6} = 'C:\Users\Rose Palermo\Documents\Titan\Notes\NewRoughness_nonorm\LakePowell_wavelet_updated'; 
+savename{6} = '/Users/rosepalermo/Documents/Research/Titan/Notes/11_19_18_wavepower/LakePowell_'; 
 % 7 = Scotland
-savename{7} = 'C:\Users\Rose Palermo\Documents\Titan\Notes\NewRoughness_nonorm\scotland_wavelet_updated'; 
+savename{7} = '/Users/rosepalermo/Documents/Research/Titan/Notes/11_19_18_wavepower/scotland_'; 
 
 if save_on
 savename = savename{i};
@@ -144,7 +146,7 @@ if i == 1
 filename = 'lg_4wavelets.xls';
 M = xlsread(filename);
 
-savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/lg_4wavelets_wavelet_updated'; 
+% savename = '/Users/rosepalermo/Documents/Research/Titan/Notes/Generals/lg_4wavelets_wavelet_updated'; 
 %get rid of duplicate points (when it goes exactly around a pixel)
 % indices to unique values in column 3
 [~, ind] = unique(M(:, 4:5), 'rows');
@@ -325,4 +327,4 @@ ylabel('Y')
 axis tight
 axis equal
 
-
+end

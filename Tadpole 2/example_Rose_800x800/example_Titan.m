@@ -76,7 +76,7 @@ p.thetac = 0;               %     p.thetac         Threshold for fluvial incisio
 
 % ------------------ initial conditions -----------------------------------                           
 
-p.beta = 1.8;               %     p.beta           Negative slope of the power spectrum. 0 = white noise, more positive values are "redder" (more variance at longer wavelengths)
+p.beta = 1.6;  %1.8             %     p.beta           Negative slope of the power spectrum. 0 = white noise, more positive values are "redder" (more variance at longer wavelengths)
 p.variance = 10000;         %     p.variance       Variance of elevation (m^2)
 p.periodic = 1;             %     p.periodic       Elevations will be periodic at the boundaries (1) or not (0, default)
 
