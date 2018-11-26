@@ -1,3 +1,4 @@
+
 function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun,fetch_on,savename)
 
 % Titan analogue damage model for coastal erosion of a lake
@@ -20,14 +21,14 @@ function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun,fetch_on,savename)
 % fetch_on = true;
 
 % run time
-tmax = 1;
+tmax = 100;
 
 % when creating a gif
 plot_now = true;
-gif_on = false;
-save_on = false;
+gif_on = true;
+save_on = true;
 shoreline_save = cell(1,1);
-% filename = [num2str(modelrun),'fetch_5_2018_example.gif'];
+filename = [num2str(modelrun),'riverandwave_strength10k.gif'];
 
 % load('xycontours.mat')
 % lakex = x_1m_t1;
@@ -92,7 +93,7 @@ lake = reshape(lake,length(y),length(x));
 
 %give land some sort of strength that will be damaged and destroyed
 land = ~lake;
-strength = 10*double(land);
+strength = 10000*double(land);
 
 % identify the shoreline
 % [shoreline,shorelinecard,shorelinecorn] = idshoreline(lake,land);
@@ -276,6 +277,7 @@ for i = 1:tmax
     if save_on
 %         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave',num2str(i),'.fig'])
 %         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\','wave_rednoise',num2str(i),'.fig'])
+
         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\11_18_riverandwave\',savename,num2str(i),'.fig'])
     end
     

@@ -1,11 +1,17 @@
 % test synthetic
 
 save_on = false;
+<<<<<<< HEAD:Wavelets/For Taylor/synthetic_wavelet_test.m
+% HERE IS A SYNTHETIC SIGNAL WITH THE SAME LENGTH AS theta
+
+
+=======
 n=2; i = 12;
 
 % % HERE IS A SYNTHETIC SIGNAL WITH THE SAME LENGTH AS theta
 % 
 % 
+>>>>>>> 648fff3a78b34528b16567ddabfd97692a0363a5:Wavelets/Wavelets_Generals/synthetic_wavelet_test.m
 % th = linspace(0,2*pi,60);
 % r = 2 + rand(size(th))-0.5;
 % x = r.*cos(th);
@@ -22,7 +28,11 @@ n=2; i = 12;
 % % add first AND SECOND points to the end for meander
 % x = [x0;x0(1:2)];
 % y = [y0;y0(1:2)];
+<<<<<<< HEAD:Wavelets/For Taylor/synthetic_wavelet_test.m
+% 
+=======
 
+>>>>>>> 648fff3a78b34528b16567ddabfd97692a0363a5:Wavelets/Wavelets_Generals/synthetic_wavelet_test.m
 % % transform into azimuth and d(azimuth)/d(distance), evenly spaced in
 % % streamwise distance
 % [theta, dtheta, deltad] = meander_titan(x,y);
@@ -43,9 +53,15 @@ n=2; i = 12;
 % T = t(end)+deltad;
 % hwin = 0.5*(1-cos(2*pi*t/T));
 % synth = 4*sin(2*pi*t/(T/4)) + hwin.*( 1*sin(2*pi*t/(T/64)) );
+<<<<<<< HEAD:Wavelets/For Taylor/synthetic_wavelet_test.m
+% 
+% n=2; i = 12;
+% dowave(synth,deltad,n,x,y,[],save_on,[],i);
+=======
 % dowave(synth,deltad,n,t,synth,[],save_on,[],i);
 
 
+>>>>>>> 648fff3a78b34528b16567ddabfd97692a0363a5:Wavelets/Wavelets_Generals/synthetic_wavelet_test.m
 
 % PLAIN SINE WAVE- increase amplitude
 % deltad = pi/2;
