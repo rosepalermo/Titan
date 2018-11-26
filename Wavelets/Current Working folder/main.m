@@ -1,8 +1,8 @@
 
-save_on = true;
+save_on = false;
 i=1;
 
-for ii = 1:7
+for ii = 2:5
     i = ii;
  %% uniform applied to river t3
 % 
@@ -314,17 +314,17 @@ n=2;
 % dowave_duplicate(theta,deltad,n,x,y,savename);
 [period{i},global_Save{i}] = dowave(theta,deltad,n,x,y,savename,save_on,fetch,i);
 
-% plot where the first point is
-figure
-% plot(x,y,'k','LineWidth',2)
-hold on
-scatter(x,y,'.','k')
-scatter(x(1),y(1),'*','r')
-scatter(x(30),y(30),'*','b')
-scatter(x(ceil(length(x)/3)),y(ceil(length(y)/3)),'*','m')
-xlabel('X')
-ylabel('Y')
-axis tight
-axis equal
+% % plot where the first point is
+% figure
+% % plot(x,y,'k','LineWidth',2)
+% hold on
+% scatter(x,y,'.','k')
+% scatter(x(1),y(1),'*','r')
+% scatter(x(30),y(30),'*','b')
+% scatter(x(ceil(length(x)/3)),y(ceil(length(y)/3)),'*','m')
+% xlabel('X')
+% ylabel('Y')
+% axis tight
+% axis equal
 
 end
