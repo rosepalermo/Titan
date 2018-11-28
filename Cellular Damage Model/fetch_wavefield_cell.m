@@ -1,4 +1,4 @@
-function [WaveArea,FetchArea] = fetch_mw_cell(shoreline_fetch)
+function [WaveArea,FetchArea] = fetch_wavefield_cell(shoreline_fetch)
     FetchArea = cell(size(shoreline_fetch));
     WaveArea = cell(size(shoreline_fetch));
 
@@ -20,26 +20,6 @@ function [WaveArea,FetchArea] = fetch_mw_cell(shoreline_fetch)
 
 
 
-% N=100; %1000 data points
-% th = linspace(0,2*pi,N)'; %theta from 0 to 2pi
-% amp = 2*ones(N,1);
-% for i=1:500 %higher numbers here make more higher frequency fluctuations
-%     a = rand()-0.5; %random number from -0.5 to 0.5
-%     b = rand()-0.5;
-%     amp = amp + a/i*cos(i*th) + b/i*sin(i*th); %change circle by a fourier function over it
-% end
-% x=(amp.*cos(th))'; y = (amp.*sin(th))';
-
-% x_tot = NaN;
-% y_tot = NaN;
-% for ii = 1:length(shoreline_fetch) %add up all of the shoreline pieces (islands too)
-%     x_tot = [x_tot; shoreline_fetch{ii,1}(:,1)];
-%     y_tot = [y_tot; shoreline_fetch{ii,1}(:,2)];
-% end
-% x_tot = x_tot(2:end); y_tot = y_tot(2:end); % get rid of the NaN
-% x = x_tot + abs(min(x_tot)); % add min to make all +
-% y = y_tot + abs(min(y_tot));
-
 
 % if the length is greater than 1, there are islands.
 length_cell=cellfun(@length,shoreline_fetch);
@@ -52,9 +32,9 @@ y_bounding = slbounding{1,1}(:,2)';
 for obj = 1:length(shoreline_fetch)
     
 
-    if length(shoreline_fetch{obj,1})<3 % if there are less than 3 pts in object, get rid of them because causing problems.
-        FetchArea{obj,1} = ones(length(shoreline_fetch{obj,1}),1)*100000000000;
-        WaveArea{obj,1} = ones(length(shoreline_fetch{obj,1}),1)*100000000000;
+    if length(shoreline_fetch{obj,1})<3 % if there are less than 3 pts in object, get rid of them because causing problems. Set to Inf
+        FetchArea{obj,1} = ones(length(shoreline_fetch{obj,1}),1)*1e1000;
+        WaveArea{obj,1} = ones(length(shoreline_fetch{obj,1}),1)*1e1000;
     else
     x = shoreline_fetch{obj,1}(:,1);
     y = shoreline_fetch{obj,1}(:,2);
@@ -63,17 +43,19 @@ for obj = 1:length(shoreline_fetch)
     y = [y y(1)];
     
     
-    nvert = length(x) - 1; % # vertices in polygon, assuming closed
+    nvert = length(x) - 1; % # vertices in polygon, after closed
     % Set up rays
     nray = 1000;
     theta = linspace(0,2*pi,nray+1);
     theta = theta(1:end-1); % eliminate duplicate at 2pi
     D = 2*max(sqrt(x.^2 + y.^2));
     eps = D*1e-8;
+    
     % Set up output: light-of-sight intersection point for each vertex/angle
     % pair
     xlos = nan(nray,nvert);
     ylos = nan(nray,nvert);
+    
     % Loop over polygon vertices...
     for iv = 1:nvert
         xend = x(iv) + D.*cos(theta);
@@ -87,10 +69,13 @@ for obj = 1:length(shoreline_fetch)
 %         [P] = InterX([xseg(:),yseg(:)]',[[x_bounding x_bounding(1)];[y_bounding y_bounding(1)]]);
         [P] = InterX_mex([xseg(:),yseg(:)]',[[x_bounding x_bounding(1)];[y_bounding y_bounding(1)]]);
         xi = P(1,:)'; yi = P(2,:)';
+        
+        % find intersections with islands
         if length(shoreline_fetch) > 1
             for ii = 2:length(shoreline_fetch)
 %             [xi_add,yi_add] = polyxpoly(xseg(:), yseg(:), [shoreline_fetch{ii,1}(:,1); shoreline_fetch{ii,1}(1,1)],[shoreline_fetch{ii,1}(:,2);shoreline_fetch{ii,1}(1,2)]);
-            [xi_add,yi_add] = InterX_mex([xseg(:) yseg(:)], [[shoreline_fetch{ii,1}(:,1) shoreline_fetch{ii,1}(1,1)] [shoreline_fetch{ii,1}(:,2);shoreline_fetch{ii,1}(1,2)]]);
+            [PP] = InterX_mex([xseg(:) yseg(:)]', [[shoreline_fetch{ii,1}(:,1); shoreline_fetch{ii,1}(1,1)] [shoreline_fetch{ii,1}(:,2);shoreline_fetch{ii,1}(1,2)]]');
+            xi_add = PP(1,:)'; yi_add = PP(2,:)';
             xi_add = xi_add(1:end-1); yi_add = yi_add(1:end-1);
             xi = [xi;xi_add]; yi = [yi;yi_add];
             end
@@ -133,7 +118,7 @@ for obj = 1:length(shoreline_fetch)
         in_island = zeros(size(in_bounding)); on_island = zeros(size(on_bounding));
         if length(shoreline_fetch) > 1
             for ii = 2: length(shoreline_fetch)
-                [in_add, on_add] = inpoly([x(iv) + dx*1e-10, y(iv) + dy*1e-10],[[shoreline_fetch{ii,1}(:,1); shoreline_fetch{ii,1}(1,1)],[shoreline_fetch{ii,1}(:,2);shoreline_fetch{ii,1}(1,2)]]');
+                [in_add, on_add] = inpoly([x(iv) + dx*1e-10, y(iv) + dy*1e-10]',[[shoreline_fetch{ii,1}(:,1); shoreline_fetch{ii,1}(1,1)],[shoreline_fetch{ii,1}(:,2);shoreline_fetch{ii,1}(1,2)]]');
                 in_island = in_island | in_add; on_island = on_island | on_add;
             end
         end
@@ -164,6 +149,7 @@ for obj = 1:length(shoreline_fetch)
         slvec_norm = norm([slvecx slvecy]);
         slvecx = slvecx./slvec_norm;
         slvecy = slvecy./slvec_norm;
+        
         % unit "incident wave" vector
         xlosvec = xlos(:,iv) - x(iv); ylosvec = ylos(:,iv) - y(iv);
         los_norm = sqrt(xlosvec.^2 + ylosvec.^2);

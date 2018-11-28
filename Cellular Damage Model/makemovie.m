@@ -1,12 +1,12 @@
 
 % make a movie from the figures
-v = VideoWriter('wave_t2');
+v = VideoWriter('uniformt1v1');
 open(v);
 
-for k = 1:15
+for k = 1:100
     % Create a mat filename, and load it into a structure called matData.
 %     matFileName = sprintf('4test%d.mat', k);
-    figFileName = sprintf('2wave%d.fig', k);
+    figFileName = sprintf('uniformt1v1%d.fig', k);
     if exist(figFileName, 'file')
 %         matData = load(matFileName);
         h = open(figFileName)
@@ -18,6 +18,7 @@ for k = 1:15
 %     axis square
     frame = getframe(gcf);
     writeVideo(v,frame);
+    close all
 end
 
 close(v);

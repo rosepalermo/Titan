@@ -55,7 +55,7 @@ imagesc(tile(:,:,3))
 hold on
 
 maxc = 50*floor(max(max(tile(:,:,3)))/50);
-[C,h] = contour(tile(:,:,3),[0.5,1]);
+[C,h] = contour(tile(:,:,3),[0.025,1]);
 
 idx = find(C(1,:) == 1);
 Llen = C(2,idx);
@@ -82,7 +82,7 @@ contourxy_sorted = contourxy(sortind,:);
 
 
 figure()
-[C,h] = contour(tile(:,:,3),[0.5,1]);
+[C,h] = contour(tile(:,:,3),[0.025,1]);
 hold on
 plot(contourxy_sorted{3,1}(1,:), contourxy_sorted{3,1}(2,:),'r')
 set(gca,'Ydir','reverse')
