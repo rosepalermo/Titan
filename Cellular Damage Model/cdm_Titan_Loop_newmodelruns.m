@@ -36,14 +36,16 @@ for fo = 1:1
     fo_ = [1 0];
     fetch_on = fo_(fo);
     savetemp = {'wave' 'uniform'};
-    for modelrun = 4:4
+    for modelrun = 1:4
         lakex = lakex_mr{modelrun,1}(1,:);
         lakey = lakey_mr{modelrun,1}(1,:);
+%         figure()
+%         plot(lakex,lakey)
         eps = eps_mr(modelrun);
         dx = dx_mr(modelrun);
         dy = dy_mr(modelrun);
-        savename = [savetemp{1,fo},nametemp{1,modelrun}];
+        savename = [savetemp{1,fo},nametemp{1,modelrun}]
         cdm_Titan(lakex,lakey,eps,dx,dy,modelrun,fetch_on,savename)
+        close all
     end
-    close all
 end

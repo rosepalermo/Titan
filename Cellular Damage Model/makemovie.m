@@ -1,12 +1,12 @@
 
 % make a movie from the figures
-v = VideoWriter('uniformt1v1');
+v = VideoWriter('wavet1v1');
 open(v);
 
-for k = 1:100
+for k = 1:50
     % Create a mat filename, and load it into a structure called matData.
 %     matFileName = sprintf('4test%d.mat', k);
-    figFileName = sprintf('uniformt1v1%d.fig', k);
+    figFileName = sprintf('wavet1v1%d.fig', k);
     if exist(figFileName, 'file')
 %         matData = load(matFileName);
         h = open(figFileName)
