@@ -247,22 +247,23 @@ for i = 1:tmax
     
     
     if save_on
-%         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave',num2str(i),'.fig'])
-%         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\','wave_rednoise',num2str(i),'.fig'])
-
+        %         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave',num2str(i),'.fig'])
+        %         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\','wave_rednoise',num2str(i),'.fig'])
+        
         saveas(gcf,['D:\Titan\Modeling\11_18_river_wave_uniform_AGU\',savename,num2str(i),'.fig'])
     end
     
-end
-if fetch_on
-    if save_on
-        %     save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave','.mat'],'shoreline_save')
-        save(['D:\Titan\Modeling\11_18_river_wave_uniform_AGU\',savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
-        
+    if fetch_on
+        if save_on
+            %     save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave','.mat'],'shoreline_save')
+            save(['D:\Titan\Modeling\11_18_river_wave_uniform_AGU\',savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
+            
+        end
+    else
+        save(['D:\Titan\Modeling\11_18_river_wave_uniform_AGU\',savename,'.mat'],'shoreline_save','dam_save','X','Y','lake_save')
     end
-else
-    save(['D:\Titan\Modeling\11_18_river_wave_uniform_AGU\',savename,'.mat'],'shoreline_save','dam_save','X','Y','lake_save')
 end
+
 %% plot
 eroded = eroded(2:end,:);
 % plot initial shoreline and final shoreline

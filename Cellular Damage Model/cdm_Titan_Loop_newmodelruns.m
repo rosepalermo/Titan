@@ -36,7 +36,7 @@ for fo = 1:1
     fo_ = [1 0];
     fetch_on = fo_(fo);
     savetemp = {'wave' 'uniform'};
-    for modelrun = 1:4
+    for modelrun = 2:4
         lakex = lakex_mr{modelrun,1}(1,:);
         lakey = lakey_mr{modelrun,1}(1,:);
 %         figure()
