@@ -2,7 +2,7 @@
 save_on = false;
 i=1;
 
-for ii = 2:5
+for ii = 1:5
     i = ii;
  %% uniform applied to river t3
 % 
