@@ -21,13 +21,12 @@ function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun,fetch_on,savename)
 % fetch_on = true;
 
 % run time
-
-tmax = 50;
+tmax = 100;
 
 % when creating a gif
 plot_now = true;
 gif_on = false;
-save_on = true;
+save_on = false;
 shoreline_save = cell(1,1);
 filename = [num2str(modelrun),'riverandwave_strength10k.gif'];
 
@@ -59,7 +58,6 @@ lake = reshape(lake,length(y),length(x));
 %give land some sort of strength that will be damaged and destroyed
 land = ~lake;
 if fetch_on
-%     strength = 10000000*double(land);
     strength = 1000000*double(land);
 else
     strength = 10*double(land);
@@ -120,8 +118,7 @@ for i = 1:tmax
         dam = cell2mat(WaveArea_cell);
         strength(indshoreline) = strength(indshoreline) - shoreline(indshoreline).*dam;
         
-        % find corners and damage if they exist alone (not in the cells to
-        % trash)
+        % find corners and damage if they exist alone
         corners = setdiff(find(shoreline),indshoreline);
         if ~isempty(cells2trash)
         [c2t]=sub2ind(size(X),cells2trash(:,1),cells2trash(:,2)); % find the cells that arent the trash cells
@@ -133,7 +130,7 @@ for i = 1:tmax
         % find the mean of the damage for points next to the corners. make that
         % the damage for that corner
         if ~isempty(corners)
-        corners = corners(shoreline(corners)<1.5); % if less than 1.5, only a corner. not also a side
+        corners = corners(shoreline(corners)<1.5);
         [damcorn] = damagecorners(lake,corners,indshoreline,dam);
         %         strength(indshoreline) = strength(indshoreline) - ones(length(indshoreline),1).*dam;
         strength(corners) = strength(corners) - shoreline(corners).*damcorn;
@@ -253,18 +250,18 @@ for i = 1:tmax
 %         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave',num2str(i),'.fig'])
 %         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\','wave_rednoise',num2str(i),'.fig'])
 
-        saveas(gcf,['D:\Titan\Modeling\11_18_river_wave_uniform_AGU\',savename,num2str(i),'.fig'])
+        saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\11_18_riverandwave_higherstrength\',savename,num2str(i),'.fig'])
     end
     
 end
 if fetch_on
     if save_on
         %     save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave','.mat'],'shoreline_save')
-        save(['D:\Titan\Modeling\11_18_river_wave_uniform_AGU\',savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
+        save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\11_18_riverandwave_higherstrength\',savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
         
     end
 else
-    save(['D:\Titan\Modeling\11_18_river_wave_uniform_AGU\',savename,'.mat'],'shoreline_save','dam_save','X','Y','lake_save')
+    save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\11_18_riverandwave_higherstrength\',savename,'.mat'],'shoreline_save','dam_save','X','Y','lake_save')
 end
 %% plot
 eroded = eroded(2:end,:);
