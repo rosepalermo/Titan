@@ -293,8 +293,8 @@ end
 
 figure()
 Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
-imagesc(t,log2(period(pband1)),log2(power(:,pband1)));  %*** uncomment for 'image' plot
-colormap hsv
+imagesc(t,log2(period(pband1)),log2(power(pband1,:)));  %*** uncomment for 'image' plot
+colormap jet
 set(gca,'FontSize',12)
 xlabel('alongshore distance (m)')
 ylabel('Period')

@@ -21,6 +21,7 @@ function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun,fetch_on,savename)
 % fetch_on = true;
 
 % run time
+
 tmax = 50;
 
 % when creating a gif
@@ -58,6 +59,7 @@ lake = reshape(lake,length(y),length(x));
 %give land some sort of strength that will be damaged and destroyed
 land = ~lake;
 if fetch_on
+%     strength = 10000000*double(land);
     strength = 1000000*double(land);
 else
     strength = 10*double(land);
@@ -118,7 +120,8 @@ for i = 1:tmax
         dam = cell2mat(WaveArea_cell);
         strength(indshoreline) = strength(indshoreline) - shoreline(indshoreline).*dam;
         
-        % find corners and damage if they exist alone
+        % find corners and damage if they exist alone (not in the cells to
+        % trash)
         corners = setdiff(find(shoreline),indshoreline);
         if ~isempty(cells2trash)
         [c2t]=sub2ind(size(X),cells2trash(:,1),cells2trash(:,2)); % find the cells that arent the trash cells
@@ -130,7 +133,7 @@ for i = 1:tmax
         % find the mean of the damage for points next to the corners. make that
         % the damage for that corner
         if ~isempty(corners)
-        corners = corners(shoreline(corners)<1.5);
+        corners = corners(shoreline(corners)<1.5); % if less than 1.5, only a corner. not also a side
         [damcorn] = damagecorners(lake,corners,indshoreline,dam);
         %         strength(indshoreline) = strength(indshoreline) - ones(length(indshoreline),1).*dam;
         strength(corners) = strength(corners) - shoreline(corners).*damcorn;
