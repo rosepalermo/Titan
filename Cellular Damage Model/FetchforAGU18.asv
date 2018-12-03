@@ -22,7 +22,7 @@ load('wavet1v1.mat')
 
 % t1v1 _ REDNOISE
 SL_matrix(1).cord{1,1}(:,1) = ordered_sl_save{1,1}{1,1}(:,1);
-SL_matrix(1).cord{1,1}(:,2) = ordered_sl_save{1,1}{1,1}(:,2);
+SL_matrix(1).cord{1,1}(:,2) = ordered_sl_save{runsplot(1),1}{1,1}(:,2);
 
 %% t1v1 WAVE 
 

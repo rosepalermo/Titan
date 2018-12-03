@@ -25,7 +25,7 @@ function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun,fetch_on,savename)
 tmax = 50;
 
 % when creating a gif
-plot_now = true;
+plot_now = false;
 gif_on = false;
 save_on = true;
 shoreline_save = cell(1,1);
@@ -60,7 +60,7 @@ lake = reshape(lake,length(y),length(x));
 land = ~lake;
 if fetch_on
 %     strength = 10000000*double(land);
-    strength = 1000000*double(land);
+    strength = 100000*double(land);
 else
     strength = 10*double(land);
 end
@@ -259,11 +259,11 @@ for i = 1:tmax
     if fetch_on
         if save_on
             %     save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave','.mat'],'shoreline_save')
-            save(['D:\Titan\Modeling\11_18_river_wave_uniform_AGU\',savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
+            save(['D:\Titan\Modeling\11_18_river_wave_uniform_AGU_2\',savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
             
         end
     else
-        save(['D:\Titan\Modeling\11_18_river_wave_uniform_AGU\',savename,'.mat'],'shoreline_save','dam_save','X','Y','lake_save')
+        save(['D:\Titan\Modeling\11_18_river_wave_uniform_AGU_2\',savename,'.mat'],'shoreline_save','dam_save','X','Y','lake_save')
     end
 end
 

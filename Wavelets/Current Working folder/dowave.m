@@ -189,7 +189,7 @@ if save_on
 end
 
 
-if i ==1
+if i ==9
     % Ligeia Mare
     pmin1 = 2^10;
     pmax1 = 2^15;
@@ -198,7 +198,7 @@ if i ==1
 end
 
 
-if i == 2|i == 3|i == 4|i == 5
+if i == 1|i == 2|i == 3|i == 4|i == 5|i == 6
     %Model lakes
     pmin1 = 2^2;
     pmax1 = 2^5;
@@ -206,7 +206,7 @@ if i == 2|i == 3|i == 4|i == 5
     pmax2 = 2^4;
 end
 
-if i == 6| i == 7
+if i == 7| i == 8
     %Lake Powell or scotland
     pmin1 = 2^9;
     pmax1 = 2^14;
@@ -301,6 +301,7 @@ ylabel('Period')
 title('Wavelet Power Spectrum')
 set(gca,'XLim',xlim(:))
 set(gca,'CLim',[-12 8])
+colorbar
 
 
 

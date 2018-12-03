@@ -228,12 +228,12 @@ for obj = 1:length(shoreline_fetch)
 %             fill(xlos(:,iv), ylos(:,iv),'b');
 %         end
         
-         for iv = 1:1
-            figure()
-            plot(x,y)
-            hold on
-            fill(Wavex(:,iv), Wavey(:,iv),'b');
-        end
+%          for iv = 1:1
+%             figure()
+%             plot(x,y)
+%             hold on
+%             fill(Wavex(:,iv), Wavey(:,iv),'b');
+%         end
 
 
     for iv = 1:nvert

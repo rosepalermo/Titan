@@ -32,11 +32,11 @@ dx_mr(5) = 1; dy_mr(5) = 1;
 nametemp{5} = 't3v2';
 
 
-for fo = 1:1
+for fo = 1:2
     fo_ = [1 0];
     fetch_on = fo_(fo);
     savetemp = {'wave' 'uniform'};
-    for modelrun = 2:4
+    for modelrun = 1:2
         lakex = lakex_mr{modelrun,1}(1,:);
         lakey = lakey_mr{modelrun,1}(1,:);
 %         figure()
