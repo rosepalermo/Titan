@@ -15,6 +15,8 @@ function [period, global_Save] = dowave(y,dt,ord,xx,yy,savename,save_on,fetch,i)
 % variance = std(y)^2;
 % y = (y - mean(y))/sqrt(variance);
 
+% close the loop
+
 n = length(y);
 t = (0:length(y)-1)*dt;  % construct time array
 xlim = [min(t),max(t)];  % plotting range
@@ -35,8 +37,11 @@ power = (abs(wave)).^2 ;  % compute wavelet power spectrum
 % energy = power*dt;
 % figure()
 % plot(energy,period)
-
-plotidx = cellstr(num2str(ceil(t(1:500:end-500)')));
+if i == 10
+    plotidx = cellstr(num2str(t(1:length(t)/20:end-20)'));
+else
+    plotidx = cellstr(num2str(ceil(t(1:length(t)/20:end-20)')));
+end
 
 % Background spectrum and significance levels:
 
@@ -133,7 +138,7 @@ ylabel('y')
 % title('data')
 set(gca,'FontSize',12)
 hold off
-text(t(1:500:end-500),y(1:500:end-500),plotidx,'FontSize',14);
+text(t(1:length(t)/20:end-20),y(1:length(t)/20:end-20),plotidx,'FontSize',14);
 
 %--- Contour plot wavelet power spectrum
 subplot('position',[0.1 0.37 0.65 0.28])
@@ -143,7 +148,7 @@ Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
 % contour(t,log2(period),log2(power),log2(levels));  %*** or use 'contourf'
 % imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
 imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
-colormap gray
+colormap jet
 set(gca,'FontSize',12)
 
 
@@ -184,10 +189,22 @@ set(gca,'FontSize',12)
 fig1 = gcf;
 fig1.Position = ([0,0,750,400]);
 if save_on
-    fig = '.png'; pws ='pws'; figname = strcat(savename,pws,fig);
-    saveas(gca,figname)
+    fig = '.eps'; pws ='pws'; figname = strcat(savename,pws);
+    print(figname,'-depsc')
+    fig = '.fig'; pws ='pws'; figname = strcat(savename,pws);
+    saveas(gcf,figname)
+    
 end
 
+figure()
+Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
+
+% contour(t,log2(period),log2(power),log2(levels));  %*** or use 'contourf'
+% imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
+imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
+colormap jet
+set(gca,'FontSize',12)
+set(gca,'Clim',[-20 15])
 
 if i ==9
     % Ligeia Mare
@@ -201,7 +218,7 @@ end
 if i == 1|i == 2|i == 3|i == 4|i == 5|i == 6
     %Model lakes
     pmin1 = 2^2;
-    pmax1 = 2^5;
+    pmax1 = 2^4;
     pmin2 = 2^3;
     pmax2 = 2^4;
 end
@@ -212,6 +229,11 @@ if i == 7| i == 8
     pmax1 = 2^14;
     pmin2 = 2^9;
     pmax2 = 2^14;
+end
+
+if i == 10
+    pmin1 = 2^-11.85;
+    pmax1 = 2^-6;
 end
 
 if i == 12
@@ -228,10 +250,12 @@ plot(t/100,eq14)
 xlabel('distance along coast (km)')
 title('sum of eq14')
 if save_on
-    fig = '.png'; EQ14vt ='EQ14vt'; figname = strcat(savename,EQ14vt,fig);
-    saveas(gca,figname)
+    fig = '.eps'; EQ14vt ='EQ14vt'; figname = strcat(savename,EQ14vt);
+    print(figname,'-depsc')
+    fig = '.fig'; EQ14vt ='EQ14vt'; figname = strcat(savename,EQ14vt);
+    saveas(gcf,figname)
 end
-text(t(1:500:end-500),eq14(1:500:end-500),plotidx,'FontSize',14);
+text(t(1:length(t)/20:end-20),eq14(1:length(t)/20:end-20),plotidx,'FontSize',14);
 
 figure()
 h = histogram(eq14,10,'Normalization','probability')
@@ -241,8 +265,10 @@ h.FaceColor = 'k';
 h.EdgeColor = 'w';
 title('sum of eq14')
 if save_on
-    fig = '.png'; EQ14hist ='EQ14hist'; figname = strcat(savename,EQ14hist,fig);
-    saveas(gca,figname)
+    fig = '.eps'; EQ14hist ='EQ14hist'; figname = strcat(savename,EQ14hist);
+    print(figname,'-depsc')
+    fig = '.fig'; EQ14hist ='EQ14hist'; figname = strcat(savename,EQ14hist);
+    saveas(gcf,figname)
 end
 
 if i == 12
@@ -251,44 +277,48 @@ if i == 12
     title('sum of eq14')
     view(2)
     colorbar
-    set(gca,'Clim',[0 0.00025])
+    set(gca,'Clim',[0 0.0002])
     axis equal tight
 elseif i == 2|i == 3|i == 4|i == 5
     figure()
     scatter3(xx/1e3,yy/1e3,eq14,[],eq14,'.')
     view(2)
     axis equal tight
-    set(gca,'XLim',([0.5 0.8])); set(gca,'YLim',([0.5 0.8])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
-    set(gca,'Clim',[0 0.00025])
+    set(gca,'XLim',([2.100 2.400])); set(gca,'YLim',([1.800 2.000])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
+    set(gca,'Clim',[0 0.0002])
     set(gca,'FontSize',14)
     set(gca,'xtick',[],'ytick',[])
     set(gca,'xticklabel',[],'yticklabel',[])
-    text(xx(1:500:end-500)/1e3,yy(1:500:end-500)/1e3,plotidx,'FontSize',14);
+    text(xx(1:length(t)/20:end-20)/1e3,yy(1:length(t)/20:end-20)/1e3,plotidx,'FontSize',14);
     if save_on
-        fig = '.png'; rn3z ='eq14zoom'; figname = strcat(savename,rn3z,fig);
-        saveas(gca,figname)
+        fig = '.eps'; rn3z ='eq14zoom'; figname = strcat(savename,rn3z);
+        print(figname,'-depsc')
+        fig = '.fig'; rn3z ='eq14zoom'; figname = strcat(savename,rn3z);
+        saveas(gcf,figname)
     end
     figure()
     scatter3(xx,yy,eq14,[],eq14,'.')
     title('sum of eq14')
     view(2)
     colorbar
-    set(gca,'Clim',[0 0.00025])
+    set(gca,'Clim',[0 0.0002])
     axis equal tight
-    text(xx(1:500:end-500),yy(1:500:end-500),plotidx,'FontSize',14);
+    text(xx(1:length(t)/20:end-20),yy(1:length(t)/20:end-20),plotidx,'FontSize',14);
 else
     figure()
     scatter3(xx,yy,eq14,[],eq14,'.')
     title('sum of eq14')
     view(2)
     colorbar
-    set(gca,'Clim',[0 0.00025])
+    set(gca,'Clim',[0 0.0002])
     axis equal tight
-    text(xx(1:500:end-500),yy(1:500:end-500),plotidx,'FontSize',14);
+    text(xx(1:length(t)/20:end-20),yy(1:length(t)/20:end-20),plotidx,'FontSize',14);
 end
 if save_on
-    fig = '.png'; EQ14_ ='EQ14'; figname = strcat(savename,EQ14_,fig);
-    saveas(gca,figname)
+    fig = '.eps'; EQ14_ ='EQ14'; figname = strcat(savename,EQ14_);
+    print(figname,'-depsc')
+    fig = '.fig'; EQ14_ ='EQ14'; figname = strcat(savename,EQ14_);
+    saveas(gcf,figname)
 end
 
 figure()
@@ -302,7 +332,12 @@ title('Wavelet Power Spectrum')
 set(gca,'XLim',xlim(:))
 set(gca,'CLim',[-12 8])
 colorbar
-
+if save_on
+    fig = '.eps'; wpszoom_ ='wps_zoom'; figname = strcat(savename,wpszoom_);
+    print(figname,'-depsc')
+    fig = '.fig'; wpszoom_ ='wps_zoom'; figname = strcat(savename,wpszoom_);
+    saveas(gcf,figname)
+end
 
 
 %% test before AGU 18
@@ -312,8 +347,8 @@ colorbar
 % xlabel('distance along coast (km)')
 % title('sum of wavelet power')
 % if save_on
-%     fig = '.png'; rnessvt ='rnessvt'; figname = strcat(savename,rnessvt,fig);
-%     saveas(gca,figname)
+%     fig = '.eps'; rnessvt ='rnessvt'; figname = strcat(savename,rnessvt);
+%     print(figname,'-depsc')
 % end
 % if i == 12
 %     figure()
@@ -334,8 +369,8 @@ colorbar
 %     set(gca,'xtick',[],'ytick',[])
 %     set(gca,'xticklabel',[],'yticklabel',[])
 %     if save_on
-%         fig = '.png'; rn3z ='rnesszoom'; figname = strcat(savename,rn3z,fig);
-%         saveas(gca,figname)
+%         fig = '.eps'; rn3z ='rnesszoom'; figname = strcat(savename,rn3z);
+%         print(figname,'-depsc')
 %     end
 %     figure()
 %     scatter3(xx,yy,rness,[],rness,'.')
@@ -354,8 +389,8 @@ colorbar
 %     axis equal tight
 % end
 % if save_on
-%     fig = '.png'; RNESS_ ='RNESS'; figname = strcat(savename,RNESS_,fig);
-%     saveas(gca,figname)
+%     fig = '.eps'; RNESS_ ='RNESS'; figname = strcat(savename,RNESS_);
+%     print(figname,'-depsc')
 % end
 % 
 % figure()
@@ -366,8 +401,8 @@ colorbar
 % h.EdgeColor = 'w';
 % title('sum of wavelet power')
 % if save_on
-%     fig = '.png'; rness_hist ='RNESShist'; figname = strcat(savename,rness_hist,fig);
-%     saveas(gca,figname)
+%     fig = '.eps'; rness_hist ='RNESShist'; figname = strcat(savename,rness_hist);
+%     print(figname,'-depsc')
 % end
 % 
 % rness_energy = sum(energy(pband1,:));
@@ -377,8 +412,8 @@ colorbar
 % title('sum of wavelet power*dt')
 % xlabel('distance along coast (km)')
 % if save_on
-%     fig = '.png'; rness_energyvt ='rness_energyvt'; figname = strcat(savename,rness_energyvt,fig);
-%     saveas(gca,figname)
+%     fig = '.eps'; rness_energyvt ='rness_energyvt'; figname = strcat(savename,rness_energyvt);
+%     print(figname,'-depsc')
 % end
 % 
 % figure()
@@ -389,8 +424,8 @@ colorbar
 % h.EdgeColor = 'w';
 % title('sum of wavelet power*dt')
 % if save_on
-%     fig = '.png'; rness_energy_hist ='rness_energyhist'; figname = strcat(savename,rness_energy_hist,fig);
-%     saveas(gca,figname)
+%     fig = '.eps'; rness_energy_hist ='rness_energyhist'; figname = strcat(savename,rness_energy_hist);
+%     print(figname,'-depsc')
 % end
 % 
 % if i == 12
@@ -412,8 +447,8 @@ colorbar
 %     set(gca,'xtick',[],'ytick',[])
 %     set(gca,'xticklabel',[],'yticklabel',[])
 %     if save_on
-%         fig = '.png'; rn3z ='Energyzoom'; figname = strcat(savename,rn3z,fig);
-%         saveas(gca,figname)
+%         fig = '.eps'; rn3z ='Energyzoom'; figname = strcat(savename,rn3z);
+%         print(figname,'-depsc')
 %     end
 %     figure()
 %     scatter3(xx,yy,rness_energy,[],rness_energy,'.')
@@ -432,8 +467,8 @@ colorbar
 %     axis equal tight
 % end
 % if save_on
-%     fig = '.png'; RENERGY ='RENERGY'; figname = strcat(savename,RENERGY,fig);
-%     saveas(gca,figname)
+%     fig = '.eps'; RENERGY ='RENERGY'; figname = strcat(savename,RENERGY);
+%     print(figname,'-depsc')
 % end
 %% test before generals
 % norm_rness_unsmoothed = rness./sum(global_ws);
@@ -452,8 +487,8 @@ colorbar
 % set(gca,'FontSize',14)
 % ylim([0 90])
 % if save_on
-%     fig = '.png'; rn ='rn'; figname = strcat(savename,rn,fig);
-%     saveas(gca,figname)
+%     fig = '.eps'; rn ='rn'; figname = strcat(savename,rn);
+%     print(figname,'-depsc')
 % end
 
 % figure()
@@ -473,8 +508,8 @@ colorbar
 % % yticks([0 0.25 0.5])
 % % xticks([0 20 40 60 80])
 % % if save_on
-% %     fig = '.png'; his ='his'; figname = strcat(savename,his,fig);
-% %     saveas(gca,figname)
+% %     fig = '.eps'; his ='his'; figname = strcat(savename,his);
+% %     print(figname,'-depsc')
 % % end
 
 
@@ -524,8 +559,8 @@ colorbar
 % % %     set(gca,'FontSize',14)
 % % % end
 % % if save_on
-% %     fig = '.png'; rn3 ='rn3'; figname = strcat(savename,rn3,fig);
-% %     saveas(gca,figname)
+% %     fig = '.eps'; rn3 ='rn3'; figname = strcat(savename,rn3);
+% %     print(figname,'-depsc')
 % % end
 % % 
 % % % norm_rness zoomed
@@ -545,8 +580,8 @@ colorbar
 % % set(gca,'xtick',[],'ytick',[])
 % % set(gca,'xticklabel',[],'yticklabel',[])
 % % if save_on
-% %     fig = '.png'; rn3z ='rn3z'; figname = strcat(savename,rn3z,fig);
-% %     saveas(gca,figname)
+% %     fig = '.eps'; rn3z ='rn3z'; figname = strcat(savename,rn3z);
+% %     print(figname,'-depsc')
 % % end
 % % 
 % % if save_on

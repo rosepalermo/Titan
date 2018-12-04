@@ -75,8 +75,8 @@ slopesign = sign(az(end)-az(1));
 if slopesign == 0
     slopesign = sign(az(end-1) - az(1));
 end
-% bgslope = (az(end)-az(1))/(d(end) - d(1));
-bgslope = slopesign * 2*pi / (d(end) - d(1));
+bgslope = (az(end)-az(1))/(d(end) - d(1));
+% bgslope = slopesign * 2*pi / (d(end) - d(1));
 bgx = d - mean(d);
 
 % Detrend the data series by subtracting a line with a range of 2*pi from the data.

@@ -1,70 +1,46 @@
 
-save_on = false;
+save_on = true;
 i=1;
-
-for ii = 1:5
+addpath('/Users/rosepalermo/Documents/GitHub/Titan2/Cellular Damage Model')
+for ii = 1:10
     i = ii;
- %% uniform applied to river t3
-% 
-% load('uniform_t3_15.mat')
-% x0 = xuniform;
-% y0 = yuniform;
-% % M = [x0 y0];
-% % %get rid of duplicate points (when it goes exactly around a pixel)
-% % % indices to unique values in column 3
-% % [~, ind] = unique(M, 'rows');
-% % % duplicate indices
-% % duplicate_ind = setdiff(1:size(M, 1), ind);
-% % % duplicate values
-% % duplicate_val = [M(duplicate_ind, 1) M(duplicate_ind, 2)];
-% % M(duplicate_ind,:)=[];
-% % x0 = M(:,1);
-% % y0 = M(:,2);
-% savename = 'trash';
 
-%%
 clearvars -except period global_Save i save_on
-load('waveandfetch_4generalssls_u30.mat')
-% % 1 = LGM
-% savename{1} = '/Users/rosepalermo/Documents/Research/Titan/Notes/NewRoughness_nonorm/lg_4wavelets_wavelet_updated'; 
-% % 2 = REDNOISE
-% savename{2} = '/Users/rosepalermo/Documents/Research/Titan/Notes/NewRoughness_nonorm/rednoise_wavelet_updated'; 
-% % 3 = WAVE
-% savename{3} = '/Users/rosepalermo/Documents/Research/Titan/Notes/NewRoughness_nonorm/wave_wavelet_updated'; 
-% % 4 = RIVERS
-% savename{4} = '/Users/rosepalermo/Documents/Research/Titan/Notes/NewRoughness_nonorm/rivert2_wavelet_updated'; 
-% % 5 = UNIFORM
-% savename{5} = '/Users/rosepalermo/Documents/Research/Titan/Notes/NewRoughness_nonorm/uniform_wavelet_updated'; 
-% % 6 = Lake Powell
-% savename{6} = '/Users/rosepalermo/Documents/Research/Titan/Notes/NewRoughness_nonorm/LakePowell_wavelet_updated'; 
-% % 7 = Scotland
-% savename{7} = '/Users/rosepalermo/Documents/Research/Titan/Notes/NewRoughness_nonorm/scotland_wavelet_updated'; 
-% 1 = LGM
-savename{1} = '/Users/rosepalermo/Documents/Research/Titan/Notes/11_19_18_wavepower/lg_4wavelets_'; 
-% 2 = REDNOISE
-savename{2} = '/Users/rosepalermo/Documents/Research/Titan/Notes/11_19_18_wavepower/rednoise_'; 
-% 3 = WAVE
-savename{3} = '/Users/rosepalermo/Documents/Research/Titan/Notes/11_19_18_wavepower/wave_'; 
-% 4 = RIVERS
-savename{4} = '/Users/rosepalermo/Documents/Research/Titan/Notes/11_19_18_wavepower/rivert2_'; 
-% 5 = UNIFORM
-savename{5} = '/Users/rosepalermo/Documents/Research/Titan/Notes/11_19_18_wavepower/uniform_'; 
-% 6 = Lake Powell
-savename{6} = '/Users/rosepalermo/Documents/Research/Titan/Notes/11_19_18_wavepower/LakePowell_'; 
-% 7 = Scotland
-savename{7} = '/Users/rosepalermo/Documents/Research/Titan/Notes/11_19_18_wavepower/scotland_'; 
+load('shorelines_4AGU18.mat')
 
+% 2 = REDNOISE
+savename{1} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/rednoise_v1_'; 
+% 3 = WAVE t1v1_30
+savename{2} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/wave_t1v1_30_'; 
+% 3 = WAVE t1v1_50
+savename{3} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/wave_t1v1_50_';
+% 5 = UNIFORM t1v1_30
+savename{4} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/uniform_t1v1_30_'; 
+% 5 = UNIFORM t1v1_50
+savename{5} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/uniform_t1v1_50_'; 
+% 4 = RIVERS t3v1
+savename{6} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/river_t3v1_'; 
+% 6 = Lake Powell
+savename{7} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/LakePowell_'; 
+% 7 = Scotland
+savename{8} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/scotland_'; 
+% 9 = LGM
+savename{9} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/lgm'; 
+% 9 = LGM
+savename{10} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/sebago'; 
+
+fetch = [];
 if save_on
 savename = savename{i};
 end
-if i < 6 
-    xx = A(5).cord{1,1}(:,2); yy = A(5).cord{1,1}(:,1);
-    A(5).cord{1,1}(:,1) = yy;
-    A(5).cord{1,1}(:,2) = xx;
-x0 = A(i).cord{1,1}(:,1);
-y0 = A(i).cord{1,1}(:,2);
+if i < 7 % one of the models
+%     xx = A(5).cord{1,1}(:,2); yy = A(5).cord{1,1}(:,1);
+%     A(5).cord{1,1}(:,1) = yy;
+%     A(5).cord{1,1}(:,2) = xx;
+x0 = SL_matrix(i).cord{1,1}(:,1);
+y0 = SL_matrix(i).cord{1,1}(:,2);
 
-fetch = WaveArea_save{1, i}{1, 1};
+% fetch = WaveArea_save{1, i}{1, 1};
 M = [x0 y0];
 % indices to unique values in column 3
 [~, ind] = unique(M, 'rows');
@@ -73,13 +49,14 @@ duplicate_ind = setdiff(1:size(M, 1), ind);
 % duplicate values
 duplicate_val = [M(duplicate_ind, 1) M(duplicate_ind, 2)];
 M(duplicate_ind,:)=[];
-fetch(duplicate_ind) = [];
+% fetch(duplicate_ind) = [];
+
 
 x0=M(:,1);
 y0=M(:,2);
 end
 
-if i == 6
+if i == 7
 % %Lake Powell
 filename = 'LakePowell_gp.csv';
 M = csvread(filename);
@@ -113,7 +90,7 @@ end
 
 
 %% Scotland
-if i == 7
+if i == 8
 filename = 'Scotland_gp.csv';
 M = csvread(filename);
 %get rid of duplicate points (when it goes exactly around a pixel)
@@ -142,7 +119,7 @@ end
 
 %% load Ligeia Mare
 % clear
-if i == 1
+if i == 9
 filename = 'lg_4wavelets.xls';
 M = xlsread(filename);
 
@@ -160,6 +137,25 @@ x0=M(:,4);
 y0=M(:,5);
 end
 
+%% Sebago
+if i == 10
+M = xlsread('sebago_2_xy_UTM.xls');
+%get rid of duplicate points (when it goes exactly around a pixel)
+% indices to unique values in column 3
+[~, ind] = unique(M(:, 4:5), 'rows');
+% duplicate indices
+duplicate_ind = setdiff(1:size(M, 1), ind);
+% duplicate values
+duplicate_val = [M(duplicate_ind, 4) M(duplicate_ind, 5)];
+M(duplicate_ind,:)=[];
+
+x0=M(:,4);
+y0=M(:,5);
+x0 = [x0(3319+25:3459);x0(2223:2787);x0(3460:4155);x0(5442:7123);x0(87:1664);x0(1941:2222);x0(4156:5044);x0(8329:8703);x0(7124:8328);x0(5381:5440);x0(5045:5379)];
+y0 = [y0(3319+25:3459);y0(2223:2787);y0(3460:4155);y0(5442:7123);y0(87:1664);y0(1941:2222);y0(4156:5044);y0(8329:8703);y0(7124:8328);y0(5381:5440);y0(5045:5379)];
+x_island = [x0(1665:1940);x0(2788:3318)];
+y_island = [y0(1665:1940);y0(2788:3318)];
+end
 %%  Red noise eroded by waves
 % clear
 % load('wave_rednoise_wrong.mat')
@@ -312,6 +308,10 @@ y = y(1:end-2);
 % autoregressive process of order n (a.k.a. an AR(n) process)
 n=2;
 % dowave_duplicate(theta,deltad,n,x,y,savename);
+
+% theta = [theta(length(theta)*2/3:end);theta;theta(1:length(theta)*1/3)];
+% x = [x(length(x)*2/3:end);x;x(1:length(x)*1/3)];
+% y = [y(length(y)*2/3:end);y;y(1:length(y)*1/3)];
 [period{i},global_Save{i}] = dowave(theta,deltad,n,x,y,savename,save_on,fetch,i);
 
 % % plot where the first point is

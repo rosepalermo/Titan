@@ -21,12 +21,12 @@ if i == 12
     colorbar
     set(gca,'Clim',[0 0.00025])
     axis equal tight
-elseif i == 2|i == 3|i == 4|i == 5
+elseif i == 1|i == 2|i == 3|i == 4|i == 5|i == 6
     figure()
     scatter3(xx/1e3,yy/1e3,eq14,[],eq14,'.')
     view(2)
     axis equal tight
-    set(gca,'XLim',([0.5 0.8])); set(gca,'YLim',([0.5 0.8])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
+    set(gca,'XLim',([2.100 2.400])); set(gca,'YLim',([1.800 2.000])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
     set(gca,'Clim',[0 0.00025])
     set(gca,'FontSize',14)
     set(gca,'xtick',[],'ytick',[])
