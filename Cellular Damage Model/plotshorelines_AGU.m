@@ -1,12 +1,12 @@
 % color = {'k';[0.3 0.3 0.3];[0.7 0.7 0.7]};
 % color = {'k';'r';'b'};
-addpath('D:\Titan\Modeling\AGU final folder')
+addpath('C:\Users\Rose Palermo\Documents\Titan\Modeling\11_18_riverandwave_higherstrength')
 addpath('C:\Users\Rose Palermo\Documents\GitHub\Titan2\Wavelets\Current Working folder')
 
 
 hh = figure();
 % hh.Position = [440,378,974,420];
-load('wavet1v1.mat')
+load('wavet2v1.mat')
 runsplot = [1;3;5];
 runsplot = [1:5];
 
@@ -32,8 +32,8 @@ set(gca,'XLim',([2100 2400])); set(gca,'YLim',([1800 2000]))
 
 end
 %%
-
-load('uniformt1v1.mat')
+addpath('D:\Titan\Modeling\AGU final folder')
+load('uniformt2v1.mat')
 % runsplot = [1; 10; 20];
 runsplot = [1:2:20];
 

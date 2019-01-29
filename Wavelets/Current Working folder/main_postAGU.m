@@ -1,39 +1,47 @@
 
-save_on = true;
+save_on = false;
 i=1;
-addpath('/Users/rosepalermo/Documents/GitHub/Titan2/Cellular Damage Model')
-for ii = 1:10
+addpath('C:\Users\Rose Palermo\Documents\GitHub\Titan2\Cellular Damage Model')
+for ii = 12:12
     i = ii;
 
 clearvars -except period global_Save i save_on
-load('shorelines_4AGU18.mat')
+load('waveandfetch_4AGU18.mat')
 
 % 2 = REDNOISE
-savename{1} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/rednoise_v1_'; 
+savename{1} = 'D:\Titan\Modeling\river_and_wave_1_2019\rednoise_v1_'; 
 % 3 = WAVE t1v1_30
-savename{2} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/wave_t1v1_30_'; 
+savename{2} = 'D:\Titan\Modeling\river_and_wave_1_2019\wave_t1v1_30_'; 
 % 3 = WAVE t1v1_50
-savename{3} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/wave_t1v1_50_';
-% 5 = UNIFORM t1v1_30
-savename{4} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/uniform_t1v1_30_'; 
+savename{3} = 'D:\Titan\Modeling\river_and_wave_1_2019\wave_t1v1_50_';
+% 4 = UNIFORM t1v1_30
+savename{4} = 'D:\Titan\Modeling\river_and_wave_1_2019\uniform_t1v1_30_'; 
 % 5 = UNIFORM t1v1_50
-savename{5} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/uniform_t1v1_50_'; 
-% 4 = RIVERS t3v1
-savename{6} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/river_t3v1_'; 
-% 6 = Lake Powell
-savename{7} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/LakePowell_'; 
-% 7 = Scotland
-savename{8} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/scotland_'; 
+savename{5} = 'D:\Titan\Modeling\river_and_wave_1_2019\uniform_t1v1_50_'; 
+% 7 = RIVERS t3v1
+savename{6} = 'D:\Titan\Modeling\river_and_wave_1_2019\river_t3v1_'; 
+% 7 = Lake Powell
+savename{7} = 'D:\Titan\Modeling\river_and_wave_1_2019\LakePowell_'; 
+% 8 = Scotland
+savename{8} = 'D:\Titan\Modeling\river_and_wave_1_2019\scotland_'; 
 % 9 = LGM
-savename{9} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/lgm'; 
-% 9 = LGM
-savename{10} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/sebago'; 
+savename{9} = 'D:\Titan\Modeling\river_and_wave_1_2019\lgm'; 
+% 10 = Sebago
+savename{10} = 'D:\Titan\Modeling\river_and_wave_1_2019\sebago'; 
+% 11 = WAVE t2v1_30
+savename{11} = 'D:\Titan\Modeling\river_and_wave_1_2019\wave_t2v1_30_'; 
+% 12 = WAVE t2v1_50
+savename{12} = 'D:\Titan\Modeling\river_and_wave_1_2019\wave_t2v1_50_'; 
+% 13 = UNIFORM t2v1_30
+savename{13} = 'D:\Titan\Modeling\river_and_wave_1_2019\uniform_t2v1_30_'; 
+% 14 = UNIFORM t2v1_50
+savename{14} = 'D:\Titan\Modeling\river_and_wave_1_2019\uniform_t2v1_50_'; 
 
 
 if save_on
 savename = savename{i};
 end
-if i < 7 % one of the models
+if i < 7 | i >10% one of the models
 %     xx = A(5).cord{1,1}(:,2); yy = A(5).cord{1,1}(:,1);
 %     A(5).cord{1,1}(:,1) = yy;
 %     A(5).cord{1,1}(:,2) = xx;

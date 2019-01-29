@@ -28,7 +28,6 @@ land = ~lake;
 state = [slX_orderedind, slY_orderedind, LP_state];
 state_all = [state];
 unq = unique(state,'rows');
-unq_all = unq;
 
 ind = [slXind slYind];
 ordered_cw = [slX_orderedind slY_orderedind];
@@ -378,28 +377,22 @@ while sum(~ismember(ind,ordered_cw_all,'rows')) > 0
                 scatter(slX_orderedind,slY_orderedind);
         ordered_cw = [slX_orderedind slY_orderedind];
         if obj == 1
-            ordered_cw_all = ordered_cw;
-            state_all = state;
-            unq_all = unq;
-        else
             ordered_cw_all = [ordered_cw_all;ordered_cw];
-            state_all = [state_all;state];
-            unq_all = [unq_all;unq];
-
+            state_saveall = [state];
+        else
+            ordered_cw_all = ordered_cw;
         end
         ordered_ccw = flipud(ordered_cw);
         sl_cell{obj,1} = ordered_ccw;
         obj = obj+1;
         % start at point number 1 for the next object
-        i = 3;
+        i = 2;
         ptsleft = ind(find(~ismember(ind,ordered_cw_all,'rows')),:);
         if ~isempty(ptsleft)
-            clearvars slX_orderedind slY_orderedind LastPoint state unq
+            clearvars slX_orderedind slY_orderedind LastPoint
             slX_orderedind(1) = ptsleft(1,1);
             slY_orderedind(1) = ptsleft(1,2);
-            [slX_orderedind, slY_orderedind, LastPoint, LP_state] = find2ndpt(land,slX_orderedind(1),slY_orderedind(1));
-            state = [slX_orderedind, slY_orderedind, LP_state];
-            unq = unique(state,'rows');
+            [slX_orderedind, slY_orderedind, LastPoint] = find2ndpt(land,slX_orderedind(1),slY_orderedind(1));
         end
         
         
