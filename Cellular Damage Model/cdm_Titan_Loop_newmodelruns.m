@@ -8,7 +8,7 @@ nametemp{1} = 't1v1';
 
 lakex_mr{2,1}(1,:) = x_0_5m_t2v1;
 lakey_mr{2,1}(1,:) = y_0_5m_t2v1;
-eps_mr(2) = 200;
+eps_mr(2) = 100;
 dx_mr(2) = 1; dy_mr(2) = 1;
 nametemp{2} = 't2v1';
 
@@ -32,11 +32,13 @@ dx_mr(5) = 1; dy_mr(5) = 1;
 nametemp{5} = 't3v2';
 
 
-for fo = 1:2
+for fo = 1
     fo_ = [1 0];
     fetch_on = fo_(fo);
     savetemp = {'wave' 'uniform'};
-    for modelrun = 1:2
+    for mr = 2:2
+        mr_ = [2 4];
+        modelrun = mr_(mr);
         lakex = lakex_mr{modelrun,1}(1,:);
         lakey = lakey_mr{modelrun,1}(1,:);
 %         figure()

@@ -27,9 +27,9 @@ tmax = 50;
 % when creating a gif
 plot_now = false;
 gif_on = false;
-save_on = true;
+save_on = false;
 shoreline_save = cell(1,1);
-filename = [num2str(modelrun),'riverandwave_strength10k.gif'];
+% filename = [num2str(modelrun),'riverandwave.gif'];
 
 
 
@@ -60,7 +60,7 @@ lake = reshape(lake,length(y),length(x));
 land = ~lake;
 if fetch_on
 %     strength = 10000000*double(land);
-    strength = 100000*double(land);
+    strength = 50000*double(land);
 else
     strength = 10*double(land);
 end
@@ -253,17 +253,17 @@ for i = 1:tmax
         %         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave',num2str(i),'.fig'])
         %         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\','wave_rednoise',num2str(i),'.fig'])
         
-        saveas(gcf,['D:\Titan\Modeling\11_18_river_wave_uniform_AGU\',savename,num2str(i),'.fig'])
+        saveas(gcf,['D:\Titan\Modeling\river_and_wave_1_2019\',savename,num2str(i),'.fig'])
     end
     
     if fetch_on
         if save_on
             %     save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave','.mat'],'shoreline_save')
-            save(['D:\Titan\Modeling\11_18_river_wave_uniform_AGU_2\',savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
+            save(['D:\Titan\Modeling\river_and_wave_1_2019\',savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
             
         end
     else
-        save(['D:\Titan\Modeling\11_18_river_wave_uniform_AGU_2\',savename,'.mat'],'shoreline_save','dam_save','X','Y','lake_save')
+        save(['D:\Titan\Modeling\river_and_wave_1_2019\',savename,'.mat'],'shoreline_save','dam_save','X','Y','lake_save')
     end
 end
 

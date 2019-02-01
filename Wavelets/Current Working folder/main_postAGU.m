@@ -1,39 +1,47 @@
 
 save_on = false;
-
-addpath('/Users/rosepalermo/Documents/GitHub/Titan2/Cellular Damage Model')
-for ii = 8
+i=1;
+addpath('C:\Users\Rose Palermo\Documents\GitHub\Titan2\Cellular Damage Model')
+for ii = 12:12
     i = ii;
 
 clearvars -except period global_Save i save_on
-load('shorelines_4AGU18.mat')
+load('waveandfetch_4AGU18.mat')
 
 % 2 = REDNOISE
-savename{1} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/rednoise_v1_'; 
+savename{1} = 'D:\Titan\Modeling\river_and_wave_1_2019\rednoise_v1_'; 
 % 3 = WAVE t1v1_30
-savename{2} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/wave_t1v1_30_'; 
+savename{2} = 'D:\Titan\Modeling\river_and_wave_1_2019\wave_t1v1_30_'; 
 % 3 = WAVE t1v1_50
-savename{3} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/wave_t1v1_50_';
-% 5 = UNIFORM t1v1_30
-savename{4} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/uniform_t1v1_30_'; 
+savename{3} = 'D:\Titan\Modeling\river_and_wave_1_2019\wave_t1v1_50_';
+% 4 = UNIFORM t1v1_30
+savename{4} = 'D:\Titan\Modeling\river_and_wave_1_2019\uniform_t1v1_30_'; 
 % 5 = UNIFORM t1v1_50
-savename{5} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/uniform_t1v1_50_'; 
-% 4 = RIVERS t3v1
-savename{6} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/river_t3v1_'; 
-% 6 = Lake Powell
-savename{7} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/LakePowell_'; 
-% 7 = Scotland
-savename{8} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/scotland_'; 
+savename{5} = 'D:\Titan\Modeling\river_and_wave_1_2019\uniform_t1v1_50_'; 
+% 7 = RIVERS t3v1
+savename{6} = 'D:\Titan\Modeling\river_and_wave_1_2019\river_t3v1_'; 
+% 7 = Lake Powell
+savename{7} = 'D:\Titan\Modeling\river_and_wave_1_2019\LakePowell_'; 
+% 8 = Scotland
+savename{8} = 'D:\Titan\Modeling\river_and_wave_1_2019\scotland_'; 
 % 9 = LGM
-savename{9} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/lgm'; 
-% 9 = LGM
-savename{10} = '/Volumes/GoogleDrive/My Drive/RoseAndrewShare/AGU 2018/figures from rose/sebago'; 
+savename{9} = 'D:\Titan\Modeling\river_and_wave_1_2019\lgm'; 
+% 10 = Sebago
+savename{10} = 'D:\Titan\Modeling\river_and_wave_1_2019\sebago'; 
+% 11 = WAVE t2v1_30
+savename{11} = 'D:\Titan\Modeling\river_and_wave_1_2019\wave_t2v1_30_'; 
+% 12 = WAVE t2v1_50
+savename{12} = 'D:\Titan\Modeling\river_and_wave_1_2019\wave_t2v1_50_'; 
+% 13 = UNIFORM t2v1_30
+savename{13} = 'D:\Titan\Modeling\river_and_wave_1_2019\uniform_t2v1_30_'; 
+% 14 = UNIFORM t2v1_50
+savename{14} = 'D:\Titan\Modeling\river_and_wave_1_2019\uniform_t2v1_50_'; 
 
 
 if save_on
 savename = savename{i};
 end
-if i < 7 % one of the models
+if i < 7 | i >10% one of the models
 %     xx = A(5).cord{1,1}(:,2); yy = A(5).cord{1,1}(:,1);
 %     A(5).cord{1,1}(:,1) = yy;
 %     A(5).cord{1,1}(:,2) = xx;
@@ -113,7 +121,7 @@ dist = sqrt((x0(2:end) - x0(1:end-1)).^2 +  (y0(2:end) - y0(1:end-1)).^2);
 dist_off = find(dist>1000);
 x0_fixed = [flipud(x0(924:2345));x0(1:923);x0(2346:end)];
 y0_fixed = [flipud(y0(924:2345));y0(1:923);y0(2346:end)];
-% plot(x0_fixed,y0_fixed)
+plot(x0_fixed,y0_fixed)
 x0 = x0_fixed; y0 = y0_fixed;
 fetch = [];
 end
@@ -156,11 +164,6 @@ x0 = [x0(3319+25:3459);x0(2223:2787);x0(3460:4155);x0(5442:7123);x0(87:1664);x0(
 y0 = [y0(3319+25:3459);y0(2223:2787);y0(3460:4155);y0(5442:7123);y0(87:1664);y0(1941:2222);y0(4156:5044);y0(8329:8703);y0(7124:8328);y0(5381:5440);y0(5045:5379)];
 x_island = [x0(1665:1940);x0(2788:3318)];
 y_island = [y0(1665:1940);y0(2788:3318)];
-
-lat = 111103;
-lon = 80837;
-x0 = (x0-min(x0)) * lon;%changed from lon/lat*lon to just lon
-y0 = (y0-min(y0)) * lat;
 end
 %%  Red noise eroded by waves
 % clear

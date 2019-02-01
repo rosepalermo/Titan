@@ -218,7 +218,7 @@ if i ==9
 end
 
 
-if i == 1|i == 2|i == 3|i == 4|i == 5|i == 6
+if i <= 6 | i>10&i<15
     %Model lakes
     pmin1 = 2^2;
     pmax1 = 2^4;
@@ -246,7 +246,7 @@ if i == 10
     pmax1 = 2^10;
 end
 
-if i == 12
+if i == 122
     pmin1 = 0;
     pmax1 = 2^5;
 end
@@ -303,7 +303,7 @@ h.FaceColor = 'k';
 h.EdgeColor = 'w';
 title(i)
 end
-if i == 12
+if i == 122
     figure()
     scatter3(t,y,eq14,[],eq14,'.')
     title('sum of eq14')
@@ -386,7 +386,7 @@ end
 %     fig = '.eps'; rnessvt ='rnessvt'; figname = strcat(savename,rnessvt);
 %     print(figname,'-depsc')
 % end
-% if i == 12
+% if i == 122
 %     figure()
 %     scatter3(t,y,rness,[],rness,'.')
 %     title('sum of wavelet power')
@@ -464,7 +464,7 @@ end
 %     print(figname,'-depsc')
 % end
 % 
-% if i == 12
+% if i == 122
 %     figure()
 %     scatter3(t,y,rness_energy,[],rness_energy,'.')
 %     title('sum of wavelet power*dt')
