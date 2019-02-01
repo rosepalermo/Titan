@@ -127,7 +127,7 @@ global_signif = wave_signif_ARn(std(y)^2,dt,scale,1,fft_theor,-1,dof,mother);
 eq14 = dj.*dt./0.776./length(y)*sum(sum(power./scale'));
 
 % PLOTTING
-figure
+figure()
 
 %--- Plot time series
 subplot('position',[0.1 0.75 0.65 0.2])
@@ -141,7 +141,7 @@ hold off
 text(t(1:length(t)/20:end-20),y(1:length(t)/20:end-20),plotidx,'FontSize',14);
 
 %--- Contour plot wavelet power spectrum
-subplot('position',[0.1 0.37 0.65 0.28])
+ax1 = subplot('position',[0.1 0.37 0.65 0.28]);
 % levels = [0.0625,0.125,0.25,0.5,1,2,4,8,16] ;
 Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
 
@@ -150,6 +150,7 @@ Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
 imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
 colormap jet
 set(gca,'FontSize',12)
+set(gcs,'Clim',[-12 8])
 
 
 xlabel('alongshore distance (m)')
@@ -171,7 +172,7 @@ set(gca,'XLim',xlim(:))
 
 
 %--- Plot global wavelet spectrum
-subplot('position',[0.77 0.37 0.2 0.28])
+ax2 = subplot('position',[0.77 0.37 0.2 0.28]);
 semilogx(fft_theor,log2(period),'k')
 hold on
 semilogx(global_signif,log2(period),'r')
@@ -186,6 +187,7 @@ set(gca,'YLim',log2([min(period),max(period)]), ...
 	'YTickLabel','')
 set(gca,'XLim',[0,1.25*max(global_ws)])
 set(gca,'FontSize',12)
+linkaxes([ax1 ax2],'y')
 fig1 = gcf;
 fig1.Position = ([0,0,750,400]);
 if save_on
@@ -196,7 +198,8 @@ if save_on
     
 end
 
-figure()
+figure(10)
+
 Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
 
 % contour(t,log2(period),log2(power),log2(levels));  %*** or use 'contourf'
@@ -204,12 +207,12 @@ Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
 imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
 colormap jet
 set(gca,'FontSize',12)
-set(gca,'Clim',[-20 15])
+set(gca,'Clim',[-12 8])
 
 if i ==9
     % Ligeia Mare
     pmin1 = 2^10;
-    pmax1 = 2^15;
+    pmax1 = 2^14;
     pmin2 = 2^10;
     pmax2 = 2^15;
 end
@@ -223,17 +226,24 @@ if i == 1|i == 2|i == 3|i == 4|i == 5|i == 6
     pmax2 = 2^4;
 end
 
-if i == 7| i == 8
-    %Lake Powell or scotland
+if i == 7
+    %Lake Powell
     pmin1 = 2^9;
-    pmax1 = 2^14;
+    pmax1 = 2^11;
     pmin2 = 2^9;
     pmax2 = 2^14;
 end
 
+if i == 8
+    % scotland
+    pmin1 = 2^8;
+    pmax1 = 2^10.5;
+    pmin2 = 2^9;
+    pmax2 = 2^14;
+end
 if i == 10
-    pmin1 = 2^-11.85;
-    pmax1 = 2^-6;
+    pmin1 = 2^7;
+    pmax1 = 2^10;
 end
 
 if i == 12
@@ -245,7 +255,8 @@ pband1 = period >= pmin1 & period <= pmax1;
 powernorm_sub = power(pband1,:);
 eq14 = dj.*dt./0.776./length(y)*sum(powernorm_sub./scale(pband1)');
 
-figure() 
+figure(11) 
+
 plot(t/100,eq14)
 xlabel('distance along coast (km)')
 title('sum of eq14')
@@ -257,20 +268,41 @@ if save_on
 end
 text(t(1:length(t)/20:end-20),eq14(1:length(t)/20:end-20),plotidx,'FontSize',14);
 
-figure()
+figure(16)
+subplot(2,5,i)
 h = histogram(eq14,10,'Normalization','probability')
 % h = findobj(gca,'Type','patch');
+set(gca,'Xlim',[0 4e-4])
 h.FaceColor = 'k';
 % h.FaceColor = [0.6 0.6 0.6];
 h.EdgeColor = 'w';
-title('sum of eq14')
+title(i)
 if save_on
     fig = '.eps'; EQ14hist ='EQ14hist'; figname = strcat(savename,EQ14hist);
     print(figname,'-depsc')
     fig = '.fig'; EQ14hist ='EQ14hist'; figname = strcat(savename,EQ14hist);
     saveas(gcf,figname)
 end
+if i == 8
+figure(17)
+subplot(2,1,1)
+h = histogram(eq14(1:length(eq14)/3),10,'Normalization','probability')
+% h = findobj(gca,'Type','patch');
+set(gca,'Xlim',[0 4e-4])
+h.FaceColor = 'k';
+% h.FaceColor = [0.6 0.6 0.6];
+h.EdgeColor = 'w';
+title(i)
 
+subplot(2,1,2)
+h = histogram(eq14(length(eq14)/3:end),10,'Normalization','probability')
+% h = findobj(gca,'Type','patch');
+set(gca,'Xlim',[0 4e-4])
+h.FaceColor = 'k';
+% h.FaceColor = [0.6 0.6 0.6];
+h.EdgeColor = 'w';
+title(i)
+end
 if i == 12
     figure()
     scatter3(t,y,eq14,[],eq14,'.')
@@ -280,7 +312,8 @@ if i == 12
     set(gca,'Clim',[0 0.0002])
     axis equal tight
 elseif i == 2|i == 3|i == 4|i == 5
-    figure()
+    figure(12)
+    
     scatter3(xx/1e3,yy/1e3,eq14,[],eq14,'.')
     view(2)
     axis equal tight
@@ -296,7 +329,8 @@ elseif i == 2|i == 3|i == 4|i == 5
         fig = '.fig'; rn3z ='eq14zoom'; figname = strcat(savename,rn3z);
         saveas(gcf,figname)
     end
-    figure()
+    figure(13)
+    
     scatter3(xx,yy,eq14,[],eq14,'.')
     title('sum of eq14')
     view(2)
@@ -305,7 +339,8 @@ elseif i == 2|i == 3|i == 4|i == 5
     axis equal tight
     text(xx(1:length(t)/20:end-20),yy(1:length(t)/20:end-20),plotidx,'FontSize',14);
 else
-    figure()
+    figure(14)
+    
     scatter3(xx,yy,eq14,[],eq14,'.')
     title('sum of eq14')
     view(2)
@@ -321,7 +356,8 @@ if save_on
     saveas(gcf,figname)
 end
 
-figure()
+figure(15)
+
 Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
 imagesc(t,log2(period(pband1)),log2(power(pband1,:)));  %*** uncomment for 'image' plot
 colormap jet

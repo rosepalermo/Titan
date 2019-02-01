@@ -1,8 +1,8 @@
 
-save_on = true;
-i=1;
+save_on = false;
+
 addpath('/Users/rosepalermo/Documents/GitHub/Titan2/Cellular Damage Model')
-for ii = 1:10
+for ii = 8
     i = ii;
 
 clearvars -except period global_Save i save_on
@@ -112,7 +112,7 @@ dist = sqrt((x0(2:end) - x0(1:end-1)).^2 +  (y0(2:end) - y0(1:end-1)).^2);
 dist_off = find(dist>1000);
 x0_fixed = [flipud(x0(924:2345));x0(1:923);x0(2346:end)];
 y0_fixed = [flipud(y0(924:2345));y0(1:923);y0(2346:end)];
-plot(x0_fixed,y0_fixed)
+% plot(x0_fixed,y0_fixed)
 x0 = x0_fixed; y0 = y0_fixed;
 fetch = [];
 end
@@ -155,6 +155,11 @@ x0 = [x0(3319+25:3459);x0(2223:2787);x0(3460:4155);x0(5442:7123);x0(87:1664);x0(
 y0 = [y0(3319+25:3459);y0(2223:2787);y0(3460:4155);y0(5442:7123);y0(87:1664);y0(1941:2222);y0(4156:5044);y0(8329:8703);y0(7124:8328);y0(5381:5440);y0(5045:5379)];
 x_island = [x0(1665:1940);x0(2788:3318)];
 y_island = [y0(1665:1940);y0(2788:3318)];
+
+lat = 111103;
+lon = 80837;
+x0 = (x0-min(x0)) * lon;%changed from lon/lat*lon to just lon
+y0 = (y0-min(y0)) * lat;
 end
 %%  Red noise eroded by waves
 % clear
