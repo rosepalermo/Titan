@@ -93,6 +93,12 @@ p.F(noise <= 0) = 1;
 
 init = noise;
 
+%% coastal erosion inputs
+p.SLR = 1;                  % 1m/dt
+g.sealevel_init = 0.5;           % initial sea level
+p.strength = 10;            % initial strength of the bedrock above water.
+
+
 %% RUN THE MODEL %%
 
 % run the model, storing the final elevation grid in solution
