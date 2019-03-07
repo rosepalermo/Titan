@@ -36,6 +36,8 @@ ordered_cw_all = [slX_orderedind slY_orderedind];
 i = 3;
 obj = 1;
 
+imagesc(lake');hold on;
+
 while sum(~ismember(ind,ordered_cw_all,'rows')) > 0
     if length(unq(:,1)) == length(state(:,1))
         scatter(slX_orderedind,slY_orderedind);

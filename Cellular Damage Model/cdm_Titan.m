@@ -27,7 +27,7 @@ tmax = 50;
 % when creating a gif
 plot_now = false;
 gif_on = false;
-save_on = false;
+save_on = true;
 shoreline_save = cell(1,1);
 % filename = [num2str(modelrun),'riverandwave.gif'];
 
@@ -124,10 +124,10 @@ for i = 1:tmax
         % trash)
         corners = setdiff(find(shoreline),indshoreline);
         if ~isempty(cells2trash)
-        [c2t]=sub2ind(size(X),cells2trash(:,1),cells2trash(:,2)); % find the cells that arent the trash cells
-        if exist('c2t') & ~isempty(corners)
-        corners = corners(~ismember(corners,c2t));
-        end
+            [c2t]=sub2ind(size(X),cells2trash(:,1),cells2trash(:,2)); % find the cells that arent the trash cells
+            if exist('c2t') & ~isempty(corners)
+                corners = corners(~ismember(corners,c2t));
+            end
         end
         
         % find the mean of the damage for points next to the corners. make that
@@ -236,9 +236,10 @@ for i = 1:tmax
     corners_save{i,1} = corners;
     damcorners_save{i,1} = damcorn;
     
+    slplot = cell2mat(fetch_sl_cells);
     p2 = subplot(1,2,2)
     cla(p2)
-    scatter3(fetch_sl_cells{1,1}(:,1),fetch_sl_cells{1,1}(:,2),dam,[],dam)
+    scatter3(slplot(:,1),slplot(:,2),dam,[],dam)
     hold on
     scatter3(X(corners),Y(corners),damcorn,[],damcorn)
     axis equal
