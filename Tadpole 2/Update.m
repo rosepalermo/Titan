@@ -4,6 +4,8 @@ function [p g] = Update(p,g)
 % UPDATE elevations using operator splitting %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% g.U is the input elevation. UPDATE THE
+% SHORELINE POSITION & ELEVATION BASED ON OUTSIDE FUNCITON HERE?
 
 % CHANNEL INCISION
 if p.doStreamPower
@@ -34,4 +36,5 @@ if p.doDiffusion
         % where the channels are and what the new time step is
     end
     g = ADI(p,g); % alternating-direction implicit (Crank-Nicolson in 2D)
+    
 end

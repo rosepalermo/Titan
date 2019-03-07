@@ -10,4 +10,6 @@ if p.doAdaptiveTimeStep
     p.dt = min( [p.dtmax p.Courant/Courant*p.dt]);
 end
 
+
+
 g.U = g.U + p.dt*RHS;

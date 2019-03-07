@@ -52,6 +52,7 @@ load('xy_beta1_6_v1.mat')
 SL_matrix(6).cord{1,1}(:,1) = x_0_5m_t2v1;
 SL_matrix(6).cord{1,1}(:,2) = y_0_5m_t2v1;
 
+%% t1v1 WAVE 
 
 %% LAKE POWELL
 filename = 'LakePowell_gp.csv';
@@ -193,10 +194,10 @@ for i = 1:length(SL_matrix)
     figure();scatter3(SL_matrix(i).cord{1,1}(:,1),SL_matrix(i).cord{1,1}(:,2),WaveArea{1,1},[],WaveArea{1,1});view(2);colorbar
 end
 
-
-for i = 1:length(SL_matrix)
-    figure()
-    plot(SL_matrix(i).cord{1,1}(:,1),SL_matrix(i).cord{1,1}(:,2))
-end
-save('waveandfetch_4AGU18.mat','SL_matrix','WaveArea_save','FetchArea_save')
+% 
+% for i = 1:length(SL_matrix)
+%     figure()
+%     plot(SL_matrix(i).cord{1,1}(:,1),SL_matrix(i).cord{1,1}(:,2))
+% end
+% save('waveandfetch_4AGU18.mat','SL_matrix','WaveArea_save','FetchArea_save')
 save('shorelines_4AGU18.mat','SL_matrix')

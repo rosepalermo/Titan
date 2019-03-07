@@ -33,6 +33,9 @@ else
     g.Channels = zeros(p.K,p.J);
 end
 
+g.Coast_input = init<g.sealevel_init;     % liquid is 1m or less in elevation
+g.Strength = p.strength*g.Coast_input;  % initial "strength" of the bedrock
+
 %%%%%%%%%%%%%%%%%
 % SET UP OUTPUT % 
 %%%%%%%%%%%%%%%%%
