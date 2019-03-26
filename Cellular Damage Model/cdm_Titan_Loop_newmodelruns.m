@@ -1,3 +1,5 @@
+addpath('/home/rpalermo/Titan2/Tadpole 2/example_Rose_800x800')
+
 % contours
 load('xy_beta1_6_v1.mat')
 lakex_mr{1,1}(1,:) = x_0_5m_t1v1;
