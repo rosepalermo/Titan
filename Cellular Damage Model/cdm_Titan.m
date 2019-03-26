@@ -22,9 +22,11 @@ function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun,fetch_on,savename)
 
 % run time
 
-tmax = 50;
+tmax = 25;
 
 % when creating a gif
+% savefolder = 'D:\Titan\Modeling\river_and_wave_1_2019\';
+savefolder = '/home/rpalermo/titan_models';
 plot_now = false;
 gif_on = false;
 save_on = true;
@@ -236,35 +238,40 @@ for i = 1:tmax
     corners_save{i,1} = corners;
     damcorners_save{i,1} = damcorn;
     
-    slplot = cell2mat(fetch_sl_cells);
-    p2 = subplot(1,2,2)
-    cla(p2)
-    scatter3(slplot(:,1),slplot(:,2),dam,[],dam)
-    hold on
-    scatter3(X(corners),Y(corners),damcorn,[],damcorn)
-    axis equal
-    axis([min(min(X)) max(max(X)) min(min(Y)) max(max(Y))])
-    colorbar
-    colormap(jet)
-    view(2)
+%     slplot = cell2mat(fetch_sl_cells);
+%     p2 = subplot(1,2,2)
+%     cla(p2)
+%     scatter3(slplot(:,1),slplot(:,2),dam,[],dam)
+%     hold on
+%     scatter3(X(corners),Y(corners),damcorn,[],damcorn)
+%     axis equal
+%     axis([min(min(X)) max(max(X)) min(min(Y)) max(max(Y))])
+%     colorbar
+%     colormap(jet)
+%     view(2)
     end
     
     
-    if save_on
+    if save_on && plot_now
         %         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave',num2str(i),'.fig'])
         %         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\','wave_rednoise',num2str(i),'.fig'])
         
-        saveas(gcf,['D:\Titan\Modeling\river_and_wave_1_2019\',savename,num2str(i),'.fig'])
+%         saveas(gcf,['D:\Titan\Modeling\river_and_wave_1_2019\',savename,num2str(i),'.fig'])
+        saveas(gcf,[savefolder, savename,num2str(i),'.fig'])
+
     end
     
     if fetch_on
         if save_on
             %     save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave','.mat'],'shoreline_save')
-            save(['D:\Titan\Modeling\river_and_wave_1_2019\',savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
+%             save(['D:\Titan\Modeling\river_and_wave_1_2019\',savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
+            save([savefolder, savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y','lake_save')
             
         end
     else
-        save(['D:\Titan\Modeling\river_and_wave_1_2019\',savename,'.mat'],'shoreline_save','dam_save','X','Y','lake_save')
+%         save(['D:\Titan\Modeling\river_and_wave_1_2019\',savename,'.mat'],'shoreline_save','dam_save','X','Y','lake_save')
+        save([savefolder, savename,'.mat'],'shoreline_save','dam_save','X','Y','lake_save')
+
     end
 end
 

@@ -3,13 +3,13 @@ load('xy_beta1_6_v1.mat')
 lakex_mr{1,1}(1,:) = x_0_5m_t1v1;
 lakey_mr{1,1}(1,:) = y_0_5m_t1v1;
 eps_mr(1) = 100;
-dx_mr(1) = 1; dy_mr(1) = 1;
+dx_mr(1) = 0.25; dy_mr(1) = 0.25;
 nametemp{1} = 't1v1';
 
 lakex_mr{2,1}(1,:) = x_0_5m_t2v1;
 lakey_mr{2,1}(1,:) = y_0_5m_t2v1;
 eps_mr(2) = 100;
-dx_mr(2) = 1; dy_mr(2) = 1;
+dx_mr(2) = 0.25; dy_mr(2) = 0.25;
 nametemp{2} = 't2v1';
 
 load('xy_beta1_6_v2.mat')
@@ -42,7 +42,7 @@ for fo = 1:2
     fo_ = [1 0];
     fetch_on = fo_(fo);
     savetemp = {'wave' 'uniform'};
-    for mr = 6
+    for mr = 2
         mr_ = [1 2 3 4 5 6];
         modelrun = mr_(mr);
         lakex = lakex_mr{modelrun,1}(1,:);

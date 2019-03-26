@@ -177,9 +177,9 @@ for obj = 1:length(shoreline_fetch)
 %     subplot(1,2,1)
 %     plot(x,y,'k','LineWidth',1.5);
 %     hold on;
-%     % for ivv = 1:nray
+    % for ivv = 1:nray
 %     for ivv = 1:nray
-%         for iv = 1:1
+%         for iv = 1:nvert
 %             plot(xpltlos(:,ivv,iv), ypltlos(:,ivv,iv),'b');
 %             hold on
 %         end

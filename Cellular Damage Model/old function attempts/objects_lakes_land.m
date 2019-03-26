@@ -1,9 +1,10 @@
-load('test_polygon_island.mat')
-tile = repmat(polygon,2);
+% load('test_polygon_island.mat')
+% tile = repmat(polygon,2);
+load('wavet2v2_lake_025.mat')
 
 figure()
-[bound, L, n, A]  = bwboundaries(tile);
-imagesc(tile');
+[bound, L, n, A]  = bwboundaries(lake);
+imagesc(lake');
 hold on;
 for i = 1:length(bound)
     scatter(bound{i,1}(:,1),bound{i,1}(:,2));
