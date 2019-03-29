@@ -18,19 +18,19 @@ load('xy_beta1_6_v2.mat')
 lakex_mr{3,1}(1,:) = x_0_5m_t1v2;
 lakey_mr{3,1}(1,:) = y_0_5m_t1v2;
 eps_mr(3) = 100;
-dx_mr(3) = 1; dy_mr(3) = 1;
+dx_mr(3) = 0.25; dy_mr(3) = 0.25;
 nametemp{3} = 't1v2';
 
 lakex_mr{4,1}(1,:) = x_0_5m_t2v2;
 lakey_mr{4,1}(1,:) = y_0_5m_t2v2;
 eps_mr(4) = 100;
-dx_mr(4) = 1; dy_mr(4) = 1;
+dx_mr(4) = 0.25; dy_mr(4) = 0.25;
 nametemp{4} = 't2v2';
 
 lakex_mr{5,1}(1,:) = x_0_5m_t3v2;
 lakey_mr{5,1}(1,:) = y_0_5m_t3v2;
 eps_mr(5) = 100;
-dx_mr(5) = 1; dy_mr(5) = 1;
+dx_mr(5) = 0.25; dy_mr(5) = 0.25;
 nametemp{5} = 't3v2';
 
 load('xy_beta1_6_v1.mat')

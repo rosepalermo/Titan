@@ -83,8 +83,8 @@ end
 %% loop here for chemical weathering- style model
 % ii = 1;
 eroded = nan(1,2);
-h = figure;
-h.Position = [0,0,1000,500]
+% h = figure;
+% h.Position = [0,0,1000,500]
 
 for i = 1:tmax
     i
@@ -102,16 +102,19 @@ for i = 1:tmax
             clearvars fetch_sl_cells indshoreline WaveArea_cell
             %order the shoreline and islands
             shoreline = addidshoreline_cardonly(lake,land);
+            disp('ordering')
             [indshoreline,cells2trash] = order_cw_lastpoint(lake,shoreline); % ccw ordered ind = indshoreline
+            disp('ordered')
             for l = 1: length(indshoreline)
                 indshoreline{l,1} = sub2ind(size(X),indshoreline{l,1}(:,1),indshoreline{l,1}(:,2));
                 fetch_sl_cells{l,1}(:,1) = X(indshoreline{l,1});
                 fetch_sl_cells{l,1}(:,2) = Y(indshoreline{l,1});
             end
+            disp('calculating wave')
             % calculate wave weighted (sqrt(F)*cos(theta-phi))
             [WaveArea_cell,~] = fetch_wavefield_cell(fetch_sl_cells);
 %         [WaveArea_cell] = {ones(size(fetch_sl_cells{1,1},1),1)}; % ones to test debugging with
-            
+            disp('wave calculated')
             clearvars erodedind
         end
         
@@ -278,13 +281,13 @@ end
 %% plot
 eroded = eroded(2:end,:);
 % plot initial shoreline and final shoreline
-figure()
-imagesc('XData',x,'YData',y,'CData',strength)
-shading flat
-colormap((gray))
-hold on
-plot(lakex,lakey,'w')
-axis square
+% figure()
+% imagesc('XData',x,'YData',y,'CData',strength)
+% shading flat
+% colormap((gray))
+% hold on
+% plot(lakex,lakey,'w')
+% axis square
 % scatter(eroded(:,1),eroded(:,2),'c')
 
 % toc
