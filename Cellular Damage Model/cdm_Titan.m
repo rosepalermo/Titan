@@ -29,7 +29,7 @@ tmax = 25;
 savefolder = '/home/rpalermo/titan_models';
 plot_now = true;
 gif_on = false;
-save_on = false;
+save_on = true;
 shoreline_save = cell(1,1);
 % filename = [num2str(modelrun),'riverandwave.gif'];
 
