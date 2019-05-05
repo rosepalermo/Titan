@@ -22,7 +22,7 @@ function cdm_Titan(lake,X,Y,modelrun,fetch_on,savename)
 
 % run time
 
-tmax = 25;
+tmax = 2;
 
 % when creating a gif
 % savefolder = 'D:\Titan\Modeling\river_and_wave_1_2019\';
@@ -89,7 +89,7 @@ eroded = nan(1,2);
 
 for i = 1:tmax
     i
-% figure();imagesc(strength)
+figure();imagesc(strength)
         
         
     if ~fetch_on % if no fetch, the order doesn't matter and we can calc damage.
@@ -98,7 +98,7 @@ for i = 1:tmax
         %damage the shoreline
         strength(indshoreline) = strength(indshoreline)-dam(indshoreline);
         strength(strength<0) = 0;
-        erodedind = indshoreline(strength(indshoreline)<=0);
+        
         strength(erodedind) = 0;
         erodedX = X(erodedind);
         erodedY = Y(erodedind);
@@ -127,10 +127,10 @@ for i = 1:tmax
 %             shoreline = addidshoreline_cardonly(lake,land); %rewrite shoreline to be card only for fetch.. will damage corners separately later
             shoreline = addidshoreline_cardonly(F_lake,~F_lake); %rewrite shoreline to be card only for fetch.. will damage corners separately later            
             disp('ordering')
-            [indshoreline_ocw,cells2trash] = order_cw_lastpoint(F_lake,shoreline); % ccw ordered ind = indshoreline
+            [indshoreline,cells2trash] = order_cw_lastpoint(F_lake,shoreline); % ccw ordered ind = indshoreline
             disp('ordered')
-            for l = 1: length(indshoreline_ocw)
-                indshoreline{l,1} = sub2ind(size(X),indshoreline_ocw{l,1}(:,1),indshoreline_ocw{l,1}(:,2));
+            for l = 1: length(indshoreline)
+                indshoreline{l,1} = sub2ind(size(X),indshoreline{l,1}(:,1),indshoreline{l,1}(:,2));
                 fetch_sl_cells{l,1}(:,1) = X(indshoreline{l,1});
                 fetch_sl_cells{l,1}(:,2) = Y(indshoreline{l,1});
             end
@@ -175,6 +175,7 @@ for i = 1:tmax
         erodedind = indshoreline(strength(indshoreline)<=0);
         % erode points that weren't a corner and were only 2-1 cells
         % connected because it messed up the fetch calculations..
+        findsl = find(shoreline);
         if ~isempty(cells2trash)
             cells2trash = sub2ind(size(lake),cells2trash(:,1),cells2trash(:,2));
             erodedind_12 = cells2trash(find(~ismember(cells2trash,corners)));
@@ -195,9 +196,7 @@ for i = 1:tmax
         %     [shoreline,shorelinecard,shorelinecorn] = idshoreline(lake,land);
         %     [shoreline] = addidshoreline_cardonly(lake,land); % update to card only because only card for fetch part
         [shoreline] = addidshoreline(lake,land);
-        ordered_sl_save{i,ff} = fetch_sl_cells;
-        corners_save{i,ff} = corners;
-        damcorners_save{i,ff} = damcorn;
+        
         end
     end
     
@@ -255,10 +254,10 @@ for i = 1:tmax
     shoreline_save{i,1} = find(shoreline);
     dam_save{i,1} = dam;
     lake_save{i,1} = lake;
-%     if fetch_on
-%         ordered_sl_save{i,1} = fetch_sl_cells;
-%         corners_save{i,1} = corners;
-%         damcorners_save{i,1} = damcorn;
+    if fetch_on
+    ordered_sl_save{i,1} = fetch_sl_cells;
+    corners_save{i,1} = corners;
+    damcorners_save{i,1} = damcorn;
     
 %     slplot = cell2mat(fetch_sl_cells);
 %     p2 = subplot(1,2,2)
@@ -271,7 +270,7 @@ for i = 1:tmax
 %     colorbar
 %     colormap(jet)
 %     view(2)
-%     end
+    end
     
     
     if save_on && plot_now

@@ -1,11 +1,14 @@
-load('test_polygon_island.mat')
-lake = repmat(polygon,2);
+function [L,fol] = find_first_order_lakes(lake)
+
+
+% load('test_polygon_island.mat')
+% lake = repmat(polygon,2);
 % load('wavet2v2_lake_025.mat')
 
-figure()
+% figure()
 [bound, L, n, A]  = bwboundaries(lake);
-imagesc(lake');
-hold on;
+% imagesc(lake');
+% hold on;
 for i = 1:length(bound)
     scatter(bound{i,1}(:,1),bound{i,1}(:,2));
 end
@@ -30,27 +33,10 @@ end
 
 
 fol = find(first_order_lakes);
-imagesc(L == fol(1))
+% imagesc(L == fol(1))
 
+% 
+% enclosing_boundary  = find(A(6,:));
+% enclosed_boundaries = find(A(:,6));
 
-
-
-
-
-
-
-
-
-
-
-% [B,L,n,A] = bwboundaries(tile);
-enclosing_boundary  = find(A(6,:));
-enclosed_boundaries = find(A(:,6));
-% enclosing_boundary  = find(A(2,:));
-% enclosed_boundaries = find(A(:,2));
-% enclosing_boundary  = find(A(3,:));
-% enclosed_boundaries = find(A(:,3));
-% enclosing_boundary  = find(A(4,:));
-% enclosed_boundaries = find(A(:,4));
-% enclosing_boundary  = find(A(5,:));
-% enclosed_boundaries = find(A(:,5));
+end
