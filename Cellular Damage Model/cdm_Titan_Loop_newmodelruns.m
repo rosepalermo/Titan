@@ -40,11 +40,11 @@ eps_mr(6) = 200;
 dx_mr(6) = 5; dy_mr(6) = 5;
 nametemp{6} = 'test_t1v1';
 
-parfor fo = 1:2
+for fo = 1:2
     fo_ = [1 0];
     fetch_on = fo_(fo);
     savetemp = {'wave' 'uniform'};
-    for mr = 1:5
+    parfor mr = 1:5
         savename = [savetemp{1,fo},nametemp{1,mr}]
         [lake,X,Y] = gridlake(lakex_mr{mr,1}(1,:),lakey_mr{mr,1}(1,:),dx_mr(mr),dy_mr(mr),eps_mr(mr));
         cdm_Titan(lake,X,Y,mr,fetch_on,savename)
