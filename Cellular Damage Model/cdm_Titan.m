@@ -63,7 +63,6 @@ land = ~lake;
 if fetch_on
 %     strength = 10000000*double(land);
     strength = 50000*double(land);
-    strength = 3*double(land);
 else
     strength = 10*double(land);
 end
