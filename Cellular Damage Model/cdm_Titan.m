@@ -3,7 +3,8 @@ function cdm_Titan(lake,X,Y,modelrun,fetch_on,savename)
 
 % Titan analogue damage model for coastal erosion of a lake
 % Rose Palermo 2-2018
-%
+% Last update to this code was 6-2019. Used this code to make the
+% waveerosion and uniformerosion functions for the coupled tadpole model.
 %
 % Input or generate a lake. Makes a grid larger than this lake.
 % decides water and land based on if the grid cell is in the polygon or
@@ -26,8 +27,9 @@ tmax = 25;
 
 % when creating a gif
 % savefolder = 'D:\Titan\Modeling\river_and_wave_1_2019\';
-savefolder = '/home/rpalermo/titan_models';
-plot_now = true;
+% savefolder = '/home/rpalermo/titan_models';
+savefolder = '/Users/rosepalermo/Documents/Research/Titan/River_and_wave_7_19';
+plot_now = false;
 gif_on = false;
 save_on = true;
 shoreline_save = cell(1,1);
@@ -114,10 +116,10 @@ for i = 1:tmax
         
         % if fetch_on % loop over # of objects
         % find number of first order lakes
-        [L,fol] = find_first_order_lakes(lake);
-        for ff = 1:length(fol)
+        [F_lake_all] = find_first_order_lakes(lake);
+        for ff = 1:length(F_lake_all)
             
-            F_lake = (L == fol(ff));
+            F_lake = F_lake_all{ff};
         if (exist('erodedind','var')) | (i == 1) | (ff>1)
             disp('fetch')
             clearvars fetch_sl_cells indshoreline WaveArea_cell
@@ -135,8 +137,10 @@ for i = 1:tmax
             end
             disp('calculating wave')
             % calculate wave weighted (sqrt(F)*cos(theta-phi))
-            [WaveArea_cell,~] = fetch_wavefield_cell(fetch_sl_cells);
-            %         [WaveArea_cell] = {ones(size(fetch_sl_cells{1,1},1),1)}; % ones to test debugging with
+%             [WaveArea_cell,~] = fetch_wavefield_cell(fetch_sl_cells);
+            [WaveArea_cell] = fetch_vis_approx(fetch_sl_cells);
+ 
+%         [WaveArea_cell] = {ones(size(fetch_sl_cells{1,1},1),1)}; % ones to test debugging with
             disp('wave calculated')
             clearvars erodedind
         end
@@ -146,6 +150,7 @@ for i = 1:tmax
         %         [shoreline] = addidshoreline_cardonly(lake,land); % edges only
         [shoreline] = addidshoreline(lake,land); % corners and edges
         dam = cell2mat(WaveArea_cell);
+%         dam = WaveArea_cell';
         strength(indshoreline) = strength(indshoreline) - shoreline(indshoreline).*dam;
         
         % find corners and damage if they exist alone (not in the cells to

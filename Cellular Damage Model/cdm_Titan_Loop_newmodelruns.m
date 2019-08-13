@@ -1,5 +1,6 @@
 addpath('/home/rpalermo/Titan2/Tadpole 2/example_Rose_800x800')
 addpath('/Users/rosepalermo/Documents/GitHub/Titan2/Tadpole 2/example_Rose_800x800')
+addpath('/Users/rosepalermo/Dropbox (MIT)/Titan/taylor_fetch/Rosemakingapproxfn')
 % contours
 load('xy_beta1_6_v1.mat')
 lakex_mr{1,1}(1,:) = x_0_5m_t1v1;
@@ -40,14 +41,14 @@ eps_mr(6) = 200;
 dx_mr(6) = 5; dy_mr(6) = 5;
 nametemp{6} = 'test_t1v1';
 
-for fo = 1:2
+for fo = 1
     fo_ = [1 0];
     fetch_on = fo_(fo);
     savetemp = {'wave' 'uniform'};
-    parfor mr = 1:5
+    for mr = 4%1:5
         savename = [savetemp{1,fo},nametemp{1,mr}]
-        [lake,X,Y] = gridlake(lakex_mr{mr,1}(1,:),lakey_mr{mr,1}(1,:),dx_mr(mr),dy_mr(mr),eps_mr(mr));
-        cdm_Titan(lake,X,Y,mr,fetch_on,savename)
+        [lake,~,~] = gridlake(lakex_mr{mr,1}(1,:),lakey_mr{mr,1}(1,:),dx_mr(mr),dy_mr(mr),eps_mr(mr));
+        cdm_no_sealevelrise(lake,mr,fetch_on,savename)
         close all
     end
 end

@@ -38,3 +38,11 @@ if p.doDiffusion
     g = ADI(p,g); % alternating-direction implicit (Crank-Nicolson in 2D)
     
 end
+
+if p.doWaveErosion
+    g = waveerosion(p,g);
+end
+
+if p.doUniformErosion
+    g = uniformerosion(p,g);
+end
