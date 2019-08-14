@@ -36,11 +36,11 @@ ordered_cw_all = [slX_orderedind slY_orderedind];
 i = 3;
 obj = 1;
 
-imagesc(lake');hold on;
+% imagesc(lake');hold on;
 
 while sum(~ismember(ind,ordered_cw_all,'rows')) > 0
     if length(unq(:,1)) == length(state(:,1))
-        scatter(slX_orderedind,slY_orderedind);
+%         scatter(slX_orderedind,slY_orderedind);
         U = land(slX_orderedind(i-1),slY_orderedind(i-1)-1);
         UL = land(slX_orderedind(i-1)-1,slY_orderedind(i-1)-1);
         L = land(slX_orderedind(i-1)-1,slY_orderedind(i-1));
@@ -377,7 +377,7 @@ while sum(~ismember(ind,ordered_cw_all,'rows')) > 0
         state = [slX_orderedind, slY_orderedind, LP_state];
         unq = unique(state,'rows');
     else
-                scatter(slX_orderedind,slY_orderedind);
+%                 scatter(slX_orderedind,slY_orderedind);
         ordered_cw = [slX_orderedind slY_orderedind];
         if obj == 1
             ordered_cw_all = ordered_cw;

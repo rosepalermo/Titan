@@ -173,35 +173,35 @@ for obj = 1:length(shoreline_fetch)
     xpltlos = permute(cat(3, x(1:end-1).*ones(nray,1), xlos), [3 1 2]);
     ypltlos = permute(cat(3, y(1:end-1).*ones(nray,1), ylos), [3 1 2]);
     % To check, let's plot just the rays associated with angle idx=50
-%     figure()
-%     subplot(1,2,1)
-%     plot(x,y,'k','LineWidth',1.5);
-%     hold on;
-%     % for ivv = 1:nray
-%     for ivv = 1:nray
-%         for iv = 1:1
-%             plot(xpltlos(:,ivv,iv), ypltlos(:,ivv,iv),'b');
-%             hold on
-%         end
-%     end
+    figure()
+    subplot(1,2,1)
+    plot(x,y,'k','LineWidth',1.5);
+    hold on;
+    % for ivv = 1:nray
+    for ivv = 1:nray
+        for iv = 1:1
+            plot(xpltlos(:,ivv,iv), ypltlos(:,ivv,iv),'b');
+            hold on
+        end
+    end
 %     
 %     % Plot "Wave field"
 %     % For plotting, define each resulting line segment from vertex to
 %     % line-of-sight point
-    xpltwave = permute(cat(3, x(1:end-1).*ones(nray,1), Wavex), [3 1 2]);
-    ypltwave = permute(cat(3, y(1:end-1).*ones(nray,1), Wavey), [3 1 2]);
-%     % To check, let's plot just the rays associated with angle idx=50
-%     figure()
-%     subplot(1,2,2)
-%     plot(x,y,'k','Linewidth',1.5);
-%     hold on;
-%     % for ivv = 1:nray
-%     for ivv = 1:nray
-%         for iv =1:1
-%             plot(xpltwave(:,ivv,iv), ypltwave(:,ivv,iv),'b');
-%             hold on
-%         end
-%     end
+    xpltwave = permute(cat(2, x(1:end-1).*ones(nray,1), Wavex), [3 1 2]);
+    ypltwave = permute(cat(2, y(1:end-1).*ones(nray,1), Wavey), [3 1 2]);
+    % To check, let's plot just the rays associated with angle idx=50
+    figure()
+    subplot(1,2,2)
+    plot(x,y,'k','Linewidth',1.5);
+    hold on;
+    % for ivv = 1:nray
+    for ivv = 1:nray
+        for iv =1:1
+            plot(xpltwave(:,ivv,iv), ypltwave(:,ivv,iv),'b');
+            hold on
+        end
+    end
 %     
 % %     figure()
 % %     plot(x,y,'k')

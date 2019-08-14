@@ -1,5 +1,4 @@
 
-function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun,fetch_on,savename)
 
 % Titan analogue damage model for coastal erosion of a lake
 % Rose Palermo 2-2018
@@ -21,37 +20,43 @@ function cdm_Titan(lakex,lakey,eps,dx,dy,modelrun,fetch_on,savename)
 % fetch_on = true;
 
 % run time
+% load('test_cdm.mat')
+% load('test2.mat')
+fetch_on = true;
 
-tmax = 20;
+tmax = 10;
 
 % when creating a gif
 plot_now = false;
 gif_on = false;
 save_on = true;
 shoreline_save = cell(1,1);
+savename = 'wavet1v1';
 % filename = [num2str(modelrun),'riverandwave.gif'];
 
 
 
-% figure()
-% plot(lakex,lakey)
-% axis square
-LakeArea = polyarea(lakex,lakey); % original lake area-- does NOT change throughout simulation
+% % figure()
+% % plot(lakex,lakey)
+% % axis square
+% LakeArea = polyarea(lakex,lakey); % original lake area-- does NOT change throughout simulation
 
 %make a grid larger than lake by eps
 % eps = 5;
 % dx = 0.05; dy = 0.05;
-x = (min(lakex)-eps):dx:(max(lakex)+eps);
-y = (min(lakey)-eps):dy:(max(lakey)+eps);
+% x = (min(lakex)-eps):dx:(max(lakex)+eps);
+% y = (min(lakey)-eps):dy:(max(lakey)+eps);
+% [X,Y] = meshgrid(x,y);
+% Xinon = reshape(X,[],1);
+% Yinon = reshape(Y,[],1);
+
+x = 1:size(lake,2);
+y = 1:size(lake,1);
 [X,Y] = meshgrid(x,y);
-Xinon = reshape(X,[],1);
-Yinon = reshape(Y,[],1);
-
-
 %points in and on the polygon are the lake
-[in, on] = inpoly([Xinon,Yinon]',[lakex;lakey]);
-lake = in + on;
-lake = reshape(lake,length(y),length(x));
+% [in, on] = inpoly([Xinon,Yinon]',[lakex;lakey]);
+% lake = in + on;
+% lake = reshape(lake,length(y),length(x));
 % figure()
 % imagesc(x,y,lake)
 % shading interp
@@ -64,6 +69,8 @@ if fetch_on
 else
     strength = 10*double(land);
 end
+
+% strength = 3*double(land);
 
 % identify the shoreline
 % [shoreline,shorelinecard,shorelinecorn] = idshoreline(lake,land);
@@ -231,12 +238,10 @@ for i = 1:tmax
     shoreline_save{i,1} = find(shoreline);
     dam_save{i,1} = dam;
     lake_save{i,1} = lake;
-    
     if fetch_on
     ordered_sl_save{i,1} = fetch_sl_cells;
     corners_save{i,1} = corners;
     damcorners_save{i,1} = damcorn;
-    lake_save{i,1} = lake;
     
     slplot = cell2mat(fetch_sl_cells);
     p2 = subplot(1,2,2)
@@ -262,7 +267,7 @@ for i = 1:tmax
     if fetch_on
         if save_on
             %     save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave','.mat'],'shoreline_save')
-            save(['D:\Titan\Modeling\river_and_wave_3_2019\',savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y','lake_save')
+            save(['D:\Titan\Modeling\river_and_wave_3_2019\',savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
             
         end
     else
@@ -271,16 +276,15 @@ for i = 1:tmax
 end
 
 %% plot
-eroded = eroded(2:end,:);
-% plot initial shoreline and final shoreline
-figure()
-imagesc('XData',x,'YData',y,'CData',strength)
-shading flat
-colormap((gray))
-hold on
-plot(lakex,lakey,'w')
-axis square
+% eroded = eroded(2:end,:);
+% % plot initial shoreline and final shoreline
+% figure()
+% imagesc('XData',x,'YData',y,'CData',strength)
+% shading flat
+% colormap((gray))
+% hold on
+% plot(lakex,lakey,'w')
+% axis square
 % scatter(eroded(:,1),eroded(:,2),'c')
 
 % toc
-end
