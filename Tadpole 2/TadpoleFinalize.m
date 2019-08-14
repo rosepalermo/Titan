@@ -14,7 +14,9 @@ if p.doSaveOutput % if we're saving results
     
     t = g.t;
     
-    save(p.runname, '-v7.3', 'p', 't', 'output');
+    sealevel = g.sealevelsave;
+    
+    save(p.runname, '-v7.3', 'p', 't', 'output', 'sealevel');
 
     % take a snapshot of the final topography and save it as an image
     Snapshot(p,g);

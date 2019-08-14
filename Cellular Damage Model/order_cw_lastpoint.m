@@ -39,7 +39,8 @@ obj = 1;
 % imagesc(lake');hold on;
 
 while sum(~ismember(ind,ordered_cw_all,'rows')) > 0
-    if length(unq(:,1)) == length(state(:,1))
+
+    if length(unq(:,1)) == length(state(:,1)) && ~all([slX_orderedind(1), slY_orderedind(1)] == [slX_orderedind(2), slY_orderedind(2)])
 %         scatter(slX_orderedind,slY_orderedind);
         U = land(slX_orderedind(i-1),slY_orderedind(i-1)-1);
         UL = land(slX_orderedind(i-1)-1,slY_orderedind(i-1)-1);
@@ -50,30 +51,32 @@ while sum(~ismember(ind,ordered_cw_all,'rows')) > 0
         R = land(slX_orderedind(i-1)+1,slY_orderedind(i-1));
         UR = land(slX_orderedind(i-1)+1,slY_orderedind(i-1)-1);
         
-        if [slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)-1,slY_orderedind(i-1)-1]
+        if all([slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)-1,slY_orderedind(i-1)-1])
             LastPoint(i) = 2;
             LP_state(i,:) = [slX_orderedind(i-1)-1,slY_orderedind(i-1)-1];
-        elseif [slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)-1,slY_orderedind(i-1)]
+        elseif all([slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)-1,slY_orderedind(i-1)])
             LastPoint(i) = 3;
             LP_state(i,:) = [slX_orderedind(i-1)-1,slY_orderedind(i-1)];
-        elseif [slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)-1,slY_orderedind(i-1)+1]
+        elseif all([slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)-1,slY_orderedind(i-1)+1])
             LastPoint(i) = 4;
             LP_state(i,:) = [slX_orderedind(i-1)-1,slY_orderedind(i-1)+1];
-        elseif [slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1),slY_orderedind(i-1)+1]
+        elseif all([slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1),slY_orderedind(i-1)+1])
             LastPoint(i) = 5;
             LP_state(i,:) = [slX_orderedind(i-1),slY_orderedind(i-1)+1];
-        elseif [slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)+1,slY_orderedind(i-1)+1]
+        elseif all([slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)+1,slY_orderedind(i-1)+1])
             LastPoint(i) = 6;
             LP_state(i,:) = [slX_orderedind(i-1)+1,slY_orderedind(i-1)+1];
-        elseif [slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)+1,slY_orderedind(i-1)]
+        elseif all([slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)+1,slY_orderedind(i-1)])
             LastPoint(i) = 7;
             LP_state(i,:) = [slX_orderedind(i-1)+1,slY_orderedind(i-1)];
-        elseif [slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)+1,slY_orderedind(i-1)-1]
+        elseif all([slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1)+1,slY_orderedind(i-1)-1])
             LastPoint(i) = 8;
             LP_state(i,:) = [slX_orderedind(i-1)+1,slY_orderedind(i-1)-1];
-        elseif [slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1),slY_orderedind(i-1)-1]
+        elseif all([slX_orderedind(i-2),slY_orderedind(i-2)] == [slX_orderedind(i-1),slY_orderedind(i-1)-1])
             LastPoint(i) = 1;
             LP_state(i,:) = [slX_orderedind(i-1),slY_orderedind(i-1)-1];
+        else
+            break
         end
         
         if LastPoint(i) == 1
@@ -378,7 +381,8 @@ while sum(~ismember(ind,ordered_cw_all,'rows')) > 0
         unq = unique(state,'rows');
     else
 %                 scatter(slX_orderedind,slY_orderedind);
-        ordered_cw = [slX_orderedind slY_orderedind];
+
+        ordered_cw = [slX_orderedind, slY_orderedind];
         if obj == 1
             ordered_cw_all = ordered_cw;
             state_all = state;
@@ -390,10 +394,10 @@ while sum(~ismember(ind,ordered_cw_all,'rows')) > 0
 
         end
         ordered_ccw = flipud(ordered_cw);
-        sl_cell{obj,1} = ordered_ccw;
+        sl_cell{obj,1} = ordered_ccw(1:end-3,:);
         obj = obj+1;
-        % start at point number 1 for the next object
         i = 3;
+        % start at point number 1 for the next object
         ptsleft = ind(find(~ismember(ind,ordered_cw_all,'rows')),:);
         if ~isempty(ptsleft)
             clearvars slX_orderedind slY_orderedind LastPoint state unq

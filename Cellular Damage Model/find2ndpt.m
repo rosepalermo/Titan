@@ -2,7 +2,7 @@ function [slX_orderedind, slY_orderedind, LastPoint,LP_state] = find2ndpt(land,s
 
 slX_orderedind = nan(2,1);
 slY_orderedind = nan(2,1);
-
+LP_state(1,:) = nan(2,1);
 
 % find 2nd shoreline point
 U = land(slXind(1),slYind(1)-1);
@@ -79,8 +79,8 @@ elseif [slX_orderedind(2),slY_orderedind(2)] == [slX_orderedind(1),slY_orderedin
     LastPoint(2,1) = 1;
     LP_state(2,:) = [slX_orderedind(1),slY_orderedind(1)-1];
 else
-    LastPoint = zeros(2,1);
-    LP_state(2,:) = zeros(2,1);
+    LastPoint = nan(2,1);
+    LP_state(2,:) = nan(2,1);
 end
 
 

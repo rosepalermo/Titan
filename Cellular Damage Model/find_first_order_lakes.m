@@ -1,16 +1,7 @@
-% load('test_polygon_island.mat')
-% lake = repmat(polygon,2);
-% load('wavet2v2_lake_025.mat')
-load('test_lake_objects.mat')
-% lake = L;
-figure()
+function [L_lake,total_lakes,total_islands,L] = find_first_order_lakes(lake)
+
 [bound, L, ~, A]  = bwboundaries(lake,8);
 n = length(bound);
-imagesc(lake');
-hold on;
-for i = 1:n
-    plot(bound{i,1}(:,1),bound{i,1}(:,2));
-end
 
 first_order_lakes = zeros(n,1);
 for i=1:n
@@ -30,6 +21,7 @@ for i=find(first_order_lakes)'
 end
 
 second_order_lakes = zeros(n,1);
+second_order_lakes_i = zeros(n,1);
 for i=find(first_order_islands)'
     sol_temp = zeros(size(second_order_lakes)) | A(:,i);
     second_order_lakes_i(sol_temp) = find(sol_temp);
@@ -55,7 +47,8 @@ ti = total_islands(find(total_islands>0));
 %%
 close all
 
-L_lake=cell(length(tl),1);
+L_lake=cell(length(tl),1); %first order lake and everything inside with numbers from L
+F_lake=cell(length(tl),1); %first order lake and everything inside with ones and zeros (1 = lake, 0 = land)
 for i = 1:length(fol)
     L_lake{i} = zeros(size(L));
     F_lake{i} = zeros(size(L));
@@ -79,41 +72,8 @@ for i = 1:length(fol)
         end
     end
 
-    
-%     figure()
-%     imagesc(F_lake{i})
 end
 
-% for i = 1:10%length(fol)
-%     F_lake{i} = zeros(size(L));
-%     F_lake{i}(find(L==first_order_lakes(tl(i)))) = L(find(L == first_order_lakes(tl(i)))); 
-%     foi_temp = find(first_order_islands==tl(i));
-%     if ~isempty(foi_temp)
-%     for ii = 1:length(foi_temp)
-%         F_lake{i}(find(L==foi_temp(ii))) = L(find(L==foi_temp(ii)));
-%     end
-%     end
-%     sol_temp = find(
-%     figure()
-%     imagesc(F_lake{i})
-% end
 
 
-
-
-[B_test, L_test, ~, A_test]  = bwboundaries(F_lake{1},8);
-figure()
-imagesc(L_test)
-
-
-% [B,L,n,A] = bwboundaries(tile);
-enclosing_boundary  = find(A(6,:));
-enclosed_boundaries = find(A(:,6));
-% enclosing_boundary  = find(A(2,:));
-% enclosed_boundaries = find(A(:,2));
-% enclosing_boundary  = find(A(3,:));
-% enclosed_boundaries = find(A(:,3));
-% enclosing_boundary  = find(A(4,:));
-% enclosed_boundaries = find(A(:,4));
-% enclosing_boundary  = find(A(5,:));
-% enclosed_boundaries = find(A(:,5));
+end

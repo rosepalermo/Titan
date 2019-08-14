@@ -33,8 +33,12 @@ else
     g.Channels = zeros(p.K,p.J);
 end
 
-g.Coast_input = init<g.sealevel_init;     % liquid is 1m or less in elevation
-g.Strength = p.strength*g.Coast_input;  % initial "strength" of the bedrock
+if p.doWaveErosion | p.doUniformErosion
+   addpath('/Users/rosepalermo/Documents/GitHub/Titan2/Cellular Damage Model') 
+   addpath('/Users/rosepalermo/Documents/GitHub/VisiLibity1/src') 
+end
+g.Coast_input = g.U<p.sealevel_init;     % liquid is 1m or less in elevation
+g.Strength = p.strength*ones(size(g.Coast_input));  % initial "strength" of the bedrock -- same across the entire field
 
 %%%%%%%%%%%%%%%%%
 % SET UP OUTPUT % 
