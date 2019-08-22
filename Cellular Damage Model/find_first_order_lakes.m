@@ -1,4 +1,4 @@
-function [L_lake,total_lakes,total_islands,L] = find_first_order_lakes(lake)
+function [F_lake,total_lakes,total_islands,L] = find_first_order_lakes(lake)
 
 [bound, L, ~, A]  = bwboundaries(lake,8);
 n = length(bound);
@@ -49,26 +49,23 @@ close all
 
 L_lake=cell(length(tl),1); %first order lake and everything inside with numbers from L
 F_lake=cell(length(tl),1); %first order lake and everything inside with ones and zeros (1 = lake, 0 = land)
-for i = 1:length(fol)
+for i = 1:length(tl)
     L_lake{i} = zeros(size(L));
     F_lake{i} = zeros(size(L));
-    L_lake{i}(find(L==fol(i))) = L(find(L == fol(i)));
-    F_lake{i}(find(L==fol(i))) = ones(size(find(L == fol(i))));
-    foi_temp = find(first_order_islands==fol(i));
-    if ~isempty(foi_temp) % are there any islands in this lake?
+    L_lake{i}(find(L==tl(i))) = L(find(L == tl(i)));
+    F_lake{i}(find(L==tl(i))) = ones(size(find(L == tl(i))));
+    foi_temp = find(first_order_islands==tl(i));
+    if ~isempty(foi_temp) % are there any first order islands in this lake?
         for ii = 1:length(foi_temp) % if so, find them
             L_lake{i}(find(L==foi_temp(ii))) = L(find(L==foi_temp(ii)));
             F_lake{i}(find(L==foi_temp(ii))) = zeros(size(find(L==foi_temp(ii))));
-            %             imagesc(F_lake{i})
-            sol_temp = find(second_order_lakes==foi_temp(ii));
-            if ~isempty(sol_temp) % are there any lakes in these islands?
-                for iii = 1:length(sol_temp)
-                    L_lake{i}(find(L==sol_temp(iii))) = L(find(L==sol_temp(iii)));
-                    F_lake{i}(find(L==sol_temp(iii))) = ones(size(find(L==sol_temp(iii))));
-                    %             imagesc(F_lake{i})
-                end
-            end
-            
+        end
+    end
+    soi_temp = find(second_order_islands==tl(i));
+    if ~isempty(soi_temp) % are there any second order islands in this lake?
+        for ii = 1:length(soi_temp) % if so, find them
+            L_lake{i}(find(L==soi_temp(ii))) = L(find(L==soi_temp(ii)));
+            F_lake{i}(find(L==soi_temp(ii))) = zeros(size(find(L==soi_temp(ii))));
         end
     end
 

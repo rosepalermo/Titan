@@ -40,8 +40,8 @@ lakestemp = zeros(N,1);
 lakestemp(lakes) = lakes;
 lakes = lakestemp;
 
-islands = zeros(length(lakes),1);
-islands_temp = zeros(length(lakes),1);
+islands = zeros(N,1);
+islands_temp = zeros(N,1);
 for i=find(lakes)'
     islands_temp = zeros(size(lakes)) | A(:,i);
     islands(islands_temp) = i;
@@ -60,7 +60,7 @@ nextcol = [0,-1,-1; 0,1,0; 1,1,0];
 
 % size(B,1)-1 because it includes the boundary of the domain as a boundary
 coasts = cell(1,size(B,1)-1); % this will hold the ordered (CW) coastlines of the lakes/seas
-for l = find(lakes)
+for l = lakes 
     bdy = B{l};
     r1 = bdy(1,1);
     c1 = bdy(1,2);
@@ -82,12 +82,9 @@ end
 
 % Now we add in the boundaries of the islands, which we already have from
 % bwboundaries
-% islands = 3:N; % the indices of the objects that are islands
-
-if sum(islands)>0 % if there are islands
-    coasts(1,find(islands)) = B(find(islands)); % The non-empty elements of the cell array coasts
-    % should now have CW-ordered coasts for the land, not the liquid.
-end
+islands = 3:N; % the indices of the objects that are islands
+coasts(1,islands) = B(islands); % The non-empty elements of the cell array coasts 
+                              % should now have CW-ordered coasts for the land, not the liquid.
 
 % Rose to check if units 3 or less still mess up in the fetch calc.
 % get rid of units 3 or less because they mess up in the fetch calc.

@@ -52,15 +52,14 @@ parfor ii = 1:length(fetch_sl_cells)
 end
 
 % find fetch polygon for each point
-WaveArea = cell(length(slccw),1);
+V = cell(np,1);
 
 tic
 for k = 1:length(slccw)
-    WaveArea{k,1} = zeros(length(slccw{k}),1);
     for l = 1:length(slccw{k})
         %     l
         % For each point, subsample the shoreline at a desired interval.
-        [Pobs,env,~,~,nbi] = SubsampleShorelineislands(slccw,k,l,binfine,bincoarse,dist,nhood,eps,epsilon);
+        [Pobs,env,~,~,nbi] = SubsampleShoreline(slccw,k,l,binfine,bincoarse,dist,nhood,eps,epsilon);
         V = visibility_polygon(Pobs, env, epsilon, snap_distance);
         
         % fetch & wave area & distance & cos(theta-phi)

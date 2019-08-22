@@ -2,6 +2,7 @@ function [Pobs,env,xsub,ysub,nbi] = SubsampleShoreline(slccw,k,l,binfine,bincoar
 
 x_l = slccw{k}(l,1);
 y_l = slccw{k}(l,2);
+np = length(slccw{k}(:,1));
 
 for i = 1:length(slccw)
     
@@ -10,14 +11,14 @@ for i = 1:length(slccw)
     
 %     if length(x)>20
         
-        np = length(x);
+        np_x = length(x);
         % compute squared euclidean distances to every other shoreline point
         dx = x_l-x;
         dy = y_l-y;
         dsq = dx.*dx + dy.*dy;
         
         % include points that are within a distance dist to point l.
-        binclose = zeros(1,np);
+        binclose = zeros(1,np_x);
         binclose(dsq <= dist*dist) = 1;
         
         % now we just need to know which elements to draw from fine, and which from
@@ -34,6 +35,7 @@ for i = 1:length(slccw)
             
             % Add in point l and the specified neighborhood
             neighb = (l-nhood):(l+nhood);
+           
             
             % periodic bc's
             neighb(neighb<1) = neighb(neighb<1)+np;

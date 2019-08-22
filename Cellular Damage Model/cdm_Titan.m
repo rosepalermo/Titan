@@ -259,7 +259,6 @@ for i = 1:tmax
     shoreline_save{i,1} = find(shoreline);
     dam_save{i,1} = dam;
     lake_save{i,1} = lake;
-
 %     if fetch_on
 %         ordered_sl_save{i,1} = fetch_sl_cells;
 %         corners_save{i,1} = corners;
@@ -283,7 +282,6 @@ for i = 1:tmax
         %         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave',num2str(i),'.fig'])
         %         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\','wave_rednoise',num2str(i),'.fig'])
         
-
 %         saveas(gcf,['D:\Titan\Modeling\river_and_wave_1_2019\',savename,num2str(i),'.fig'])
         saveas(gcf,[savefolder, savename,num2str(i),'.fig'])
 
@@ -292,7 +290,6 @@ for i = 1:tmax
     if fetch_on
         if save_on
             %     save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave','.mat'],'shoreline_save')
-
 %             save(['D:\Titan\Modeling\river_and_wave_1_2019\',savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
             save([savefolder, savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y','lake_save')
             

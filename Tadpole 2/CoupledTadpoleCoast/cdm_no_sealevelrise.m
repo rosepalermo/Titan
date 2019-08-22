@@ -32,7 +32,6 @@ savefolder = '/Users/rosepalermo/Documents/Research/Titan/River_and_wave_7_19';
 plot_now = false;
 gif_on = false;
 save_on = true;
-shoreline_save = cell(1,1);
 lake_save = cell(tmax,1);
 lake_save{1} = lake;
 strength = cell(tmax,1);
@@ -93,8 +92,8 @@ for i = 2:tmax
     
     
     
-    shoreline_save{i,1} = find(shoreline);
-    lake_save{i,1} = lake;
+%     shoreline_save{i,1} = find(shoreline);
+%     lake_save{i,1} = lake;
     
     % save a plot if there is one
     if save_on && plot_now
@@ -108,16 +107,7 @@ for i = 2:tmax
     
     %save the data
     if save_on
-        if fetch_on
-            %     save(['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\',num2str(modelrun),'wave','.mat'],'shoreline_save')
-            %             save(['D:\Titan\Modeling\river_and_wave_1_2019\',savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y')
-            save([savefolder, savename,'.mat'],'shoreline_save','ordered_sl_save','dam_save','corners_save','damcorners_save','X','Y','lake_save')
-            
-        else
-            %         save(['D:\Titan\Modeling\river_and_wave_1_2019\',savename,'.mat'],'shoreline_save','dam_save','X','Y','lake_save')
-            save([savefolder, savename,'.mat'],'shoreline_save','dam_save','X','Y','lake_save')
-            
-        end
+        save([savefolder, savename,'.mat'],'lake_save','strength')
     end
 end
 

@@ -20,8 +20,8 @@ land = ~lake;
 % end
 
 % initialize save variable
-shoreline_save = cell(1,1);
-eroded = nan(1,2);
+% shoreline_save = cell(1,1);
+eroded = cell(1,1);
 
 
         
@@ -43,11 +43,11 @@ eroded = nan(1,2);
         % change land to lake at eroded pts
         lake(erodedind) = true;
         land = ~lake;
-        [shoreline] = addidshoreline(lake,land);
-        shoreline_save = find(shoreline);
-        dam_save = dam;
-        lake_save = lake;
-        eroded = eroded(2:end,:);
+%         [shoreline] = addidshoreline(lake,land);
+%         shoreline_save{ff} = find(shoreline);
+%         dam_save{ff} = dam;
+%         lake_save{ff} = lake;
+%         eroded = eroded(2:end,:);
     end
     
     %% if 1, wave erosion
@@ -56,27 +56,28 @@ eroded = nan(1,2);
         % if fetch_on 
         
         % tile inputs because of boundary problem
-        lake_tile = repmat(lake,3);
-        strength_tile = repmat(strength,3);
+%         lake_tile = repmat(lake,3);
+%         strength_tile = repmat(strength,3);
         
         % loop over # of objects
         % find number of first order lakes
-        [L,fol] = find_first_order_lakes(lake_tile);
+%         [L,fol] = find_first_order_lakes(lake_tile);
+        [F_lake_all,~,~,~] = find_first_order_lakes(lake);
         % remove first order lakes that touch the boundaries
-        boundaries = [L(1,:)';L(end,:)';L(:,1);L(:,end)];
-        boundaries = boundaries(boundaries>0);
-        boundaries = unique(boundaries);
+%         boundaries = [L(1,:)';L(end,:)';L(:,1);L(:,end)];
+%         boundaries = boundaries(boundaries>0);
+%         boundaries = unique(boundaries);
         
-        for ff = 1:length(fol)
-            
-            F_lake = (L == fol(ff));
-        if (exist('erodedind','var')) | (ff==1)
+        for ff = 1:length(F_lake_all)
+            F_lake = F_lake_all{ff};
+%             F_lake = (L == fol(ff));
+% if (exist('erodedind','var')) | (ff==1)
             disp('fetch')
             clearvars fetch_sl_cells indshoreline WaveArea_cell
             
             %order the shoreline and islands
 %             shoreline = addidshoreline_cardonly(lake,land); %rewrite shoreline to be card only for fetch.. will damage corners separately later
-            shoreline = addidshoreline_cardonly(F_lake,~F_lake); %rewrite shoreline to be card only for fetch.. will damage corners separately later            
+%             shoreline = addidshoreline_cardonly(F_lake,~F_lake); %rewrite shoreline to be card only for fetch.. will damage corners separately later            
             disp('ordering')
             % new order the shoreline code
             [indshoreline_ocw,keepme,cells2trash] = order_shoreline_bwbound(F_lake);
@@ -86,18 +87,18 @@ eroded = nan(1,2);
 %             keepme = 1:length(indshoreline_ocw);
             disp('ordered')
             for l = 1: length(cells_with_shorelines)
-                indshoreline{l,1} = sub2ind(size(X),indshoreline_ocw{cells_with_shorelines(l),1}(:,1),indshoreline_ocw{cells_with_shorelines(l),1}(:,2));
+                indshoreline{l,1} = sub2ind(size(X),indshoreline_ocw{cells_with_shorelines(l)}(:,1),indshoreline_ocw{cells_with_shorelines(l)}(:,2));
                 fetch_sl_cells{l,1}(:,1) = X(indshoreline{l,1});
                 fetch_sl_cells{l,1}(:,2) = Y(indshoreline{l,1});
             end
             disp('calculating wave')
             % calculate wave weighted (sqrt(F)*cos(theta-phi))
-            [WaveArea] = fetch_vis_approx(fetch_sl_cells);
+            [WaveArea_cell] = fetch_vis_approx(fetch_sl_cells);
             %             [WaveArea_cell,~] = fetch_wavefield_cell(fetch_sl_cells);
             %         [WaveArea_cell] = {ones(size(fetch_sl_cells{1,1},1),1)}; % ones to test debugging with
             disp('wave calculated')
             clearvars erodedind
-        end
+%         end
         
         % go back to normal lake, not lake tile for damage?
         
@@ -137,8 +138,8 @@ eroded = nan(1,2);
         % connected because it messed up the fetch calculations..
         if ~isempty(cells2trash)
             cells2trash = sub2ind(size(lake),cells2trash(:,1),cells2trash(:,2));
-            erodedind_12 = cells2trash(find(~ismember(cells2trash,corners)));
-            erodedind =[erodedind;erodedind_12];
+%             erodedind_12 = cells2trash(find(~ismember(cells2trash,corners)));
+            erodedind =[erodedind;cells2trash];
         end
         
         
@@ -146,19 +147,17 @@ eroded = nan(1,2);
         erodedX = X(erodedind);
         erodedY = Y(erodedind);
         erodedi = cat(2,erodedX,erodedY);
-        eroded = cat(1,eroded,erodedi);
+%         eroded{ff} = cat(1,eroded,erodedi);
         
         % change land to lake at eroded pts
         lake(erodedind) = true;
-        land = ~lake;
+%         land = ~lake;
         % update shoreline
-        [shoreline] = addidshoreline(lake,land);
-        ordered_sl_save{ff} = fetch_sl_cells;
-        corners_save{ff} = corners;
-        damcorners_save{ff} = damcorn;
-        dam_save{ff} = dam;
-        lake_save{ff} = lake;
-        eroded{ff} = eroded(2:end,:);
+%         [shoreline] = addidshoreline(lake,land);
+%         ordered_sl_save{ff} = fetch_sl_cells;
+%         corners_save{ff} = corners;
+%         damcorners_save{ff} = damcorn;
+%         eroded{ff} = eroded{ff}(2:end,:);
         end
     end
     
