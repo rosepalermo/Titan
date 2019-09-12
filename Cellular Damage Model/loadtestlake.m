@@ -1,8 +1,8 @@
 load('xycontours.mat')
 lakex = x_1m_t1;
 lakey = y_1m_t1;
-eps = 200;
-dx = 5; dy = 5;
+eps = 400;
+dx = 10; dy = 10;
 x = (min(lakex)-eps):dx:(max(lakex)+eps);
 y = (min(lakey)-eps):dy:(max(lakey)+eps);
 [X,Y] = meshgrid(x,y);
@@ -14,3 +14,6 @@ lake = in + on;
 lake = reshape(lake,length(y),length(x));
 land = ~lake;
 [shoreline] = addidshoreline_cardonly(lake,land);
+
+% imagesc(lake)
+

@@ -70,6 +70,9 @@ eroded = cell(1,1);
         
         for ff = 1:length(F_lake_all)
             F_lake = F_lake_all{ff};
+            if length(find(F_lake))<2
+                continue
+            end
 %             F_lake = (L == fol(ff));
 % if (exist('erodedind','var')) | (ff==1)
             disp('fetch')
@@ -82,6 +85,9 @@ eroded = cell(1,1);
             % new order the shoreline code
             [indshoreline_ocw,keepme,cells2trash] = order_shoreline_bwbound(F_lake);
             cells_with_shorelines = find(keepme);
+            if isempty(indshoreline_ocw) % stops eroding when shoreline hits the boundary
+                break
+            end
             % my original order the shoreline code
 %             [indshoreline_ocw,cells2trash] = order_cw_lastpoint(F_lake,shoreline); % ccw ordered ind = indshoreline
 %             keepme = 1:length(indshoreline_ocw);

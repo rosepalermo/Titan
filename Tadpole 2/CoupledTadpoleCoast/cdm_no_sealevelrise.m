@@ -1,5 +1,5 @@
 
-function cdm_no_sealevelrise(lake,modelrun,fetch_on,savename)
+function cdm_no_sealevelrise(lake,fetch_on,savename)
 
 % Titan analogue damage model for coastal erosion of a lake
 % Rose Palermo 2-2018
@@ -27,8 +27,8 @@ tmax = 25;
 
 % when creating a gif
 % savefolder = 'D:\Titan\Modeling\river_and_wave_1_2019\';
-% savefolder = '/home/rpalermo/titan_models';
-savefolder = '/Users/rosepalermo/Documents/Research/Titan/River_and_wave_7_19';
+savefolder = '/home/rpalermo/titan_models/';
+% savefolder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/River_and_wave_9_19/';
 plot_now = false;
 gif_on = false;
 save_on = true;
@@ -107,7 +107,7 @@ for i = 2:tmax
     
     %save the data
     if save_on
-        save([savefolder, savename,'.mat'],'lake_save','strength')
+        save([savefolder, savename,num2str(i),'.mat'],'lake_save','strength')
     end
 end
 

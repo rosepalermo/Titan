@@ -18,6 +18,9 @@ np = [vp(2),-vp(1)];
 nn = [vn(2),-vn(1)];
 np = np/sqrt(np(1)^2+np(2)^2);
 nn = nn/sqrt(nn(1)^2+nn(2)^2);
+if any(isnan(nn))
+    disp(pause)
+end
 % pmid = [0.5*(xp+x0),0.5*(yp+y0)];
 % nmid = [0.5*(xn+x0),0.5*(yn+y0)];
 nbi=np+nn;

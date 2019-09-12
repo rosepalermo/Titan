@@ -37,7 +37,7 @@ dist = 20;%0.1*max([range(x) range(y)]); % Typical value is ~10-100 in units of 
 eps = 0.001;
 epsilon = 1e-6;
 snap_distance = 0; % Looks like we get some invalid (empty array) visibility polygons if snap_distance >= eps.
-
+% disp('simplify')
 parfor ii = 1:length(fetch_sl_cells)
     % shoreline. x and y are ordered clockwise, first point != last point
     x = slccw{ii}(:,1);
@@ -53,16 +53,21 @@ end
 
 % find fetch polygon for each point
 WaveArea = cell(length(slccw),1);
-
 tic
 for k = 1:length(slccw)
     WaveArea{k,1} = zeros(length(slccw{k}),1);
     for l = 1:length(slccw{k})
-        %     l
+            l
         % For each point, subsample the shoreline at a desired interval.
+%         disp('subsample')
         [Pobs,env,~,~,nbi] = SubsampleShorelineislands(slccw,k,l,binfine,bincoarse,dist,nhood,eps,epsilon);
-        V = visibility_polygon(Pobs, env, epsilon, snap_distance);
+%         disp('vis')
         
+%         V = visibility_polygon(Pobs, env, epsilon, snap_distance);
+        V = visibility_polygon(Pobs,env,epsilon,0.05);
+        
+
+%         disp('vis calcl')
         % fetch & wave area & distance & cos(theta-phi)
 %         FetchArea = polyarea(V(:,1),V(:,2));
         Fetch_dist = sqrt(sum(([x_all(l),y_all(l)] - V).^2,2));

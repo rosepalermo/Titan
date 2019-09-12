@@ -24,6 +24,7 @@ function [sl_cell,keepme,cells2trash] = order_shoreline_bwbound(lake);
 land = double(~lake);
 [B,L,N,A] = bwboundaries(land,8);
 
+
 % As long as there isn't liquid on the boundary of the grid, the first
 % object should be the main landmass. The holes of that object will be the
 % lakes/seas, and the object children of the main object will be islands --
@@ -78,6 +79,7 @@ for l = find(lakes)
     colCCW = c1 + nextcol(ridx,cidx);
     
     coasts{1} = bwtraceboundary(land,[rowCCW,colCCW],'S',4,Inf,'counterclockwise');
+    coasts{1}(end,:) = [];
 end
 
 % Now we add in the boundaries of the islands, which we already have from
@@ -97,6 +99,9 @@ keepme = (length_cells) > 3;
 cells2trash = cell2mat(coasts(~keepme)');
 sl_cell = coasts;
 
+if length(B) ==1 % this occurs when shoreline hits the boundary
+    return
+end
 
 % % PLOT
 % figure

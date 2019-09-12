@@ -27,7 +27,7 @@ tmax = 25;
 
 % when creating a gif
 % savefolder = 'D:\Titan\Modeling\river_and_wave_1_2019\';
-% savefolder = '/home/rpalermo/titan_models';
+% savefolder = '/home/rpalermo/titan_models/';
 savefolder = '/Users/rosepalermo/Documents/Research/Titan/River_and_wave_7_19';
 plot_now = false;
 gif_on = false;

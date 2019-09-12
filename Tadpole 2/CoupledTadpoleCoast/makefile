@@ -3,10 +3,10 @@ current_target: main
 
 
 #Compiler flags
-#CXXFLAGS = -O0 -Wall -ggdb
+# CXXFLAGS = -O0 -Wall -ggdb -mmacosx-version-min=10.9
 CXXFLAGS = -O2
 #Linker flags
-#LDFLAGS = -O0 -Wall -ggdb
+# LDFLAGS = -O0 -Wall -ggdb
 LDFLAGS = -O2
 
 

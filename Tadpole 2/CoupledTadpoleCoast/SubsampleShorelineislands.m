@@ -21,6 +21,8 @@ end
 % Increase the distance until all of the points are contained within it.
 observer_is_valid = 0;
 while ~observer_is_valid
+    
+
     % Update binclose and binsimp for all of the bodies.
     for i=1:length(slccw)
         % Populate binclose
