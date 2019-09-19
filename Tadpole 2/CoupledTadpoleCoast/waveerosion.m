@@ -6,7 +6,8 @@ g.wave_input = g.U<g.sealevel; % a meter above 0 I'm calling the coastline. afte
 
 % call wave erosion function, output updates U and strength
 [g.wave_output,g.strength] = coastal_erosion(g.wave_input,p.doWaveErosion,g.Strength);
-
+% CHANGE STRENGTH OF ERODED POINTS TO IC STRENGTH. HAVE NOT DONE THIS
+% BECAUSE I'M STILL WORKING WITH ONLY COASTAL EROSION MODEL
 
 % make new subaqueous points elevation 0.5 below sea level? Talk to Andrew about what this depth
 % should be.

@@ -23,13 +23,13 @@ function cdm_no_sealevelrise(lake,fetch_on,savename)
 
 % run time
 
-tmax = 25;
+tmax = 10;
 
 % when creating a gif
 % savefolder = 'D:\Titan\Modeling\river_and_wave_1_2019\';
-savefolder = '/home/rpalermo/titan_models/';
-% savefolder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/River_and_wave_9_19/';
-plot_now = false;
+% savefolder = '/home/rpalermo/titan_models/';
+savefolder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/River_and_wave_9_19/';
+plot_now = true;
 gif_on = false;
 save_on = true;
 lake_save = cell(tmax,1);
@@ -41,8 +41,8 @@ strength = cell(tmax,1);
 %give land some sort of strength that will be damaged and destroyed
 land = ~lake;
 if fetch_on
-    %     strength = 10000000*double(land);
-    strength{1} = 50000*double(land);
+        strength{1} = 500000000*double(land);
+%     strength{1} = 50000*double(land);
 else
     strength{1} = 10*double(land);
 end
@@ -60,7 +60,7 @@ for i = 2:tmax
         drawnow
         %         imagesc(x,y,double(shoreline))
         p1 = subplot(1,2,1)
-        imagesc(x,y,(strength))
+        imagesc((strength{i}))
         colormap('gray')
         shading flat
         axis square
@@ -101,7 +101,7 @@ for i = 2:tmax
         %         saveas(gcf,['C:\Users\Rose Palermo\Documents\Titan\Modeling\6_17_pregeneralsfigs\','wave_rednoise',num2str(i),'.fig'])
         
         %         saveas(gcf,['D:\Titan\Modeling\river_and_wave_1_2019\',savename,num2str(i),'.fig'])
-        saveas(gcf,[savefolder, savename,num2str(i),'.fig'])
+%         saveas(gcf,[savefolder, savename,num2str(i),'.fig'])
         
     end
     

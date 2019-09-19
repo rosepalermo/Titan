@@ -10,3 +10,5 @@ if p.n>1
 else
     g.sealevel(1) = p.sealevel_init;
 end
+
+% g.sealevel(p.n) = p.sealevel_all(p.n);

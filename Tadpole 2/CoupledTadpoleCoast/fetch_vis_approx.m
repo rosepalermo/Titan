@@ -57,7 +57,7 @@ tic
 for k = 1:length(slccw)
     WaveArea{k,1} = zeros(length(slccw{k}),1);
     for l = 1:length(slccw{k})
-            l
+%             l
         % For each point, subsample the shoreline at a desired interval.
 %         disp('subsample')
         [Pobs,env,~,~,nbi] = SubsampleShorelineislands(slccw,k,l,binfine,bincoarse,dist,nhood,eps,epsilon);

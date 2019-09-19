@@ -21,7 +21,6 @@ land = ~lake;
 
 % initialize save variable
 % shoreline_save = cell(1,1);
-eroded = cell(1,1);
 
 
         
@@ -37,8 +36,7 @@ eroded = cell(1,1);
         strength(erodedind) = 0;
         erodedX = X(erodedind);
         erodedY = Y(erodedind);
-        erodedi = cat(2,erodedX,erodedY);
-        eroded = cat(1,eroded,erodedi);
+%         erodedi = cat(2,erodedX,erodedY);
         
         % change land to lake at eroded pts
         lake(erodedind) = true;

@@ -80,7 +80,7 @@ p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosi
 p.SLR = 1;                  %     p.SLR            Rate of sea level rise. 1m/dt
 p.sealevel_init = 1;        %     p.sealevel_init  Initial sea level
 p.strength = 10;            %     p.strength       Initial strength of the bedrock
-
+% p.sealevel_all = sinusoidal slchange
 % ------------------ initial conditions -----------------------------------                           
 
 p.beta = 1.6;  %1.8             %     p.beta           Negative slope of the power spectrum. 0 = white noise, more positive values are "redder" (more variance at longer wavelengths)
