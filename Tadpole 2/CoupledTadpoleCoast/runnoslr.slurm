@@ -7,4 +7,4 @@
 #SBATCH -p sched_engaging_default
 . /etc/profile.d/modules.sh
 module load mit/matlab/2018a 
-matlab -nodisplay -nodesktop -nosplash -r "run cdm_no_slr_loop.m"
+matlab -nodisplay -nodesktop -nosplash -r "run cdm_no_slr_MR2.m"
