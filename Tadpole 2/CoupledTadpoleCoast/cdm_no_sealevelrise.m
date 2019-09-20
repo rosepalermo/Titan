@@ -27,11 +27,11 @@ tmax = 10;
 
 % when creating a gif
 % savefolder = 'D:\Titan\Modeling\river_and_wave_1_2019\';
-% savefolder = '/home/rpalermo/titan_models/';
-savefolder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/River_and_wave_9_19/';
-plot_now = true;
+savefolder = '/home/rpalermo/titan_models/';
+% savefolder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/River_and_wave_9_19/';
+plot_now = false;
 gif_on = false;
-save_on = false;
+save_on = true;
 lake_save = cell(tmax,1);
 lake_save{1} = lake;
 strength = cell(tmax,1);
@@ -107,7 +107,7 @@ for i = 2:tmax
     
     %save the data
     if save_on
-        save([savefolder, savename,num2str(i),'.mat'],'lake_save','strength')
+        save([savefolder, savename,'_',num2str(i),'.mat'],'lake_save','strength')
     end
 end
 
