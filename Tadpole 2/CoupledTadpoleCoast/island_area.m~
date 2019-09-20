@@ -1,0 +1,23 @@
+function [P] = island_area(P0,eps)
+for l = 1:length(P0)
+    if l > 1
+        l_ind_prev = l-1;
+    else
+        l_ind_prev = length(P0);
+    end
+    
+    if l < length(P0)
+        l_ind_next = l+1;
+    else
+        l_ind_next = 1;
+    end
+    
+    xp = P0((l_ind_prev), 1);
+    yp = P0((l_ind_prev), 2);
+    xn = P0((l_ind_next), 1);
+    yn = P0((l_ind_next), 2);
+    [Pobs,~] = Pint([xn,yn],[P0(l,1),P0(l,2)],[xp,yp],eps);
+   
+end
+
+end

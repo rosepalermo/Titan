@@ -32,6 +32,9 @@ if ~any(nbi) % x0,y0 is on a promontory or a zero-width inlet, so nbi == [0,0]
     
     % continue along the previous segment a distance eps
     P = [x0,y0]+eps.*vp;
+    if norm(vp) == 0
+        disp("we have a problem")
+    end
 
 else
     nbi = nbi/sqrt(nbi(1)^2+nbi(2)^2);

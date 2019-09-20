@@ -71,13 +71,9 @@ while ~observer_is_valid
         else
             env{i} = ([xsub,ysub]);
         end
-%         if i>1 && polyarea(env{i}(:,1),env{i}(:,2)) == 0 % if we're on a 0 width island
-%             if i == k
-%             [env{i},Pobs,nbi] = island_area(env{i},Pobs,l_ind,eps);
-%             else
-%             [env{i},~] = island_area(env{i},[],l_ind,eps);
+%                     if polyarea(env{i}(:,1),env{i}(:,2)) == 0
+%                 [env{i},Pobs] = island_area(env{i},Pobs,eps);
 %             end
-%         end
     end
     
     % Check if the point is inside the environment.

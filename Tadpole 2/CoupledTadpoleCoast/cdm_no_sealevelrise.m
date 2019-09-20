@@ -27,11 +27,11 @@ tmax = 10;
 
 % when creating a gif
 % savefolder = 'D:\Titan\Modeling\river_and_wave_1_2019\';
-savefolder = '/home/rpalermo/titan_models/';
-% savefolder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/River_and_wave_9_19/';
+% savefolder = '/home/rpalermo/titan_models/';
+savefolder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/River_and_wave_9_19/';
 plot_now = true;
 gif_on = false;
-save_on = true;
+save_on = false;
 lake_save = cell(tmax,1);
 lake_save{1} = lake;
 strength = cell(tmax,1);
@@ -41,8 +41,8 @@ strength = cell(tmax,1);
 %give land some sort of strength that will be damaged and destroyed
 land = ~lake;
 if fetch_on
-        strength{1} = 500000000*double(land);
-%     strength{1} = 50000*double(land);
+%         strength{1} = 500000000*double(land);
+    strength{1} = 50000*double(land);
 else
     strength{1} = 10*double(land);
 end

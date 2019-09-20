@@ -34,9 +34,9 @@ nhood = 2; % This is a tradeoff between choosing a larger value that is more lik
 dist = 20;%0.1*max([range(x) range(y)]); % Typical value is ~10-100 in units of x
 
 % parameters for visibility functions
-eps = 0.1;
+eps = 0.01;
 epsilon = 1e-4;
-snap_distance = 0.05; % Looks like we get some invalid (empty array) visibility polygons if snap_distance >= eps.
+snap_distance = 0; % Looks like we get some invalid (empty array) visibility polygons if snap_distance >= eps.
 % disp('simplify')
 parfor ii = 1:length(fetch_sl_cells)
     % shoreline. x and y are ordered clockwise, first point != last point
@@ -63,7 +63,8 @@ for k = 1:length(slccw)
         [Pobs,env,~,~,nbi] = SubsampleShorelineislands(slccw,k,l,binfine,bincoarse,dist,nhood,eps,epsilon);
 %         disp('vis')
         
-        V = visibility_polygon(Pobs, env, epsilon, snap_distance);
+%         V = visibility_polygon(Pobs, env, epsilon, snap_distance);
+        V = visibility_polygon(Pobs,env,epsilon,0.05);
         
 
 %         disp('vis calcl')

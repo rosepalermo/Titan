@@ -81,8 +81,7 @@ land = ~lake;
 %             shoreline = addidshoreline_cardonly(F_lake,~F_lake); %rewrite shoreline to be card only for fetch.. will damage corners separately later            
             disp('ordering')
             % new order the shoreline code
-            [indshoreline_ocw,keepme,cells2trash] = order_shoreline_bwbound(F_lake);
-            cells_with_shorelines = find(keepme);
+            [indshoreline_ocw,~,cells2trash] = order_shoreline_bwbound(F_lake);
             if isempty(indshoreline_ocw) % stops eroding when shoreline hits the boundary
                 break
             end
@@ -90,8 +89,8 @@ land = ~lake;
 %             [indshoreline_ocw,cells2trash] = order_cw_lastpoint(F_lake,shoreline); % ccw ordered ind = indshoreline
 %             keepme = 1:length(indshoreline_ocw);
             disp('ordered')
-            for l = 1: length(cells_with_shorelines)
-                indshoreline{l,1} = sub2ind(size(X),indshoreline_ocw{cells_with_shorelines(l)}(:,1),indshoreline_ocw{cells_with_shorelines(l)}(:,2));
+            for l = 1: length(indshoreline_ocw)
+                indshoreline{l,1} = sub2ind(size(X),indshoreline_ocw{l}(:,1),indshoreline_ocw{l}(:,2));
                 fetch_sl_cells{l,1}(:,1) = X(indshoreline{l,1});
                 fetch_sl_cells{l,1}(:,2) = Y(indshoreline{l,1});
             end

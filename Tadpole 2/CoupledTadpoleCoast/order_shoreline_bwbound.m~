@@ -22,11 +22,7 @@ function [sl_cell,keepme,cells2trash] = order_shoreline_bwbound(lake);
 
 [~,total_lakes,total_islands] = find_first_order_lakes(lake);
 land = double(~lake);
-[B_land,~,~,~] = bwboundaries(land,8);
-if length(B_land) ==1 % this occurs when shoreline hits the boundary
-    return
-end
-
+% [B,L,N,A] = bwboundaries(land,8);
 [B,L,N,A] = bwboundaries(lake,8);
 
 % As long as there isn't liquid on the boundary of the grid, the first
@@ -101,6 +97,7 @@ if sum(total_islands)>0% if there are islands
     for island_idx=find(islands)
         coasts{island_idx}(end, :) = [];
     end
+    coasts{1, islands}(end,:) = [];
     % should now have CW-ordered coasts for the land, not the liquid.
     end
 end
@@ -113,7 +110,9 @@ keepme = (length_cells) > 3;
 cells2trash = cell2mat(coasts(~keepme)');
 sl_cell = coasts(keepme);
 
-
+if length(B) ==1 % this occurs when shoreline hits the boundary
+    return
+end
 
 % % PLOT
 % figure
