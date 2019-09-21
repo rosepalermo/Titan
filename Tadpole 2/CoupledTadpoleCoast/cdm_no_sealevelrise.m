@@ -26,8 +26,8 @@ function cdm_no_sealevelrise(lake,fetch_on,savename)
 tmax = 20;
 
 % when creating a gif
-% savefolder = 'D:\Titan\Modeling\river_and_wave_1_2019\';
-savefolder = '/home/rpalermo/titan_models/';
+savefolder = 'D:\Titan\Modeling\river_and_wave_1_2019\';
+% savefolder = '/home/rpalermo/titan_models/';
 % savefolder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/River_and_wave_9_19/';
 plot_now = false;
 gif_on = false;

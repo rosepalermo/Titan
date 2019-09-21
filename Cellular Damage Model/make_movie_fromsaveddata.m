@@ -2,9 +2,9 @@
 addpath('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/River_and_wave_9_19/')
 % load('wavet2v110.mat')
 % make a movie from the figures
-v = VideoWriter('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/River_and_wave_9_19/wavet1v1_10_zoom');
+v = VideoWriter('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/River_and_wave_9_19/wavet1v1_20_zoom');
 open(v);
-for k = 1:10
+for k = 1:20
 %     lake = zeros(size(X));
 %     lake(shoreline_save{k,1}) = 1;
 %     Xinon = reshape(X,[],1);
@@ -17,7 +17,7 @@ for k = 1:10
     imagesc(lake_save{k})
     colormap gray
     set(gca,'YDir','Normal')
-    set(gca,'XLim',([1600 3200])); set(gca,'YLim',([300 1800])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
+    set(gca,'XLim',([1800 3200])); set(gca,'YLim',([400 1400])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
     frame = getframe(gcf);
     writeVideo(v,frame);
     
