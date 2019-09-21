@@ -41,8 +41,8 @@ strength = cell(tmax,1);
 %give land some sort of strength that will be damaged and destroyed
 land = ~lake;
 if fetch_on
-%         strength{1} = 500000000*double(land);
-    strength{1} = 50000*double(land);
+        strength{1} = 500000000*double(land);
+%     strength{1} = 50000*double(land);
 else
     strength{1} = 10*double(land);
 end
