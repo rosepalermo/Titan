@@ -23,7 +23,7 @@ function cdm_no_sealevelrise(lake,fetch_on,savename)
 
 % run time
 
-tmax = 10;
+tmax = 20;
 
 % when creating a gif
 % savefolder = 'D:\Titan\Modeling\river_and_wave_1_2019\';

@@ -1,7 +1,7 @@
 #!/bin/bash  
 #SBATCH --gres=gpu:1  
 #SBATCH -N 1  
-#SBATCH -n 16  
+#SBATCH -n 32  
 #SBATCH --time=12:00:00  
 #SBATCH --exclusive  
 #SBATCH -p sched_engaging_default
