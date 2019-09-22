@@ -43,11 +43,11 @@ dx_mr(6) = 10; dy_mr(6) = 10;
 nametemp{6} = 'test_t1v1';
 
 
-for fo = 1:2
+for fo = 2
     fo_ = [1 0];
     fetch_on = fo_(fo);
     savetemp = {'wave' 'uniform'};
-    for mr = 1
+    for mr = 2
         savename = [savetemp{1,fo},nametemp{1,mr}]
         [lake,~,~] = gridlake(lakex_mr{mr,1}(1,:),lakey_mr{mr,1}(1,:),dx_mr(mr),dy_mr(mr),eps_mr(mr));
         cdm_no_sealevelrise(lake,fetch_on,savename)
