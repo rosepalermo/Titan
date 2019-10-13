@@ -11,15 +11,15 @@ addpath('/Users/rosepalermo/Documents/GitHub/Titan2/Tadpole 2')
 
 % --------------- space and time resolution ------------------------------- 
 
-p.Nx = 800;                 %     p.Nx             Number of grid points in x direction
-p.Ny = 800;                 %     p.Ny             Number of grid points in y direction
+p.Nx = 400;                 %     p.Nx             Number of grid points in x direction
+p.Ny = 400;                 %     p.Ny             Number of grid points in y direction
 p.dx = 125/2;                 %     p.dx             Grid spacing in the x direction (m)
 p.dy = 125/2;                 %     p.dy             Grid spacing in the y direction (m)
 
 p.doAdaptiveTimeStep = 1;   % p.doAdaptiveTimeStep Turn adaptive time step based on Courant number on (1) or off (0). If set to off, time step is p.dtmax
 p.dtmax = 1;%1e6;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
-p.tf = 2;%6e5;                 %     p.tf             Total time of the simulation (yr)
+p.tf = 10;%6e5;                 %     p.tf             Total time of the simulation (yr)
 
 
 % ----- boundary conditions, source terms, and flow routing ---------------
@@ -44,11 +44,11 @@ p.F = zeros(p.Ny,p.Nx);     %     p.F              Optional matrix of fixed poin
 
 p.doDrawPlot = 1;           %     p.doDrawPlot     Display solution as the run progresses
 p.plotint = 1;%100;            %     p.plotint        Plot will be redrawn every plotint iterations
-p.plottype = 'color shade';             %     p.plottype       1=perspective view, 2=drainage area map, 3=curvature map, 4=elevation map, 5=contour map, 6=shaded relief, 7=colored shaded relief
+p.plottype = 'elevation';             %     p.plottype       1=perspective view, 2=drainage area map, 3=curvature map, 4=elevation map, 5=contour map, 6=shaded relief, 7=colored shaded relief
                             %
 p.doSaveOutput = 0;         %     p.SaveOutput     Save model output to a .mat file
 p.saveint = 1;%1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
-p.runname = 'test1_Rose_800x800';%     p.runname:       Character string naming the run. If specified 
+p.runname = 'riverunifrom_400x400';%     p.runname:       Character string naming the run. If specified 
                             %                      (and if p.saveint~=0), the parameters and elevations at each 
                             %                      save interal will be saved in a binary .MAT file called <runname>.mat
                            
@@ -59,13 +59,13 @@ p.runname = 'test1_Rose_800x800';%     p.runname:       Character string naming 
 p.doDiffusion = 0;          %     p.doDiffusion    Turn hillslope diffusion on (1) or off (0)
 p.D = 0.005;                %     p.D              Hillslope diffusivity (m^2/yr)
                             %
-p.doLandslides = 1;         %     p.doLandslides   Turn landslides on (1) or off (0)
+p.doLandslides = 0;         %     p.doLandslides   Turn landslides on (1) or off (0)
 p.Sc = 0.6;                 %     p.Sc             Critical slope (m/m)
 
 
 % ---------------- bedrock channel incision -------------------------------                           
 
-p.doStreamPower = 1;        %     p.doStreamPower  Turn bedrock channel incision on (1) or off (0)
+p.doStreamPower = 0;        %     p.doStreamPower  Turn bedrock channel incision on (1) or off (0)
 p.doChannelDiffusion = 0;   %     p.doChannelDiffusion Turn diffusion in channels on (1) or off (0)
 p.Kf = 5e-6;                %     p.Kf             Coefficient in stream power incision law (kg m^(1+2m) yr^-2)
 p.m = 0.5;                  %     p.m              Drainage area exponent in stream power law
@@ -75,11 +75,18 @@ p.wexp = 0;                 %     p.wexp           Exponent relating channel wid
 p.thetac = 0;               %     p.thetac         Threshold for fluvial incision
 
 % ---------------- coastal erosion -------------------------------                           
-p.doWaveErosion = 1;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
-p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
-p.SLR = 1;                  %     p.SLR            Rate of sea level rise. 1m/dt
+p.doWaveErosion = 0;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
+p.doUniformErosion = 1;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
+p.SLR = 0;                  %     p.SLR            Rate of sea level rise. 1m/dt
 p.sealevel_init = 1;        %     p.sealevel_init  Initial sea level
-p.strength = 10;            %     p.strength       Initial strength of the bedrock
+if p.doUniformErosion
+    p.strength = 10;        %     p.strength       Initial strength of the bedrock
+elseif p.doWaveErosion
+    p.strength = 500000000; % good for 800x800
+    p.strength = 5000; % good for 800x800
+else
+    p.strength = 0;
+end
 % p.sealevel_all = sinusoidal slchange
 % ------------------ initial conditions -----------------------------------                           
 
@@ -91,16 +98,15 @@ p.periodic = 1;             %     p.periodic       Elevations will be periodic a
 %% CREATE INITIAL SURFACE %%
 
 noise = RedNoise(p.Ny,p.Nx,p.beta,p.variance,p.periodic);
-initgaus = get_gaussian_boundary([800 800], 0.3, 10);
-init = (initgaus+ noise);
+% initgaus = get_gaussian_boundary([800 800], 0.3, 10);
+% init = (initgaus + noise);
+init = get_IC(p);
 
 % make lowest 10% of elevations fixed points
-SL = prctile(init(:),30);
+SL = prctile(init(:),10);
 init = init - SL;
 init(init < 0) = 0; 
 p.F(init <= 0) = 1;
-
-
 
 %% RUN THE MODEL %%
 

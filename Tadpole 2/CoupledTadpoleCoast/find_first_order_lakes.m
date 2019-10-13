@@ -45,7 +45,7 @@ tl = total_lakes(find(total_lakes>0));
 total_islands = first_order_islands+second_order_islands;
 ti = total_islands(find(total_islands>0));
 %%
-close all
+% close all
 
 L_lake=cell(length(tl),1); %first order lake and everything inside with numbers from L
 F_lake=cell(length(tl),1); %first order lake and everything inside with ones and zeros (1 = lake, 0 = land)

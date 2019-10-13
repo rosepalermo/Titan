@@ -44,7 +44,7 @@ SL_matrix(5).cord{1,1}(:,1) = X(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:
 SL_matrix(5).cord{1,1}(:,2) = Y(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:,2)));
 
 
-%% t3v1 INITIAL AFTER RIVERS
+%% t2v1 INITIAL AFTER RIVERS
 
 load('xy_beta1_6_v1.mat')
 

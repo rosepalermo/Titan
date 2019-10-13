@@ -33,7 +33,7 @@ p.periodic = 1;             %     p.periodic       Elevations will be periodic a
 % [X Y] = meshgrid(1:p.Nx,1:p.Ny);
 % D = sqrt((X-xc).^2 + (Y-yc).^2);
 % shield = (r - D)*p.dx*S; % the initial shield profile
-initgaus = get_gaussian_boundary([800 800], 0.1, sqrt(p.variance));
+initgaus = get_gaussian_boundary([400 400], 0.1, sqrt(p.variance));
 
 % add a random component
 noise = RedNoise(p.Ny,p.Nx,p.beta,p.variance,p.periodic);
@@ -50,7 +50,7 @@ figure()
 imagesc(sea)
 title('H + noise')
 
-SL = prctile(sea(:),10);
+SL = prctile(sea(:),30);
 sealine = sea;
 sealine(sealine >= SL) = 0; 
 sealine(sealine < SL) = 1; 

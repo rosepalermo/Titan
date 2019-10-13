@@ -1,4 +1,4 @@
-function [lake,strength] = coastal_erosion(lake,fetch_on,strength)
+function [lake,strength,erodedind_save] = coastal_erosion(lake,fetch_on,strength,p)
 
 % Titan analogue damage model for coastal erosion of a lake
 % Rose Palermo 6-2019
@@ -37,10 +37,15 @@ land = ~lake;
         erodedX = X(erodedind);
         erodedY = Y(erodedind);
 %         erodedi = cat(2,erodedX,erodedY);
+
+if p.doStreamPower
+    strength(erodedind) = p.strength;
+end
         
         % change land to lake at eroded pts
         lake(erodedind) = true;
         land = ~lake;
+        erodedind_save = erodedind;
 %         [shoreline] = addidshoreline(lake,land);
 %         shoreline_save{ff} = find(shoreline);
 %         dam_save{ff} = dam;
@@ -65,7 +70,7 @@ land = ~lake;
 %         boundaries = [L(1,:)';L(end,:)';L(:,1);L(:,end)];
 %         boundaries = boundaries(boundaries>0);
 %         boundaries = unique(boundaries);
-        
+        erodedind_save = [NaN];
         for ff = 1:length(F_lake_all)
             F_lake = F_lake_all{ff};
             if length(find(F_lake))<2
@@ -132,7 +137,7 @@ land = ~lake;
 %             strength(corners) = strength(corners) - shoreline(corners).*damcorn;
 %         end
         
-        strength(strength<0) = 0; % if strength is negative, make it 0 for convenience
+%         strength(strength<0) = 0; % if strength is negative, make it 0 for convenience
         
         
         % find eroded points
@@ -147,6 +152,9 @@ land = ~lake;
         
         
         strength(erodedind) = 0;
+        if p.doStreamPower
+            strength(erodedind) = p.strength;
+        end
         erodedX = X(erodedind);
         erodedY = Y(erodedind);
         erodedi = cat(2,erodedX,erodedY);
@@ -154,6 +162,7 @@ land = ~lake;
         
         % change land to lake at eroded pts
         lake(erodedind) = true;
+        erodedind_save = [erodedind_save;erodedind];
 %         land = ~lake;
         % update shoreline
 %         [shoreline] = addidshoreline(lake,land);

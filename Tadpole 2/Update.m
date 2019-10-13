@@ -40,9 +40,9 @@ if p.doDiffusion
 end
 
 if p.doWaveErosion
-    g = waveerosion(p,g);
+    [p,g] = waveerosion(p,g);
 end
 
 if p.doUniformErosion
-    g = uniformerosion(p,g);
+    [p,g] = uniformerosion(p,g);
 end

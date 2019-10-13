@@ -24,14 +24,15 @@ function cdm_no_sealevelrise(lake,fetch_on,savename)
 % run time
 
 tmax = 20;
+p.doStreamPower = 0;
 
 % when creating a gif
-savefolder = 'D:\Titan\Modeling\river_and_wave_1_2019\';
+% savefolder = 'D:\Titan\Modeling\river_and_wave_1_2019\';
 % savefolder = '/home/rpalermo/titan_models/';
-% savefolder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/River_and_wave_9_19/';
+savefolder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/River_and_wave_9_19/';
 plot_now = false;
 gif_on = false;
-save_on = true;
+save_on = false;
 lake_save = cell(tmax,1);
 lake_save{1} = lake;
 strength = cell(tmax,1);
@@ -53,7 +54,7 @@ for i = 2:tmax
     % figure();imagesc(strength)
     
     
-    [lake_save{i},strength{i}] = coastal_erosion(lake_save{i-1},fetch_on,strength{i-1});
+    [lake_save{i},strength{i}] = coastal_erosion(lake_save{i-1},fetch_on,strength{i-1},p);
     
     %plot
     if plot_now

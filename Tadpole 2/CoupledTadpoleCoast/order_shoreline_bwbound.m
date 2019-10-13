@@ -46,7 +46,7 @@ for i=1:N
         lakes(i) = i;
     end
 end
-lakestemp = zeros(N,1);
+lakestemp = zeros(N,1); % or N?
 lakestemp(lakes) = lakes;
 lakes = lakestemp;
 if sum(total_islands)>0
