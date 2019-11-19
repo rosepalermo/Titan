@@ -24,6 +24,7 @@ function [sl_cell,keepme,cells2trash] = order_shoreline_bwbound(lake);
 land = double(~lake);
 [B_land,~,~,~] = bwboundaries(land,8);
 if length(B_land) ==1 % this occurs when shoreline hits the boundary
+    sl_cells = [];
     return
 end
 
@@ -88,7 +89,7 @@ for l = find(lakes)
     rowCCW = r1 + nextrow(ridx,cidx);
     colCCW = c1 + nextcol(ridx,cidx);
     
-    coasts{1} = (bwtraceboundary(land,[rowCCW,colCCW],'S',4,Inf,'counterclockwise'));
+    coasts{1} = (bwtraceboundary(land,[rowCCW,colCCW],'S',8,Inf,'counterclockwise'));
     coasts{1}(end,:) = [];
 end
 
@@ -113,15 +114,15 @@ keepme = (length_cells) > 3;
 cells2trash = cell2mat(coasts(~keepme)');
 sl_cell = coasts(keepme);
 
-
+% test = 1;
 
 % % PLOT
 % figure
 % imagesc(L); axis image
 % hold on
-% for c = [islands,lakes]
+% for c = [lakes]
 %     coast = coasts{c};
-%     plot(coast(:,2),coast(:,1),'w','LineWidth',2);
+%     scatter(coast(:,2),coast(:,1),'w');
 % end
 % 
 % %plot the cells we're going to keep in cyan

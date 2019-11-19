@@ -19,7 +19,7 @@ p.dy = 125/2;                 %     p.dy             Grid spacing in the y direc
 p.doAdaptiveTimeStep = 1;   % p.doAdaptiveTimeStep Turn adaptive time step based on Courant number on (1) or off (0). If set to off, time step is p.dtmax
 p.dtmax = 1e4;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
-p.tf = 6e5;%6e5;                 %     p.tf             Total time of the simulation (yr)
+p.tf = 6e5;                 %     p.tf             Total time of the simulation (yr)
 
 
 % ----- boundary conditions, source terms, and flow routing ---------------
@@ -75,8 +75,8 @@ p.wexp = 0;                 %     p.wexp           Exponent relating channel wid
 p.thetac = 0;               %     p.thetac         Threshold for fluvial incision
 
 % ---------------- coastal erosion -------------------------------                           
-p.doWaveErosion = 0;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
-p.doUniformErosion = 1;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
+p.doWaveErosion = 1;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
+p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
 p.SLR = 0;                  %     p.SLR            Rate of sea level rise. 1m/dt
 p.sealevel_init = 1;        %     p.sealevel_init  Initial sea level
 if p.doUniformErosion
@@ -84,6 +84,7 @@ if p.doUniformErosion
 elseif p.doWaveErosion
 %     p.strength = 500000000; % good for 800x800
     p.strength = 5000; % good for 800x800
+    p.strength = 10;
 else
     p.strength = 0;
 end
@@ -114,11 +115,16 @@ init = init - Zshift + p.sealevel_init;
 % coastal positions, and sea level.
 p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
 
+%test circle
+% [init] = test_circle(p);
+% p.F = zeros(size(init));
+% p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
+
 % make lowest 10% of elevations fixed points
-% SL = prctile(init(:),10);
-% init = init - SL;
-% init(init < 0) = 0; 
-% p.F(init <= 0) = 1;
+SL = prctile(init(:),10);
+init = init - SL;
+% % % init(init < 0) = 0; 
+p.F(init <= 0) = 1;
 
 %% RUN THE MODEL %%
 

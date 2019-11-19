@@ -17,7 +17,7 @@
 %
 % % load a test lake (wavet2v2) and the ordered shoreline:
 % load test_vis_alg.mat fetch_sl_cells
-function [WaveArea] = fetch_vis_approx(fetch_sl_cells);
+function [FetchArea] = fetch_vis_approx(fetch_sl_cells);
 
 slccw = fetch_sl_cells;
 % for i = 1:length(slccw)
@@ -68,7 +68,7 @@ for k = 1:length(slccw)
 
 %         disp('vis calcl')
         % fetch & wave area & distance & cos(theta-phi)
-%         FetchArea = polyarea(V(:,1),V(:,2));
+        FetchArea{k,1}(l,1) = polyarea(V(:,1),V(:,2));
         Fetch_dist = sqrt(sum(([slccw{k}(l,1),slccw{k}(l,2)] - V).^2,2));
         % Wave weighting = (F)*cosang
         weighted_fetch_dist = ([slccw{k}(l,1),slccw{k}(l,2)] - V)*nbi'./eps;
@@ -76,7 +76,7 @@ for k = 1:length(slccw)
         cosang = weighted_fetch_dist./Fetch_dist;
         cosang(isnan(cosang)) = 0;
         Wavepts = [slccw{k}(l,1),slccw{k}(l,2)]+(V-[slccw{k}(l,1),slccw{k}(l,2)]).*cosang;
-        WaveArea{k,1}(l,1) = polyarea(Wavepts(:,1),Wavepts(:,2));
+%         WaveArea{k,1}(l,1) = polyarea(Wavepts(:,1),Wavepts(:,2));
         
     end
 end
