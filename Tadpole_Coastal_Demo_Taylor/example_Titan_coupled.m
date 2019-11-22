@@ -84,7 +84,7 @@ if p.doUniformErosion
 elseif p.doWaveErosion
 %     p.strength = 500000000; % good for 800x800
     p.strength = 5000; % good for 800x800
-    p.strength = 10;
+    p.strength = 100000;
 else
     p.strength = 0;
 end
@@ -102,29 +102,29 @@ p.periodic = 1;             %     p.periodic       Elevations will be periodic a
 
 % initgaus = get_gaussian_boundary([800 800], 0.3, 10);
 % init = (initgaus + noise);
-rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the noise surface
-init = get_IC(p,rfactor);
-
-% adjust the elevations so pctwet % of the domain is below initial SL
-pctwet = 10;
-Zshift = prctile(init(:),pctwet);
-init = init - Zshift + p.sealevel_init;
-
-% set fixed points according to initial sea level. Note that p.F will need
-% to be updated each time step according to changes in elevations,
-% coastal positions, and sea level.
-p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
-
-%test circle
-% [init] = test_circle(p);
-% p.F = zeros(size(init));
+% rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the noise surface
+% init = get_IC(p,rfactor);
+% 
+% % adjust the elevations so pctwet % of the domain is below initial SL
+% pctwet = 10;
+% Zshift = prctile(init(:),pctwet);
+% init = init - Zshift + p.sealevel_init;
+% 
+% % set fixed points according to initial sea level. Note that p.F will need
+% % to be updated each time step according to changes in elevations,
+% % coastal positions, and sea level.
 % p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
 
+%test circle
+[init] = test_circle(p);
+p.F = zeros(size(init));
+p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
+
 % make lowest 10% of elevations fixed points
-SL = prctile(init(:),10);
-init = init - SL;
+% SL = prctile(init(:),10);
+% init = init - SL;
 % % % init(init < 0) = 0; 
-p.F(init <= 0) = 1;
+% p.F(init <= 0) = 1;
 
 %% RUN THE MODEL %%
 

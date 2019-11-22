@@ -57,10 +57,7 @@ end
     
     if fetch_on
         % if fetch_on 
-        
-        % tile inputs because of boundary problem
-%         lake_tile = repmat(lake,3);
-%         strength_tile = repmat(strength,3);
+       
         
         % loop over # of objects
         % find number of first order lakes
@@ -101,7 +98,7 @@ end
             end
             disp('calculating wave')
             % calculate wave weighted (sqrt(F)*cos(theta-phi))
-            [WaveArea_cell] = fetch_vis_approx(fetch_sl_cells);
+            [~,WaveArea_cell] = fetch_vis_approx(fetch_sl_cells);% first is wave, second is fetch!!
             %             [WaveArea_cell,~] = fetch_wavefield_cell(fetch_sl_cells);
             %         [WaveArea_cell] = {ones(size(fetch_sl_cells{1,1},1),1)}; % ones to test debugging with
             disp('wave calculated')

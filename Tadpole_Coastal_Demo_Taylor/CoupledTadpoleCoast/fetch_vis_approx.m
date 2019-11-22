@@ -17,7 +17,7 @@
 %
 % % load a test lake (wavet2v2) and the ordered shoreline:
 % load test_vis_alg.mat fetch_sl_cells
-function [FetchArea] = fetch_vis_approx(fetch_sl_cells);
+function [WaveArea,FetchArea] = fetch_vis_approx(fetch_sl_cells);
 
 slccw = fetch_sl_cells;
 % for i = 1:length(slccw)
