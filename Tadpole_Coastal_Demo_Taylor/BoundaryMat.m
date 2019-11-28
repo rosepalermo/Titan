@@ -1,4 +1,4 @@
-function [p g] = BoundaryMat(p,g)
+function [p,g] = BoundaryMat(p,g)
 
 % create a matrix C that is 1 where uplift and erosion should occur, 
 % 0 where it shouldn't
@@ -59,9 +59,10 @@ switch p.bdy.lower
 end
 
 
-% Set additional fixed points
+% Set points below sea level to zero
+g.C(g.U < g.sealevel) = 0;
 
+% Set additional fixed points
 if isfield(p,'F') % if user specified additional fixed points
     g.C(p.F==1) = 0;
 end
-
