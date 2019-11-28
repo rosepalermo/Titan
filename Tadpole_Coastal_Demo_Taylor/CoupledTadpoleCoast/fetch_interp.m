@@ -4,14 +4,14 @@ load('initialtopo.mat')
 x = 1:400; y = x;
 [X,Y] = meshgrid(x,y);
 
-figure()
+
 ind_all = [NaN];
 fetch_all = [NaN];
 fetchcorn_all = [NaN];
 corners_all = [NaN];
 
 % iterate over 0.1 m and calculate damage for uniform erosion
-for SL = 10
+for SL = 1:30
     % define the shoreline
     lake = init<SL;
     
@@ -34,18 +34,19 @@ fetchcorn_all = fetchcorn_all(2:end);
 corners_all = corners_all(2:end);
 
 % plot
+figure()
 [y_ind,x_ind] = ind2sub(size(lake),ind_all);
-scatter3(x_ind,y_ind,fetch_all,[],fetch_all)
+scatter3(x_ind,y_ind,fetch_all,[],fetch_all,'.')
 
 view(2)
 
-caxis([0 10])
+caxis([0 6000])
 axis equal
-x_all = x_all(2:end); y_all = y_all(2:end);
+% x_all = x_all(2:end); y_all = y_all(2:end);
 
 
 %%
-SL1 = 1; SL2 = 10;
+SL1 = 1; SL2 = 30;
 
 lake1 = init<SL1;
 lake2 = init<SL2;
@@ -123,13 +124,20 @@ fetch_all_sl12 = [fetch_sl1; fetch_sl2];
 
 % daminterp(daminterp=0)=NaN;
 Vq = griddata(x_fetch,y_fetch,fetch_all_sl12,x_indint,y_indint);
+% Vq = griddata(x_fetch,y_fetch,fetch_all_sl12,x_indint,y_indint,'v4');
+% Vq = griddata(x_fetch,y_fetch,fetch_all_sl12,x_indint,y_indint,'cubic');
 
+%plot interpolation
 figure
-scatter3(x_indint,y_indint,Vq,[],Vq)
+scatter3(x_indint,y_indint,Vq,[],Vq,'.')
 view(2)
-caxis([0 10])
+caxis([0 6000])
 axis equal
 
+% plot bathy
 figure(); imagesc(init); caxis([SL1 SL2])
 axis equal
 set(gca,'Ydir','normal')
+
+%plot SL1 & SL2 only
+figure(); scatter3(y_fetch,x_fetch,fetch_all_sl12,[],fetch_all_sl12,'.'); view(2); caxis([0 6000])

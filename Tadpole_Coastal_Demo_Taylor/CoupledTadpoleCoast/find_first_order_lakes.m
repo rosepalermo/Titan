@@ -37,7 +37,7 @@ end
 
 fol = first_order_lakes(find(first_order_lakes>0));
 foi = first_order_islands(find(first_order_islands>0));
-imagesc(L == fol(1))
+% imagesc(L == fol(1))
 
 total_lakes = first_order_lakes+second_order_lakes_i;
 tl = total_lakes(find(total_lakes>0));

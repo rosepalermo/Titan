@@ -22,7 +22,7 @@ function [sl_cell,keepme,cells2trash] = order_shoreline_bwbound(lake);
 
 [~,total_lakes,total_islands] = find_first_order_lakes(lake);
 land = double(~lake);
-[B_land,~,~,~] = bwboundaries(land,8);
+[B_land,L_land,~,~] = bwboundaries(land,8);
 if length(B_land) ==1 % this occurs when shoreline hits the boundary
     sl_cells = [];
     return
@@ -89,7 +89,7 @@ for l = find(lakes)
     rowCCW = r1 + nextrow(ridx,cidx);
     colCCW = c1 + nextcol(ridx,cidx);
     
-    coasts{1} = (bwtraceboundary(land,[rowCCW,colCCW],'S',8,Inf,'counterclockwise'));
+    coasts{1} = (bwtraceboundary(land,[rowCCW,colCCW],'S',4,Inf,'counterclockwise'));
     coasts{1}(end,:) = [];
 end
 
@@ -100,7 +100,10 @@ if sum(total_islands)>0% if there are islands
     if sum(islands)>0 % if there are islands
     coasts(1,find(islands)) = flipud(B(find(islands))); % The non-empty elements of the cell array coasts
     for island_idx=find(islands)
-        coasts{island_idx}(end, :) = [];
+        coasts{island_idx}(end, :) = []; % remove the last point of each island, duplicate of first point
+%         if any(ismember(coasts{island_idx},coasts{1},'rows'))
+%             coasts{island_idx} = []; % remove the island that overlaps with a promontory
+%         end
     end
     % should now have CW-ordered coasts for the land, not the liquid.
     end
