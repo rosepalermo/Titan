@@ -20,6 +20,10 @@ switch p.plottype
         
         figure(p.fighandle)
         imagesc(g.x,g.y,g.U)
+        hold on
+        contour(g.x,g.y,g.U,g.sealevel*[1,1],'k')
+        hold off
+        axis image
         title(['Iteration=' num2str(n) ', t=' num2str(round(p.t)) ', dt=' num2str(round(p.dt))])
         colorbar
 

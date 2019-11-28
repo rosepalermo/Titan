@@ -12,7 +12,7 @@ while p.t < p.tf
     p.n = n;
     %%%%%%%%%%%%%%%%%%%%%% UPDATE ELEVATIONS %%%%%%%%%%%%%%%%%%%%%%%
 
-    [p g] = Update(p,g);
+    [p,g] = Update(p,g);
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -43,7 +43,7 @@ while p.t < p.tf
             p.lastsave = n/p.saveint + 1;
             g.output(:,:,p.lastsave) = g.U;
             g.t(p.lastsave) = p.t;
-            g.sealevelsave = g.sealevel;
+            g.sealevelsave(p.lastsave) = g.sealevel;
         end
     end
     

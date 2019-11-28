@@ -28,13 +28,13 @@ if nargin ~= 2, help adm; return; end
 
 % run model
 
-[p g] = TadpoleInitialize(initial,p);
+[p,g] = TadpoleInitialize(initial,p);
 
 
-[p g] = TadpoleRun(p,g);
+[p,g] = TadpoleRun(p,g);
 
 
-[p g] = TadpoleFinalize(p,g);
+[p,g] = TadpoleFinalize(p,g);
 
             
 % assign solution to output argument

@@ -7,6 +7,7 @@ clear
 
 folder = fileparts(which('example_Titan_coupled.m'));
 addpath(genpath(folder));
+
 %% SET PARAMETERS %%
 
 % --------------- space and time resolution ------------------------------- 
@@ -19,7 +20,8 @@ p.dy = 125/2;                 %     p.dy             Grid spacing in the y direc
 p.doAdaptiveTimeStep = 1;   % p.doAdaptiveTimeStep Turn adaptive time step based on Courant number on (1) or off (0). If set to off, time step is p.dtmax
 p.dtmax = 1e4;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
-p.tf = 6e5;                 %     p.tf             Total time of the simulation (yr)
+
+p.tf = 1e5; %6e5;                 %     p.tf             Total time of the simulation (yr)
 
 
 % ----- boundary conditions, source terms, and flow routing ---------------
@@ -35,7 +37,7 @@ p.bdy.lower = 'periodic';   %                      'fixed'    --> constant eleva
                             %                                     point from opposite boundary)
 
 p.E = 1e-10;                %     p.E              Rate of surface uplift or base level lowering (m/yr)
-p.routing = 'D8';          %     p.routing        Choose which flow routing method to use: 'D8' (steepest descent), 'Dinf' (Tarboton's D-infinity), or 'Dms' (multi-slope)
+p.routing = 'Dms';          %     p.routing        Choose which flow routing method to use: 'D8' (steepest descent), 'Dinf' (Tarboton's D-infinity), or 'Dms' (multi-slope)
 p.flood = 1;                %     p.flood          1=route flow through local minima, 0=don't
 
 p.F = zeros(p.Ny,p.Nx);     %     p.F              Optional matrix of fixed points, in addition to boundary conditions above. Points with p.F == 1 will have constant elevation
@@ -47,8 +49,8 @@ p.plotint = 1;%100;            %     p.plotint        Plot will be redrawn every
 p.plottype = 'elevation';             %     p.plottype       1=perspective view, 2=drainage area map, 3=curvature map, 4=elevation map, 5=contour map, 6=shaded relief, 7=colored shaded relief
                             %
 p.doSaveOutput = 0;         %     p.SaveOutput     Save model output to a .mat file
-p.saveint = 1;%1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
-p.runname = 'riveruniform_400x400';%     p.runname:       Character string naming the run. If specified 
+p.saveint = 5; %1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
+p.runname = 'testSL';%     p.runname:       Character string naming the run. If specified 
                             %                      (and if p.saveint~=0), the parameters and elevations at each 
                             %                      save interal will be saved in a binary .MAT file called <runname>.mat
                            
@@ -59,13 +61,13 @@ p.runname = 'riveruniform_400x400';%     p.runname:       Character string namin
 p.doDiffusion = 0;          %     p.doDiffusion    Turn hillslope diffusion on (1) or off (0)
 p.D = 0.005;                %     p.D              Hillslope diffusivity (m^2/yr)
                             %
-p.doLandslides = 0;         %     p.doLandslides   Turn landslides on (1) or off (0)
+p.doLandslides = 1;         %     p.doLandslides   Turn landslides on (1) or off (0)
 p.Sc = 0.6;                 %     p.Sc             Critical slope (m/m)
 
 
 % ---------------- bedrock channel incision -------------------------------                           
 
-p.doStreamPower = 0;        %     p.doStreamPower  Turn bedrock channel incision on (1) or off (0)
+p.doStreamPower = 1;        %     p.doStreamPower  Turn bedrock channel incision on (1) or off (0)
 p.doChannelDiffusion = 0;   %     p.doChannelDiffusion Turn diffusion in channels on (1) or off (0)
 p.Kf = 1e-5; % 5e-6;                %     p.Kf             Coefficient in stream power incision law (kg m^(1+2m) yr^-2)
 p.m = 0.5;                  %     p.m              Drainage area exponent in stream power law
@@ -75,16 +77,21 @@ p.wexp = 0;                 %     p.wexp           Exponent relating channel wid
 p.thetac = 0;               %     p.thetac         Threshold for fluvial incision
 
 % ---------------- coastal erosion -------------------------------                           
-p.doWaveErosion = 1;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
-p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
-p.SLR = 0;                  %     p.SLR            Rate of sea level rise. 1m/dt
+
+p.doWaveErosion = 0;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
+p.doUniformErosion = 1;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
+% p.SLR = 50/p.tf;                  %     p.SLR            Rate of sea level rise (m/yr)
 p.sealevel_init = 1;        %     p.sealevel_init  Initial sea level
 if p.doUniformErosion
-    p.strength = 10;        %     p.strength       Initial strength of the bedrock
+%     p.strength = 10;        %     p.strength       Initial strength of the bedrock
+    p.strength = 1;         %     p.strength       Initial strength of the bedrock
+    p.Kcoast = 1e-4;        %     p.Kcoast         Coastal erosion rate constant (strength * damage^-1 * yr^-1)
 elseif p.doWaveErosion
-%     p.strength = 500000000; % good for 800x800
-    p.strength = 5000; % good for 800x800
-    p.strength = 100000;
+
+% %     p.strength = 500000000; % good for 800x800
+%     p.strength = 5000; % good for 800x800
+    p.strength = 1;         %     p.strength       Initial strength of the bedrock
+    p.Kcoast = 1e-9;        %     p.Kcoast         Coastal erosion rate constant (strength * damage^-1 * yr^-1)
 else
     p.strength = 0;
 end
@@ -109,11 +116,14 @@ init = get_IC(p,rfactor);
 pctwet = 10;
 Zshift = prctile(init(:),pctwet);
 init = init - Zshift + p.sealevel_init;
-% 
-% % set fixed points according to initial sea level. Note that p.F will need
-% % to be updated each time step according to changes in elevations,
-% % coastal positions, and sea level.
-p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
+
+
+% set fixed points according to initial sea level. Note that p.F will need
+% to be updated each time step according to changes in elevations,
+% coastal positions, and sea level. --> No, that is what g.C is for (that's
+% why it's a "grid" in g and p.F is a parameter in F). 
+
+% p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
 
 %test circle
 % [init] = test_circle(p);

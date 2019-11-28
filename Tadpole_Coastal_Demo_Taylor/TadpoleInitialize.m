@@ -1,4 +1,4 @@
-function [p g] = TadpoleInitialize(initial,p)
+function [p,g] = TadpoleInitialize(initial,p)
 
 % TadpoleInitialize.m
 %
@@ -19,16 +19,18 @@ end
 % INITIAL AND BOUNDARY CONDITIONS % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[p.K p.J] = size(initial);
+[p.K,p.J] = size(initial);
 
 g.U = initial;
 % g.Uprev = g.U; % elevations at previous time step
 
-[p g] = BoundaryMat(p,g);
+g.sealevel = p.sealevel_init; % set initial sea level
+
+[p,g] = BoundaryMat(p,g);
 
 if p.doStreamPower && ~p.doChannelDiffusion
     g.Channels = ones(p.K,p.J);
-    [p g] = MarkChannels(p,g);
+    [p,g] = MarkChannels(p,g);
 else
     g.Channels = zeros(p.K,p.J);
 end
@@ -52,6 +54,7 @@ if p.doSaveOutput
     p.saveint = ceil(p.saveint);
     g.output(:,:,1) = initial; % the initial surface
     g.t = 0; % vector that will hold the times corresponding to the saved grids
+    g.sealevelsave = p.sealevel_init; % vector that will hold the sealevels corresponding to the saved grids and times
 end
 
 
@@ -71,5 +74,5 @@ end
 
 if p.doDrawPlot
     p.plotint = round(p.plotint);
-    [p g] = SetUpPlot(p,g);
+    [p,g] = SetUpPlot(p,g);
 end

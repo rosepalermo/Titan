@@ -29,8 +29,11 @@ land = ~lake;
         [shoreline] = addidshoreline(lake,land); % corners are part of the shoreline!
         indshoreline = find(shoreline);
         dam = double(shoreline);
+        
         %damage the shoreline
-        strength(indshoreline) = strength(indshoreline)-dam(indshoreline);
+%         strength(indshoreline) = strength(indshoreline)-dam(indshoreline); % This was Rose's line
+        strength(indshoreline) = strength(indshoreline)-p.dt*p.Kcoast*dam(indshoreline); % Taylor's modified line that depends on a rate constant
+
         strength(strength<0) = 0;
         erodedind = indshoreline(strength(indshoreline)<=0);
         strength(erodedind) = 0;
@@ -110,8 +113,11 @@ end
         % Damage the shoreline
         indshoreline = cell2mat(indshoreline);
         %         [shoreline] = addidshoreline_cardonly(lake,land); % edges only
-        [shoreline] = addidshoreline(F_lake,~F_lake); % corners and edges
+        [shoreline] = addidshoreline(lake,land); % corners and edges
         dam = cell2mat(WaveArea_cell);
+%         strength(indshoreline) = strength(indshoreline) - shoreline(indshoreline).*dam; % This was Rose's line
+        strength(indshoreline) = strength(indshoreline) - p.dt*p.Kcoast*shoreline(indshoreline).*dam; % Taylor's modified line that depends on a rate constant
+
 %         SHOULDNT NEED TO DO THIS ANYMORE BECAUSE NEW ORDER THE SHORELINE
 %         INCLUDES CORNERS
 %         % find corners and damage if they exist alone (not in the cells to

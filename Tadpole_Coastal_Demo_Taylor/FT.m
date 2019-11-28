@@ -1,8 +1,8 @@
-function [p g] = FT(p,g)
+function [p,g] = FT(p,g)
 
 % calculate RHS of the NKWE, recording the Courant number and which points 
 % exceed the channel incision threshold
-[RHS g.Channels Courant] = NKWE(g,p);
+[RHS,g.Channels,Courant] = NKWE(g,p);
 
 % adjust the time step based on the specified maximum Courant number and
 % maximum time step

@@ -1,4 +1,4 @@
-function [p g] = TadpoleFinalize(p,g)
+function [p,g] = TadpoleFinalize(p,g)
 
 % TadpoleFinalize.m
 %
@@ -10,11 +10,15 @@ if p.doSaveOutput % if we're saving results
 
     g.t(p.lastsave+1)=p.t;
     
+    g.sealevelsave(p.lastsave+1)=g.sealevel;
+
     output = g.output;
     
     t = g.t;
     
     sealevel = g.sealevelsave;
+    
+%     p = rmfield (p,'fighandle');
     
     save(p.runname, '-v7.3', 'p', 't', 'output', 'sealevel');
 

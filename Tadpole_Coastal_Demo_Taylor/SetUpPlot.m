@@ -32,8 +32,12 @@ switch p.plottype
         g.x = p.dx*(0:p.J-1);
         g.y = p.dy*(0:p.K-1);
         imagesc(g.x,g.y,g.U)
-        axis image
+%         axis image
         title(['Iteration= 0, t=' num2str(p.t)])
+        hold on
+        contour(g.x,g.y,g.U,g.sealevel*[1,1],'k')
+        hold off
+        axis image
         set(gca, 'nextplot', 'replacechildren');
         set(p.fighandle, 'color', [1 1 1], 'colormap', jet);
         colorbar
