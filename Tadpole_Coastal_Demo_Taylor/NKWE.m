@@ -4,7 +4,11 @@ function [RHS Channels Courant] = NKWE(g,p)
 
 
 % calculate drainage area
-g = DrainageArea(p,g);
+if p.flood==1
+    g = DrainageAreaTopoToolbox(p,g); % Use TopoToolbox preconditioning to avoid bug causing infinite loop in TracePaths() function in Tadpole's mex flow routing codes
+else
+    g = DrainageArea(p,g);
+end
 
 % calculate slope
 S = UpwindSlope(p,g);

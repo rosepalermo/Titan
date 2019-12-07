@@ -18,7 +18,7 @@ p.dx = 125/2;                 %     p.dx             Grid spacing in the x direc
 p.dy = 125/2;                 %     p.dy             Grid spacing in the y direction (m)
 
 p.doAdaptiveTimeStep = 1;   % p.doAdaptiveTimeStep Turn adaptive time step based on Courant number on (1) or off (0). If set to off, time step is p.dtmax
-p.dtmax = 1e4;              %     p.dtmax          maximum time step (yr)
+p.dtmax = 300;%1e4;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
 
 p.tf = 1e5; %6e5;                 %     p.tf             Total time of the simulation (yr)
@@ -85,13 +85,13 @@ p.sealevel_init = 1;        %     p.sealevel_init  Initial sea level
 if p.doUniformErosion
 %     p.strength = 10;        %     p.strength       Initial strength of the bedrock
     p.strength = 1;         %     p.strength       Initial strength of the bedrock
-    p.Kcoast = 1e-4;        %     p.Kcoast         Coastal erosion rate constant (strength * damage^-1 * yr^-1)
+    p.Kcoast = 1e-2;%1e-4;        %     p.Kcoast         Coastal erosion rate constant (strength * damage^-1 * yr^-1)
 elseif p.doWaveErosion
 
 % %     p.strength = 500000000; % good for 800x800
 %     p.strength = 5000; % good for 800x800
     p.strength = 1;         %     p.strength       Initial strength of the bedrock
-    p.Kcoast = 1e-9;        %     p.Kcoast         Coastal erosion rate constant (strength * damage^-1 * yr^-1)
+    p.Kcoast = 2e-9;       %     p.Kcoast         Coastal erosion rate constant (strength * damage^-1 * yr^-1)
 else
     p.strength = 0;
 end
@@ -140,3 +140,5 @@ init = init - Zshift + p.sealevel_init;
 
 % run the model, storing the final elevation grid in solution
 solution = Tadpole(init,p);
+
+% save('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/ModelingAGU19/uniform1.mat',solution,p,init)
