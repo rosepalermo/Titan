@@ -21,7 +21,7 @@ p.doAdaptiveTimeStep = 1;   % p.doAdaptiveTimeStep Turn adaptive time step based
 p.dtmax = 300;%1e4;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
 
-p.tf = 1e5; %6e5;                 %     p.tf             Total time of the simulation (yr)
+p.tf = 3e5;                 %     p.tf             Total time of the simulation (yr)
 
 
 % ----- boundary conditions, source terms, and flow routing ---------------
@@ -50,7 +50,7 @@ p.plottype = 'elevation';             %     p.plottype       1=perspective view,
                             %
 p.doSaveOutput = 0;         %     p.SaveOutput     Save model output to a .mat file
 p.saveint = 5; %1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
-p.runname = 'testSL';%     p.runname:       Character string naming the run. If specified 
+p.runname = 'trash';        %     p.runname:       Character string naming the run. If specified 
                             %                      (and if p.saveint~=0), the parameters and elevations at each 
                             %                      save interal will be saved in a binary .MAT file called <runname>.mat
                            
@@ -78,24 +78,34 @@ p.thetac = 0;               %     p.thetac         Threshold for fluvial incisio
 
 % ---------------- coastal erosion -------------------------------                           
 
-p.doWaveErosion = 0;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
-p.doUniformErosion = 1;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
+p.doWaveErosion = 1;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
+p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
 % p.SLR = 50/p.tf;                  %     p.SLR            Rate of sea level rise (m/yr)
 p.sealevel_init = 1;        %     p.sealevel_init  Initial sea level
 if p.doUniformErosion
 %     p.strength = 10;        %     p.strength       Initial strength of the bedrock
     p.strength = 1;         %     p.strength       Initial strength of the bedrock
-    p.Kcoast = 1e-2;%1e-4;        %     p.Kcoast         Coastal erosion rate constant (strength * damage^-1 * yr^-1)
+    p.Kcoast = 1e-3;        %     p.Kcoast         Coastal erosion rate constant (damage * strength^-1 * yr^-1)
 elseif p.doWaveErosion
 
 % %     p.strength = 500000000; % good for 800x800
 %     p.strength = 5000; % good for 800x800
     p.strength = 1;         %     p.strength       Initial strength of the bedrock
-    p.Kcoast = 2e-9;       %     p.Kcoast         Coastal erosion rate constant (strength * damage^-1 * yr^-1)
+    p.Kcoast = 5.5e-8;       %     p.Kcoast         Coastal erosion rate constant (damage * strength^-1 * yr^-1)
+        % the range between 4e-8 and 5.5e-8 was hard to choose from. I
+        % chose 4e-8 because it produced a reasonable range (showing difference 
+        % between embayments and open coast) at 100m sea level (our amplitude). 
+        % Less erosion will occur below that because less of the coastline
+        % will be eroded total, but still a difference between embayment
+        % and open coast
+
 else
     p.strength = 0;
 end
-% p.sealevel_all = sinusoidal slchange
+
+% no sea level change 1, sinusoidal sea level change 0
+p.noSLR = 0;
+
 % ------------------ initial conditions -----------------------------------                           
 
 p.beta = 1.6; % 1.6;             %     p.beta           Negative slope of the power spectrum. 0 = white noise, more positive values are "redder" (more variance at longer wavelengths)
@@ -139,6 +149,13 @@ init = init - Zshift + p.sealevel_init;
 %% RUN THE MODEL %%
 
 % run the model, storing the final elevation grid in solution
-solution = Tadpole(init,p);
-
+Kf_ = [5e-6 5e-5 5e-7];%[5e-6 4.5e-6 4e-6 5.5e-6 6e-6 6.5e-6];
+folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/ModelingAGU19/';
+run = 'wave_river_tf1e5_Kf_';
+for i = 2:length(Kf_)
+    p.Kf = Kf_(i);
+    kf__ = num2str(Kf_(i));
+    p.runname = strcat(folder,run,kf__);
+    solution = Tadpole(init,p);
+end
 % save('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/ModelingAGU19/uniform1.mat',solution,p,init)

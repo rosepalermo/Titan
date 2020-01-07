@@ -5,7 +5,7 @@ function [p,g] = TadpoleRun(p,g)
 % Performs main iteration loop of Tadpole
 
 n=0;
-
+p.lastsave = 0;
 while p.t < p.tf
     
     n = n + 1;  
@@ -39,8 +39,10 @@ while p.t < p.tf
     %%%%%%%%%%%%%%%%%%%%%%%%% SAVE DATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     if p.doSaveOutput
-        if ~rem(n,p.saveint)
-            p.lastsave = n/p.saveint + 1;
+%         if ~rem(n,p.saveint)
+        if p.n == 1 | ((sign(g.SL_slope(p.n)) == -1) && (sign(g.SL_slope(p.n-1)) == 1)) % if first ts iteration or if highstand
+%             p.lastsave = n/p.saveint + 1;
+            p.lastsave = p.lastsave+1;
             g.output(:,:,p.lastsave) = g.U;
             g.t(p.lastsave) = p.t;
             g.sealevelsave(p.lastsave) = g.sealevel;

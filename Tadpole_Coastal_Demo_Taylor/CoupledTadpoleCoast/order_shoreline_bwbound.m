@@ -19,6 +19,18 @@ function [sl_cell,keepme,cells2trash] = order_shoreline_bwbound(lake);
 %               cells2trash     shoreline points that are less than 3 in
 %                               length. sl_cells(~keep me).
 
+% if the shoreline has a boundary in it...
+[shoreline_if_bound] = addidshoreline(lake,double(~lake)); % corners are part of the shoreline!
+test_sl = find(shoreline_if_bound);
+[testr,testc] = ind2sub(size(lake),test_sl);
+if any(ismember([1 size(lake,2)],[testr,testc]))
+    clearvars sl_cell;
+    sl_cell = [];
+    keepme = [];
+    cells2trash =[];
+    return;
+end
+
 
 [~,total_lakes,total_islands] = find_first_order_lakes(lake);
 land = double(~lake);
@@ -117,7 +129,6 @@ keepme = (length_cells) > 3;
 cells2trash = cell2mat(coasts(~keepme)');
 sl_cell = coasts(keepme);
 
-% test = 1;
 
 % % PLOT
 % figure
