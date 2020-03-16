@@ -6,7 +6,7 @@ g.wave_input = g.U<g.sealevel; % a meter above 0 I'm calling the coastline. afte
 
 
 % call wave erosion function, output updates U and strength
-[g.wave_output,g.strength,erodedind] = coastal_erosion(g.wave_input,1,g.Strength,p);
+[g.wave_output,g.Strength,erodedind] = coastal_erosion(g.wave_input,1,g.Strength,p);
 
 erodedind(1) = [];
 % make new subaqueous points elevation 0.5 below sea level? Talk to Andrew about what this depth

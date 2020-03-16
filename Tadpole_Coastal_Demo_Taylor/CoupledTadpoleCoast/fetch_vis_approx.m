@@ -70,13 +70,14 @@ for k = 1:length(slccw)
         % fetch & wave area & distance & cos(theta-phi)
         FetchArea{k,1}(l,1) = polyarea(V(:,1),V(:,2));
         Fetch_dist = sqrt(sum(([slccw{k}(l,1),slccw{k}(l,2)] - V).^2,2));
+        minFetch_dist = min(Fetch_dist,200);
         % Wave weighting = (F)*cosang
         weighted_fetch_dist = ([slccw{k}(l,1),slccw{k}(l,2)] - V)*nbi'./eps;
         % cos(theta - phi) = dot product of slvec and losvec
         cosang = weighted_fetch_dist./Fetch_dist;
         cosang(isnan(cosang)) = 0;
         Wavepts = [slccw{k}(l,1),slccw{k}(l,2)]+(V-[slccw{k}(l,1),slccw{k}(l,2)]).*cosang;
-%         WaveArea{k,1}(l,1) = polyarea(Wavepts(:,1),Wavepts(:,2));
+        WaveArea{k,1}(l,1) = polyarea(Wavepts(:,1),Wavepts(:,2));
         
     end
 end

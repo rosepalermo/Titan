@@ -25,36 +25,43 @@ land = ~lake;
 
         
 %% if 0, uniform erosion
-    if ~fetch_on % if no fetch, the order doesn't matter and we can calc damage.
-        [shoreline] = addidshoreline(lake,land); % corners are part of the shoreline!
-        indshoreline = find(shoreline);
-        dam = double(shoreline);
-        
-        %damage the shoreline
-%         strength(indshoreline) = strength(indshoreline)-dam(indshoreline); % This was Rose's line
-        strength(indshoreline) = strength(indshoreline)-p.dt*p.Kcoast*dam(indshoreline); % Taylor's modified line that depends on a rate constant
-
-        strength(strength<0) = 0;
-        erodedind = indshoreline(strength(indshoreline)<=0);
-        strength(erodedind) = 0;
-        erodedX = X(erodedind);
-        erodedY = Y(erodedind);
-%         erodedi = cat(2,erodedX,erodedY);
-
-if p.doStreamPower
-    strength(erodedind) = p.strength;
-end
-        
-        % change land to lake at eroded pts
-        lake(erodedind) = true;
-        land = ~lake;
-        erodedind_save = erodedind;
-%         [shoreline] = addidshoreline(lake,land);
-%         shoreline_save{ff} = find(shoreline);
-%         dam_save{ff} = dam;
-%         lake_save{ff} = lake;
-%         eroded = eroded(2:end,:);
+if ~fetch_on % if no fetch, the order doesn't matter and we can calc damage.
+    [shoreline] = addidshoreline(lake,land); % corners are part of the shoreline!
+    indshoreline = find(shoreline);
+    dam = double(shoreline);
+    
+    %damage the shoreline
+    %         strength(indshoreline) = strength(indshoreline)-dam(indshoreline); % This was Rose's line
+    strength(indshoreline) = strength(indshoreline)-p.dt*p.Kcoast*dam(indshoreline); % Taylor's modified line that depends on a rate constant
+    
+    test = p.dt*p.Kcoast*dam(indshoreline);
+    max(test)
+    disp(mean(test))
+    if max(test)>1
+        max(test)
     end
+    
+    strength(strength<0) = 0;
+    erodedind = indshoreline(strength(indshoreline)<=0);
+    strength(erodedind) = 0;
+    erodedX = X(erodedind);
+    erodedY = Y(erodedind);
+    %         erodedi = cat(2,erodedX,erodedY);
+    
+    if p.doStreamPower
+        strength(erodedind) = p.strength;
+    end
+    
+    % change land to lake at eroded pts
+    lake(erodedind) = true;
+    land = ~lake;
+    erodedind_save = erodedind;
+    %         [shoreline] = addidshoreline(lake,land);
+    %         shoreline_save{ff} = find(shoreline);
+    %         dam_save{ff} = dam;
+    %         lake_save{ff} = lake;
+    %         eroded = eroded(2:end,:);
+end
     
     %% if 1, wave erosion
     
@@ -101,7 +108,7 @@ end
             end
             disp('calculating wave')
             % calculate wave weighted (sqrt(F)*cos(theta-phi))
-            [~,WaveArea_cell] = fetch_vis_approx(fetch_sl_cells);% first is wave, second is fetch!!
+            [WaveArea_cell,~] = fetch_vis_approx(fetch_sl_cells);% first is wave, second is fetch!!
             %             [WaveArea_cell,~] = fetch_wavefield_cell(fetch_sl_cells);
             %         [WaveArea_cell] = {ones(size(fetch_sl_cells{1,1},1),1)}; % ones to test debugging with
             disp('wave calculated')
@@ -117,7 +124,12 @@ end
         dam = cell2mat(WaveArea_cell);
 %         strength(indshoreline) = strength(indshoreline) - shoreline(indshoreline).*dam; % This was Rose's line
         strength(indshoreline) = strength(indshoreline) - p.dt*p.Kcoast*shoreline(indshoreline).*dam; % Taylor's modified line that depends on a rate constant
-
+        test = p.dt*p.Kcoast*shoreline(indshoreline).*dam;
+        max(test)
+        disp(mean(test))
+        if max(test)>1
+            max(test)
+        end
 %         SHOULDNT NEED TO DO THIS ANYMORE BECAUSE NEW ORDER THE SHORELINE
 %         INCLUDES CORNERS
 %         % find corners and damage if they exist alone (not in the cells to
@@ -141,17 +153,17 @@ end
         
         strength(strength<0) = 0; % if strength is negative, make it 0 for convenience
 
-%   Find the corners and change the damage to sum corners* sqrt2/2 * wave
-%   weighting
-        [sl_nocorners] = addidshoreline_cardonly(F_lake,~F_lake);
-        corners = setdiff(find(shoreline),find(sl_nocorners));
-        cornind = ismember(indshoreline,corners);
-%         dam(cornind) = dam(cornind).*shoreline(indshoreline(cornind));
-        dam = dam.*shoreline(indshoreline);
-
-        % DAMAGE THE COASTLINE
-        strength(indshoreline) = strength(indshoreline) - shoreline(indshoreline).*dam;
-        
+% %   Find the corners and change the damage to sum corners* sqrt2/2 * wave
+% %   weighting
+%         [sl_nocorners] = addidshoreline_cardonly(F_lake,~F_lake);
+%         corners = setdiff(find(shoreline),find(sl_nocorners));
+%         cornind = ismember(indshoreline,corners);
+% %         dam(cornind) = dam(cornind).*shoreline(indshoreline(cornind));
+%         dam = dam.*shoreline(indshoreline);
+% 
+%         % DAMAGE THE COASTLINE
+%         strength(indshoreline) = strength(indshoreline) - shoreline(indshoreline).*dam;
+%         
         % find eroded points
         erodedind = indshoreline(strength(indshoreline)<=0);
         % erode points that weren't a corner and were only 2-1 cells
