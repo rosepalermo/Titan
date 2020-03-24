@@ -11,7 +11,7 @@ function [lake,strength,erodedind_save] = coastal_erosion(lake,fetch_on,strength
 x = 1:size(lake,2);
 y = 1:size(lake,1);
 [X,Y] = meshgrid(x,y);
-X = X*p.dx; Y = Y*p.dy;
+
 land = ~lake;
 % if fetch_on
 % %     strength = 10000000*double(land);
@@ -36,11 +36,11 @@ if ~fetch_on % if no fetch, the order doesn't matter and we can calc damage.
     strength(indshoreline) = strength(indshoreline)-p.dt*p.Kcoast*dam(indshoreline); % Taylor's modified line that depends on a rate constant
     
     test = p.dt*p.Kcoast*dam(indshoreline);
-%     max(test)
-%     disp(mean(test))
-%     if max(test)>1
-%         max(test)
-%     end
+    max(test)
+    disp(mean(test))
+    if max(test)>1
+        max(test)
+    end
     
     strength(strength<0) = 0;
     erodedind = indshoreline(strength(indshoreline)<=0);
@@ -126,10 +126,9 @@ end
 %         strength(indshoreline) = strength(indshoreline) - shoreline(indshoreline).*dam; % This was Rose's line
         strength(indshoreline) = strength(indshoreline) - p.dt*p.Kcoast*shoreline(indshoreline).*dam; % Taylor's modified line that depends on a rate constant
         test = p.dt*p.Kcoast*shoreline(indshoreline).*dam;
-%         max(test)
-%         disp(mean(test))
-        if max(test)>1  %if the maximum damage is greater than 1, we need the adaptive coastal time step. grid bias will be introduced otherwise.
-            p.doAdaptiveCoastalTimeStep = 1;
+        max(test)
+        disp(mean(test))
+        if max(test)>1
             max(test)
         end
 %         SHOULDNT NEED TO DO THIS ANYMORE BECAUSE NEW ORDER THE SHORELINE

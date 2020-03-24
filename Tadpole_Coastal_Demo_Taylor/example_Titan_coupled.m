@@ -18,6 +18,7 @@ p.dx = 125/2;                 %     p.dx             Grid spacing in the x direc
 p.dy = 125/2;                 %     p.dy             Grid spacing in the y direction (m)
 
 p.doAdaptiveTimeStep = 1;   % p.doAdaptiveTimeStep Turn adaptive time step based on Courant number on (1) or off (0). If set to off, time step is p.dtmax
+p.doAdaptiveCoastalTimeStep = 1;
 p.dtmax = 300;%1e4;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
 
@@ -48,7 +49,7 @@ p.doDrawPlot = 0;           %     p.doDrawPlot     Display solution as the run p
 p.plotint = 1;%100;            %     p.plotint        Plot will be redrawn every plotint iterations
 p.plottype = 'elevation';             %     p.plottype       1=perspective view, 2=drainage area map, 3=curvature map, 4=elevation map, 5=contour map, 6=shaded relief, 7=colored shaded relief
                             %
-p.doSaveOutput = 1;         %     p.SaveOutput     Save model output to a .mat file
+p.doSaveOutput = 0;         %     p.SaveOutput     Save model output to a .mat file
 p.saveint = 5; %1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
 p.runname = 'trash';        %     p.runname:       Character string naming the run. If specified 
                             %                      (and if p.saveint~=0), the parameters and elevations at each 

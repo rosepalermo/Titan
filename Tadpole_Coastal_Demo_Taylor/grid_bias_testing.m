@@ -27,6 +27,7 @@ p.Ny = 400;                 %     p.Ny             Number of grid points in y di
 p.dx = 125/2;                 %     p.dx             Grid spacing in the x direction (m)
 p.dy = 125/2;                 %     p.dy             Grid spacing in the y direction (m)
 
+p.doAdaptiveCoastalTimeStep = 1;
 p.doAdaptiveTimeStep = 1;   % p.doAdaptiveTimeStep Turn adaptive time step based on Courant number on (1) or off (0). If set to off, time step is p.dtmax
 p.dtmax = 10;%1e4;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
@@ -88,8 +89,8 @@ p.thetac = 0;               %     p.thetac         Threshold for fluvial incisio
 
 % ---------------- coastal erosion -------------------------------                           
 
-p.doWaveErosion = 0;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
-p.doUniformErosion = 1;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
+p.doWaveErosion = 1;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
+p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
 % p.SLR = 50/p.tf;                  %     p.SLR            Rate of sea level rise (m/yr)
 p.sealevel_init = 1;        %     p.sealevel_init  Initial sea level
 % if p.doUniformErosion
@@ -101,7 +102,7 @@ p.sealevel_init = 1;        %     p.sealevel_init  Initial sea level
 % else
 %     p.strength = 0;
 % end
-    p.Kcoast = 25e-3;        %     p.Kcoast         Coastal erosion rate constant (damage * strength^-1 * yr^-1)
+    p.Kcoast = 1e-12;        %     p.Kcoast         Coastal erosion rate constant (damage * strength^-1 * yr^-1)
 p.strength = 1;
 
 % no sea level change 1, sinusoidal sea level change 0
