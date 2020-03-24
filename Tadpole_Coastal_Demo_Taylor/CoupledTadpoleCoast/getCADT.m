@@ -6,6 +6,7 @@ function [adt] = getCADT(p,g,lake);
 x = 1:size(lake,2);
 y = 1:size(lake,1);
 [X,Y] = meshgrid(x,y);
+X = X*p.dx; Y = Y*p.dy;
 land = ~lake;
 
 [F_lake_all,~,~,~] = find_first_order_lakes(lake);
