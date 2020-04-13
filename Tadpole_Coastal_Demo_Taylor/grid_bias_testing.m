@@ -102,7 +102,7 @@ p.sealevel_init = 1;        %     p.sealevel_init  Initial sea level
 % else
 %     p.strength = 0;
 % end
-    p.Kcoast = 1e-12;        %     p.Kcoast         Coastal erosion rate constant (damage * strength^-1 * yr^-1)
+    p.Kcoast = 1e-11;        %     p.Kcoast         Coastal erosion rate constant (damage * strength^-1 * yr^-1)
 p.strength = 1;
 
 % no sea level change 1, sinusoidal sea level change 0

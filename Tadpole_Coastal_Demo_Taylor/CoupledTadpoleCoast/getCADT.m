@@ -33,7 +33,7 @@ for ff = 1:length(F_lake_all)
     [shoreline] = addidshoreline(lake,land);
     indshoreline = cell2mat(indshoreline);
     
-    maxdam(ff)= max(p.dt*p.Kcoast*shoreline(indshoreline).*dam)
+    maxdam(ff)= max(p.dt*p.Kcoast*shoreline(indshoreline).*dam);
     
 end
 % because damage is normalized to 1, we need as many time steps as if we
