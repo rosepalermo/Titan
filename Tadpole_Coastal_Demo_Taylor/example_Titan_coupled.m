@@ -18,7 +18,7 @@ p.dx = 125/2;                 %     p.dx             Grid spacing in the x direc
 p.dy = 125/2;                 %     p.dy             Grid spacing in the y direction (m)
 
 p.doAdaptiveTimeStep = 1;   % p.doAdaptiveTimeStep Turn adaptive time step based on Courant number on (1) or off (0). If set to off, time step is p.dtmax
-p.doAdaptiveCoastalTimeStep = 1;
+p.doAdaptiveCoastalTimeStep = 0;
 p.dtmax = 300;%1e4;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
 

@@ -35,7 +35,7 @@ if ~fetch_on % if no fetch, the order doesn't matter and we can calc damage.
     %         strength(indshoreline) = strength(indshoreline)-dam(indshoreline); % This was Rose's line
     strength(indshoreline) = strength(indshoreline)-p.dt*p.Kcoast*dam(indshoreline); % Taylor's modified line that depends on a rate constant
     
-    test = p.dt*p.Kcoast*dam(indshoreline);
+    adt = p.dt*p.Kcoast*dam(indshoreline);
 %     max(test)
 %     disp(mean(test))
 %     if max(test)>1
@@ -90,8 +90,6 @@ end
             clearvars fetch_sl_cells indshoreline WaveArea_cell
             
             %order the shoreline and islands
-%             shoreline = addidshoreline_cardonly(lake,land); %rewrite shoreline to be card only for fetch.. will damage corners separately later
-%             shoreline = addidshoreline_cardonly(F_lake,~F_lake); %rewrite shoreline to be card only for fetch.. will damage corners separately later            
             disp('ordering')
             % new order the shoreline code
             [indshoreline_ocw,~,cells2trash] = order_shoreline_bwbound(F_lake);
@@ -125,54 +123,24 @@ end
         dam = cell2mat(WaveArea_cell);
 %         strength(indshoreline) = strength(indshoreline) - shoreline(indshoreline).*dam; % This was Rose's line
         strength(indshoreline) = strength(indshoreline) - p.dt*p.Kcoast*shoreline(indshoreline).*dam; % Taylor's modified line that depends on a rate constant
-        test = p.dt*p.Kcoast*shoreline(indshoreline).*dam;
+        adt = p.dt*p.Kcoast*shoreline(indshoreline).*dam;
 %         max(test)
 %         disp(mean(test))
-        if max(test)>1  %if the maximum damage is greater than 1, we need the adaptive coastal time step. grid bias will be introduced otherwise.
+        if max(adt)>1  %if the maximum damage is greater than 1, we need the adaptive coastal time step. grid bias will be introduced otherwise.
             p.doAdaptiveCoastalTimeStep = 1;
-            max(test)
+            max(adt)
         end
-%         SHOULDNT NEED TO DO THIS ANYMORE BECAUSE NEW ORDER THE SHORELINE
-%         INCLUDES CORNERS
-%         % find corners and damage if they exist alone (not in the cells to
-%         % trash)
-        corners = setdiff(find(shoreline),indshoreline);
-        if ~isempty(cells2trash)
-            [c2t]=sub2ind(size(X),cells2trash(:,1),cells2trash(:,2)); % find the cells that arent the trash cells
-            if exist('c2t') & ~isempty(corners)
-                corners = corners(~ismember(corners,c2t));
-            end
-        end
-%         
-%         % find the mean of the damage for points next to the corners. make that
-%         % the damage for that corner
-        if ~isempty(corners)
-            corners = corners(shoreline(corners)<1.5); % if less than 1.5, only a corner. not also a side
-            [damcorn] = damagecorners(lake,corners,indshoreline,dam);
-            %         strength(indshoreline) = strength(indshoreline) - ones(length(indshoreline),1).*dam;
-            strength(corners) = strength(corners) - shoreline(corners).*damcorn;
-        end
+
         
         strength(strength<0) = 0; % if strength is negative, make it 0 for convenience
 
-% %   Find the corners and change the damage to sum corners* sqrt2/2 * wave
-% %   weighting
-%         [sl_nocorners] = addidshoreline_cardonly(F_lake,~F_lake);
-%         corners = setdiff(find(shoreline),find(sl_nocorners));
-%         cornind = ismember(indshoreline,corners);
-% %         dam(cornind) = dam(cornind).*shoreline(indshoreline(cornind));
-%         dam = dam.*shoreline(indshoreline);
-% 
-%         % DAMAGE THE COASTLINE
-%         strength(indshoreline) = strength(indshoreline) - shoreline(indshoreline).*dam;
-%         
+   
         % find eroded points
         erodedind = indshoreline(strength(indshoreline)<=0);
-        % erode points that weren't a corner and were only 2-1 cells
+        % erode points that were only 2-1 cells
         % connected because it messed up the fetch calculations..
         if ~isempty(cells2trash)
             cells2trash = sub2ind(size(lake),cells2trash(:,1),cells2trash(:,2));
-%             erodedind_12 = cells2trash(find(~ismember(cells2trash,corners)));
             erodedind =[erodedind;cells2trash];
         end
         
@@ -193,8 +161,6 @@ end
         % update shoreline
 %         [shoreline] = addidshoreline(lake,land);
 %         ordered_sl_save{ff} = fetch_sl_cells;
-%         corners_save{ff} = corners;
-%         damcorners_save{ff} = damcorn;
 %         eroded{ff} = eroded{ff}(2:end,:);
         end
     end

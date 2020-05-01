@@ -12,15 +12,15 @@ xp=P1(1);
 yp=P1(2);
 xn=P3(1);
 yn=P3(2);
-vp = [x0-xp,y0-yp];
-vn = [xn-x0,yn-y0];
+vp = [x0-xp,y0-yp]; % The vector from P1 to P2
+vn = [xn-x0,yn-y0]; % The vector from P2 to P3
 np = [vp(2),-vp(1)];
 nn = [vn(2),-vn(1)];
-np = np/sqrt(np(1)^2+np(2)^2);
-nn = nn/sqrt(nn(1)^2+nn(2)^2);
-if any(isnan(nn))
-    disp(pause)
-end
+np = np/sqrt(np(1)^2+np(2)^2); % vp rotated clockwise by 90 degrees and normalized
+nn = nn/sqrt(nn(1)^2+nn(2)^2); % vn rotated clockwise by 90 degrees and normalized
+% if any(isnan(nn))
+%     disp(pause)% This happens when P3 = P2
+% end
 % pmid = [0.5*(xp+x0),0.5*(yp+y0)];
 % nmid = [0.5*(xn+x0),0.5*(yn+y0)];
 nbi=np+nn;
@@ -32,9 +32,9 @@ if ~any(nbi) % x0,y0 is on a promontory or a zero-width inlet, so nbi == [0,0]
     
     % continue along the previous segment a distance eps
     P = [x0,y0]+eps.*vp;
-    if norm(vp) == 0
-        disp("we have a problem")
-    end
+%     if norm(vp) == 0
+%         disp("we have a problem")
+%     end
 
 else
     nbi = nbi/sqrt(nbi(1)^2+nbi(2)^2);

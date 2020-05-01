@@ -6,7 +6,7 @@ function [damcorn] = damagecorners(lake,corners,indshoreline,dam)
 
 
 
-[indxcorners,indycorners] = ind2sub(size(lake),corners);
+[indycorners,indxcorners] = ind2sub(size(lake),corners);
 if any(ismember([1,size(lake,2)],indycorners)) | any(ismember([1,size(lake,2)],indxcorners))
     damcorn = zeros(length(corners),1);
     return
