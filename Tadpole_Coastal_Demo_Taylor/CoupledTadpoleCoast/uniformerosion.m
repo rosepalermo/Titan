@@ -1,13 +1,13 @@
 function [p,g] = uniformerosion(p,g)
-
+%% ROSE MAKE AN ADAPTIVE TIMESTEP FOR UNIFORM EROSION
 % if n>1
 % g.U is the elevation
 % g.Coast_input = g.U<g.sealevel(p.n); % a meter above 0 I'm calling the coastline. after looking at a bunch of contour maps, it's close enough. Could even go to 2 m probably.
 g.Coast_input = g.U<g.sealevel; 
 % end
-
+p.dt_save = p.dt;
 % call wave erosion function, output updates U and strength
-[g.uniform_output,g.Strength,erodedind] = coastal_erosion(g.Coast_input,0,g.Strength,p);
+[g.uniform_output,g.Strength,erodedind] = coastal_erosion(g.Coast_input,0,g.Strength,p,[]);
 
 
 % make new subaqueous points elevation 0.5 below sea level? Talk to Andrew about what this depth

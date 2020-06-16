@@ -54,6 +54,10 @@ g = Source(p,g);
 if p.doWaveErosion
     [p,g] = waveerosion(p,g);
     [p,g] = BoundaryMat(p,g);
+    if isfield(p,'boundary')
+        p.tf = p.t; % end the simulation right now because waves can no longer erode (beyond the boundary of the domain)
+        return
+    end
 end
 
 if p.doUniformErosion

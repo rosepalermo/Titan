@@ -1,4 +1,4 @@
-function [sl_cell,keepme,cells2trash] = order_shoreline_bwbound(lake);
+function [sl_cell,keepme,cells2trash,p] = order_shoreline_bwbound(lake,p);
 
 % taylor_order_shoreline.m
 % Rose updated to couple with coastal damage models
@@ -28,6 +28,7 @@ if any(ismember([1 size(lake,2)],[testr,testc]))
     sl_cell = [];
     keepme = [];
     cells2trash =[];
+    p.boundary = 1;
     return;
 end
 

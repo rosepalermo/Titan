@@ -8,6 +8,8 @@ addpath('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/ModelingAGU19')
 addpath(genpath('/Users/rosepalermo/Documents/GitHub/Titan/Tadpole_Coastal_Demo_Taylor'));
 load(runname)
 
+p.doStreamPower = 0;
+
 x = p.dx*(0:p.Nx-1);
 y = p.dy*(p.Ny-1:-1:0);
 
@@ -25,6 +27,7 @@ lake = elev<sl;
 land = ~lake;
 strength = double(land);
 lake_save{1} = lake;
+strength_save{1} = strength;
 
 
 erodedind_save = {};
@@ -75,7 +78,7 @@ for i = 2:20
             max(adt)
         end
         
-        strength(strength<0) = 0; % if strength is negative, make it 0 for convenience
+%         strength(strength<0) = 0; % if strength is negative, make it 0 for convenience
 %         
         % find eroded points
         erodedind = indshoreline(strength(indshoreline)<=0);
@@ -85,10 +88,11 @@ for i = 2:20
             cells2trash = sub2ind(size(lake),cells2trash(:,1),cells2trash(:,2));
 %             erodedind_12 = cells2trash(find(~ismember(cells2trash,corners)));
             erodedind =[erodedind;cells2trash];
+            strength(cells2trash) = 0;
         end
         
         
-        strength(erodedind) = 0;
+%         strength(erodedind) = 0;
         if p.doStreamPower
             strength(erodedind) = p.strength;
         end
@@ -104,6 +108,7 @@ for i = 2:20
         
         end
     lake_save{i} = lake;
+    strength_save{i} = strength;
     fetch_save{i-1} = fetch_matrix;
     clearvars fetch_matrix
 end
@@ -117,4 +122,4 @@ for ii = 2:length(fetch_save);
     shorelinediff{ii-1} = setdiff(find(~isnan(fetch_save{ii})),find(~isnan(fetch_save{ii-1})));
 end
 
-save('fetch_for_interp_test.mat','lake_save','fetch_save','erodedind','shorelinediff')
+save('fetch_for_interp_test.mat','lake_save','fetch_save','erodedind','shorelinediff','strength_save','p')

@@ -1,4 +1,4 @@
-function [lake,strength,erodedind_save] = coastal_erosion(lake,fetch_on,strength,p)
+function [lake,strength,erodedind_save,p] = coastal_erosion(lake,fetch_on,strength,p,dam_matrix,wave_matrix)
 
 % Titan analogue damage model for coastal erosion of a lake
 % Rose Palermo 6-2019
@@ -6,164 +6,103 @@ function [lake,strength,erodedind_save] = coastal_erosion(lake,fetch_on,strength
 % where 1 is lake and 0 is land. takes "lake" and either preforms uniform
 % erosion on the shoreline or finds first order lakes
 
+% if the shoreline is on the boundary, we aren't going to do coastal
+% erosion because it doesn't work for waves (p.boundary is defined in
+% ordershoreline_bw when the shoreline is on the boundary
+if isfield(p,'boundary')
+    erodedind_save = [];
+    return
+end
 
 % initialize lake, land
-x = 1:size(lake,2);
-y = 1:size(lake,1);
-[X,Y] = meshgrid(x,y);
-X = X*p.dx; Y = Y*p.dy;
 land = ~lake;
-% if fetch_on
-% %     strength = 10000000*double(land);
-%     strength = 50000*double(land);
-% else
-%     strength = 10*double(land);
-% end
 
-% initialize save variable
-% shoreline_save = cell(1,1);
-
-
+if fetch_on
+    % calculate damage matrix -- wave
+    if sum(dam_matrix,'all')==0 % if the wave matrix doesn't already exist
+        [dam_matrix,wave_matrix,ind_sl_old,cells2trash,p] = get_dam_wave(lake,p);
         
-%% if 0, uniform erosion
-if ~fetch_on % if no fetch, the order doesn't matter and we can calc damage.
-    [shoreline] = addidshoreline(lake,land); % corners are part of the shoreline!
-    indshoreline = find(shoreline);
-    dam = double(shoreline);
-    
-    %damage the shoreline
-    %         strength(indshoreline) = strength(indshoreline)-dam(indshoreline); % This was Rose's line
-    strength(indshoreline) = strength(indshoreline)-p.dt*p.Kcoast*dam(indshoreline); % Taylor's modified line that depends on a rate constant
-    
-    adt = p.dt*p.Kcoast*dam(indshoreline);
-%     max(test)
-%     disp(mean(test))
-%     if max(test)>1
-%         max(test)
-%     end
-    
-    strength(strength<0) = 0;
-    erodedind = indshoreline(strength(indshoreline)<=0);
-    strength(erodedind) = 0;
-    erodedX = X(erodedind);
-    erodedY = Y(erodedind);
-    %         erodedi = cat(2,erodedX,erodedY);
-    
-    if p.doStreamPower
-        strength(erodedind) = p.strength;
+        % if it hit a boundary, quit
+        if isfield(p,'boundary')
+            erodedind_save = [];
+            return
+        end
     end
-    
-    % change land to lake at eroded pts
-    lake(erodedind) = true;
-    land = ~lake;
-    erodedind_save = erodedind;
-    %         [shoreline] = addidshoreline(lake,land);
-    %         shoreline_save{ff} = find(shoreline);
-    %         dam_save{ff} = dam;
-    %         lake_save{ff} = lake;
-    %         eroded = eroded(2:end,:);
+else
+    % calculate damage matrix -- uniform
+    [dam_matrix,ind_sl_old] = get_dam_uniform(lake,p);
 end
+
+% avoid grid bias with adaptive timestep if needed
+if max(dam_matrix,[],'all')>1
+    p.doAdaptiveCoastalTimeStep = 1;
+end
+% damage the shoreline
+strength = strength - dam_matrix;
+
+lake(strength<=0) = 1;
+land = ~lake;
+erodedind = ind_sl_old(strength(ind_sl_old)==0);
+
+% find the points that failed during this time step and erode the
+% neighbors for the amount of time since the coastline points failed
+[sum_dam_excess,ind_excess,time_excess] = calc_excess_dam(strength,dam_matrix,p);
+
+while sum_dam_excess > 0
+    if any(any(isinf(time_excess)))
+    end
+    %update the lake & shoreline & find new sl indices
+    [shoreline_new] = addidshoreline(lake,land); % corners and edges
+    ind_sl_new = find(shoreline_new);
+    ind_new = ind_sl_new(~ismember(ind_sl_new,ind_sl_old));
     
-    %% if 1, wave erosion
+    %     lake(ind_excess) = 1;
     
+    % make strength 0 for excess that I'm about to distribute
+    strength(find(strength<0)) = 0;
+    % damage the neighbors for the amount of time after the cell failed
+    
+    % find max time excess of 8 connected neighbors
+    time_dam_excess = find_max_excess_time(ind_excess,time_excess,ind_new,lake);
     if fetch_on
-        % if fetch_on 
-       
-        
-        % loop over # of objects
-        % find number of first order lakes
-%         [L,fol] = find_first_order_lakes(lake_tile);
-        [F_lake_all,~,~,~] = find_first_order_lakes(lake);
-        % remove first order lakes that touch the boundaries
-%         boundaries = [L(1,:)';L(end,:)';L(:,1);L(:,end)];
-%         boundaries = boundaries(boundaries>0);
-%         boundaries = unique(boundaries);
-        erodedind_save = [NaN];
-        for ff = 1:length(F_lake_all)
-            F_lake = F_lake_all{ff};
-            if length(find(F_lake))<2
-                continue
-            end
-%             F_lake = (L == fol(ff));
-% if (exist('erodedind','var')) | (ff==1)
-            disp('fetch')
-            clearvars fetch_sl_cells indshoreline WaveArea_cell
-            
-            %order the shoreline and islands
-            disp('ordering')
-            % new order the shoreline code
-            [indshoreline_ocw,~,cells2trash] = order_shoreline_bwbound(F_lake);
-            if isempty(indshoreline_ocw) % stops eroding when shoreline hits the boundary
-                break
-            end
-            % my original order the shoreline code
-%             [indshoreline_ocw,cells2trash] = order_cw_lastpoint(F_lake,shoreline); % ccw ordered ind = indshoreline
-%             keepme = 1:length(indshoreline_ocw);
-            disp('ordered')
-            for l = 1: length(indshoreline_ocw)
-                indshoreline{l,1} = sub2ind(size(X),indshoreline_ocw{l}(:,1),indshoreline_ocw{l}(:,2));
-                fetch_sl_cells{l,1}(:,1) = X(indshoreline{l,1});
-                fetch_sl_cells{l,1}(:,2) = Y(indshoreline{l,1});
-            end
-            disp('calculating wave')
-            % calculate wave weighted (sqrt(F)*cos(theta-phi))
-            [WaveArea_cell,~] = fetch_vis_approx(fetch_sl_cells);% first is wave, second is fetch!!
-            %             [WaveArea_cell,~] = fetch_wavefield_cell(fetch_sl_cells);
-            %         [WaveArea_cell] = {ones(size(fetch_sl_cells{1,1},1),1)}; % ones to test debugging with
-            disp('wave calculated')
-            clearvars erodedind
-%         end
-        
-        % go back to normal lake, not lake tile for damage?
-        
-        % Damage the shoreline
-        indshoreline = cell2mat(indshoreline);
-        %         [shoreline] = addidshoreline_cardonly(lake,land); % edges only
-        [shoreline] = addidshoreline(lake,land); % corners and edges
-        dam = cell2mat(WaveArea_cell);
-%         strength(indshoreline) = strength(indshoreline) - shoreline(indshoreline).*dam; % This was Rose's line
-        strength(indshoreline) = strength(indshoreline) - p.dt*p.Kcoast*shoreline(indshoreline).*dam; % Taylor's modified line that depends on a rate constant
-        adt = p.dt*p.Kcoast*shoreline(indshoreline).*dam;
-%         max(test)
-%         disp(mean(test))
-        if max(adt)>1  %if the maximum damage is greater than 1, we need the adaptive coastal time step. grid bias will be introduced otherwise.
-            p.doAdaptiveCoastalTimeStep = 1;
-            max(adt)
-        end
-
-        
-        strength(strength<0) = 0; % if strength is negative, make it 0 for convenience
-
-   
-        % find eroded points
-        erodedind = indshoreline(strength(indshoreline)<=0);
-        % erode points that were only 2-1 cells
-        % connected because it messed up the fetch calculations..
-        if ~isempty(cells2trash)
-            cells2trash = sub2ind(size(lake),cells2trash(:,1),cells2trash(:,2));
-            erodedind =[erodedind;cells2trash];
-        end
-        
-        
-        strength(erodedind) = 0;
-        if p.doStreamPower
-            strength(erodedind) = p.strength;
-        end
-        erodedX = X(erodedind);
-        erodedY = Y(erodedind);
-        erodedi = cat(2,erodedX,erodedY);
-%         eroded{ff} = cat(1,eroded,erodedi);
-        
-        % change land to lake at eroded pts
-        lake(erodedind) = true;
-        erodedind_save = [erodedind_save;erodedind];
-%         land = ~lake;
-        % update shoreline
-%         [shoreline] = addidshoreline(lake,land);
-%         ordered_sl_save{ff} = fetch_sl_cells;
-%         eroded{ff} = eroded{ff}(2:end,:);
-        end
+        % interpolate wave_weighting for the neighboring cells
+        wave_weighting_interp = interp_fetch_for_ind(lake,ind_new,wave_matrix);
+        % damage for max excess time of 8 con neighbor
+        dam_matrix(ind_new) = time_dam_excess.*p.Kcoast.*shoreline_new(ind_new).*wave_weighting_interp;
+    else
+        % damage for max excess time of 8 con neighbor
+        dam_matrix(ind_new) = time_dam_excess.*p.Kcoast.*shoreline_new(ind_new);
     end
     
-% lake_tile = lake_tile(ceil(size(lake_tile,2)/6):4*floor(size(lake_tile,1)/6),ceil(size(lake_tile,2)/6):4*floor(size(lake_tile,1)/6));
+    % damage shoreline
+    
+    strength(ind_new) = strength(ind_new) - dam_matrix(ind_new);
+
+    % UPDATE LAKE
+    lake(strength<=0) = 1;
+    land = ~lake;
+    erodedind = [erodedind;ind_new(strength(ind_new)==0)];
+    % recalculate sum of excess damage (if the neighboring cells erode,
+    % then the time will need to pass on to their neighbors in the next loop)
+    % end
+    [sum_dam_excess,ind_excess,time_excess] = calc_excess_dam(strength,dam_matrix,p);
+end
+
+if exist('cells2trash') && ~isempty(cells2trash)
+    cells2trash = sub2ind(size(lake),cells2trash(:,1),cells2trash(:,2));
+    erodedind =[erodedind;cells2trash];
+    strength(cells2trash) = 0;
+end
+
+
+
+if p.doStreamPower % if doing streampower, return strength to IC to represent strength of underlying rock.
+    strength(erodedind) = p.strength;
+end
+
+% change land to lake at eroded pts
+lake(erodedind) = true;
+erodedind_save = erodedind;
+
+
 end

@@ -18,11 +18,11 @@ p.dx = 125/2;                 %     p.dx             Grid spacing in the x direc
 p.dy = 125/2;                 %     p.dy             Grid spacing in the y direction (m)
 
 p.doAdaptiveTimeStep = 1;   % p.doAdaptiveTimeStep Turn adaptive time step based on Courant number on (1) or off (0). If set to off, time step is p.dtmax
-p.doAdaptiveCoastalTimeStep = 0;
+p.doAdaptiveCoastalTimeStep = 1;
 p.dtmax = 300;%1e4;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
 
-p.tf = 3e5;                 %     p.tf             Total time of the simulation (yr)
+p.tf = 3e10;                 %     p.tf             Total time of the simulation (yr)
 
 
 % ----- boundary conditions, source terms, and flow routing ---------------
@@ -62,13 +62,13 @@ p.runname = 'trash';        %     p.runname:       Character string naming the r
 p.doDiffusion = 0;          %     p.doDiffusion    Turn hillslope diffusion on (1) or off (0)
 p.D = 0.005;                %     p.D              Hillslope diffusivity (m^2/yr)
                             %
-p.doLandslides = 1;         %     p.doLandslides   Turn landslides on (1) or off (0)
+p.doLandslides = 0;         %     p.doLandslides   Turn landslides on (1) or off (0)
 p.Sc = 0.6;                 %     p.Sc             Critical slope (m/m)
 
 
 % ---------------- bedrock channel incision -------------------------------                           
 
-p.doStreamPower = 1;        %     p.doStreamPower  Turn bedrock channel incision on (1) or off (0)
+p.doStreamPower = 0;        %     p.doStreamPower  Turn bedrock channel incision on (1) or off (0)
 p.doChannelDiffusion = 0;   %     p.doChannelDiffusion Turn diffusion in channels on (1) or off (0)
 p.Kf = 1e-5; % 5e-6;                %     p.Kf             Coefficient in stream power incision law (kg m^(1+2m) yr^-2)
 p.m = 0.5;                  %     p.m              Drainage area exponent in stream power law
@@ -79,20 +79,17 @@ p.thetac = 0;               %     p.thetac         Threshold for fluvial incisio
 
 % ---------------- coastal erosion -------------------------------                           
 
-p.doWaveErosion = 1;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
-p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
+p.doWaveErosion = 0;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
+p.doUniformErosion = 1;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
 % p.SLR = 50/p.tf;                  %     p.SLR            Rate of sea level rise (m/yr)
 p.sealevel_init = 1;        %     p.sealevel_init  Initial sea level
 if p.doUniformErosion
-%     p.strength = 10;        %     p.strength       Initial strength of the bedrock
     p.strength = 1;         %     p.strength       Initial strength of the bedrock
-    p.Kcoast = 1e-3;        %     p.Kcoast         Coastal erosion rate constant (damage * strength^-1 * yr^-1)
+    p.Kcoast = 1e-4;        %     p.Kcoast         Coastal erosion rate constant (damage * strength^-1 * yr^-1)
 elseif p.doWaveErosion
 
-% %     p.strength = 500000000; % good for 800x800
-%     p.strength = 5000; % good for 800x800
     p.strength = 1;         %     p.strength       Initial strength of the bedrock
-    p.Kcoast = 1/p.dtmax/((p.Nx*p.dx).^2)/4; % maximum damage that could occur on an island that sees the wohle domain
+    p.Kcoast = 1.3e-12;     %1/p.dtmax/((p.Nx*p.dx).^2)/4; % maximum damage that could occur on an island that sees the whole domain
     %               5.5e-8;       %     p.Kcoast         Coastal erosion rate constant (damage * strength^-1 * yr^-1)
         % the range between 4e-8 and 5.5e-8 was hard to choose from. I
         % chose 4e-8 because it produced a reasonable range (showing difference 
@@ -106,7 +103,7 @@ else
 end
 
 % no sea level change 1, sinusoidal sea level change 0
-p.noSLR = 0;
+p.noSLR = 1;
 
 % ------------------ initial conditions -----------------------------------                           
 
@@ -138,8 +135,8 @@ init = init - Zshift + p.sealevel_init;
 % p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
 
 %test circle
-% [init] = test_circle(p);
-% p.F = zeros(size(init));
+[init] = 10*test_circle(p);
+p.F = zeros(size(init));
 % p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
 
 % make lowest 10% of elevations fixed points
