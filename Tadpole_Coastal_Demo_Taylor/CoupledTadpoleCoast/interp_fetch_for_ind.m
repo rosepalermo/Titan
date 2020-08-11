@@ -6,7 +6,7 @@ x = 1:length(lake);
 y = 1:length(lake);
 [X,Y] = meshgrid(x,y);
 
-[yind,xind] = ind2sub(size(lake),ind_calc);
+[xind,yind] = ind2sub(size(lake),ind_calc);
 
 F_natural = scatteredInterpolant(X(~isnan(wave_matrix)),Y(~isnan(wave_matrix)),wave_matrix(~isnan(wave_matrix)),'natural');
 wave_interp = F_natural(xind,yind);

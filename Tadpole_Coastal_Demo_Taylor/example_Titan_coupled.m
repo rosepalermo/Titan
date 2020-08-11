@@ -8,6 +8,8 @@ clear
 folder = fileparts(which('example_Titan_coupled.m'));
 addpath(genpath(folder));
 
+init_circle =0;
+init_square = 0;
 %% SET PARAMETERS %%
 
 % --------------- space and time resolution ------------------------------- 
@@ -19,10 +21,10 @@ p.dy = 125/2;                 %     p.dy             Grid spacing in the y direc
 
 p.doAdaptiveTimeStep = 1;   % p.doAdaptiveTimeStep Turn adaptive time step based on Courant number on (1) or off (0). If set to off, time step is p.dtmax
 p.doAdaptiveCoastalTimeStep = 1;
-p.dtmax = 300;%1e4;              %     p.dtmax          maximum time step (yr)
+p.dtmax = 100;%1e4;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
 
-p.tf = 3e10;                 %     p.tf             Total time of the simulation (yr)
+p.tf = 1041;                 %     p.tf             Total time of the simulation (yr)
 
 
 % ----- boundary conditions, source terms, and flow routing ---------------
@@ -50,8 +52,8 @@ p.plotint = 1;%100;            %     p.plotint        Plot will be redrawn every
 p.plottype = 'elevation';             %     p.plottype       1=perspective view, 2=drainage area map, 3=curvature map, 4=elevation map, 5=contour map, 6=shaded relief, 7=colored shaded relief
                             %
 p.doSaveOutput = 0;         %     p.SaveOutput     Save model output to a .mat file
-p.saveint = 5; %1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
-p.runname = 'trash';        %     p.runname:       Character string naming the run. If specified 
+p.saveint = 100; %1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
+% p.runname = 'trash';        %     p.runname:       Character string naming the run. If specified 
                             %                      (and if p.saveint~=0), the parameters and elevations at each 
                             %                      save interal will be saved in a binary .MAT file called <runname>.mat
                            
@@ -79,16 +81,18 @@ p.thetac = 0;               %     p.thetac         Threshold for fluvial incisio
 
 % ---------------- coastal erosion -------------------------------                           
 
-p.doWaveErosion = 0;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
-p.doUniformErosion = 1;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
+p.doWaveErosion = 1;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
+p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
+p.So = 1;
+p.dxo = 100;
 % p.SLR = 50/p.tf;                  %     p.SLR            Rate of sea level rise (m/yr)
 p.sealevel_init = 1;        %     p.sealevel_init  Initial sea level
 if p.doUniformErosion
-    p.strength = 1;         %     p.strength       Initial strength of the bedrock
+    p.strength = p.So*p.dx/p.dxo;         %     p.strength       Initial strength of the bedrock
     p.Kcoast = 1e-4;        %     p.Kcoast         Coastal erosion rate constant (damage * strength^-1 * yr^-1)
 elseif p.doWaveErosion
 
-    p.strength = 1;         %     p.strength       Initial strength of the bedrock
+    p.strength = p.So*p.dx/p.dxo;         %     p.strength       Initial strength of the bedrock
     p.Kcoast = 1.3e-12;     %1/p.dtmax/((p.Nx*p.dx).^2)/4; % maximum damage that could occur on an island that sees the whole domain
     %               5.5e-8;       %     p.Kcoast         Coastal erosion rate constant (damage * strength^-1 * yr^-1)
         % the range between 4e-8 and 5.5e-8 was hard to choose from. I
@@ -119,42 +123,49 @@ p.periodic = 1;             %     p.periodic       Elevations will be periodic a
 % initgaus = get_gaussian_boundary([800 800], 0.3, 10);
 % init = (initgaus + noise);
 rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the noise surface
-init = get_IC(p,rfactor);
-
-% adjust the elevations so pctwet % of the domain is below initial SL
-pctwet = 10;
-Zshift = prctile(init(:),pctwet);
-init = init - Zshift + p.sealevel_init;
-
+[init,depression,p] = get_IC(p,rfactor);
 
 % set fixed points according to initial sea level. Note that p.F will need
 % to be updated each time step according to changes in elevations,
 % coastal positions, and sea level. --> No, that is what g.C is for (that's
 % why it's a "grid" in g and p.F is a parameter in F). 
 
-% p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
+p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
 
 %test circle
-[init] = 10*test_circle(p);
-p.F = zeros(size(init));
-% p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
-
-% make lowest 10% of elevations fixed points
+if init_circle
+    [init,p] = test_circle(p);
+    p.strength = 1;
+    p.F = zeros(size(init));
+    p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
+elseif init_square
+    [init,p] = test_square(p);
+    p.strength = 1;
+    p.F = zeros(size(init));
+    p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
+    p.So = 1;
+    p.dxo =0.05;
+    p.Ao = 1000;
+end
+% % make lowest 10% of elevations fixed points
 % SL = prctile(init(:),10);
 % init = init - SL;
 % % % init(init < 0) = 0; 
-% p.F(init <= 0) = 1;
+
 
 %% RUN THE MODEL %%
 
 % run the model, storing the final elevation grid in solution
-Kf_ = [5e-10 5e-8 5e-6];% 5e-5 5e-7];%[5e-6 4.5e-6 4e-6 5.5e-6 6e-6 6.5e-6];
-folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/River_and_wave_3_20/';
-run = 'wave_river_tf1e5_Kf_';
-for i = 1:1%:length(Kf_)
-    p.Kf = Kf_(i);
-    kf__ = num2str(Kf_(i));
-    p.runname = strcat(folder,run,kf__);
+% Kf_ = [5e-10 5e-8 5e-6]; % rivers
+Kc_ = [1e-4];% 1.5e-4 1.5e-3]; % uniform
+% Kc_ = [1e-12];% 5e-13 2e-13];
+% Kc_ = 1.5e-8;%for circle, wave p.Kcoast = 1.5e-8
+
+p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/squaretest/';
+p.run = 'wave_Kc';
+for i = 1:length(Kc_)
+    p.Kcoast = Kc_(i);
+    p.run2 = strrep(num2str(Kc_(i)),'.','_');
+    p.runname = strcat(p.folder,p.run,p.run2);
     solution = Tadpole(init,p);
 end
-% save('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/ModelingAGU19/uniform1.mat',solution,p,init)

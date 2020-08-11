@@ -1,9 +1,8 @@
-function [init,p] = test_circle(p);
+function [init,p] = test_square(p);
 
-theta = 0 : 0.1 : 2*pi;
-radius = 5;
-lakex = radius * cos(theta);
-lakey = radius * sin(theta);
+side_length = 10;
+lakex = [linspace(0,side_length,100) side_length*ones(1,100) linspace(side_length,0,100) zeros(1,100)];
+lakey = [zeros(1,100) linspace(0,side_length,100) side_length*ones(1,100) linspace(side_length,0,100)];
 
 eps = 50;
 dx = 0.05; dy = 0.05;

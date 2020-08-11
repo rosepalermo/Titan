@@ -20,7 +20,7 @@ if p.doSaveOutput % if we're saving results
     
 %     p = rmfield (p,'fighandle');
     
-    save(p.runname, '-v7.3', 'p', 't', 'output', 'sealevel');
+    save(p.runname, '-v7.3', 'p', 't', 'output', 'sealevel', 'g');
 
     % take a snapshot of the final topography and save it as an image
     Snapshot(p,g);

@@ -1,4 +1,4 @@
-function [lake,strength,erodedind_save,p] = coastal_erosion(lake,fetch_on,strength,p,dam_matrix,wave_matrix)
+function [lake,strength,p] = coastal_erosion(lake,fetch_on,strength,p,dam_matrix,wave_matrix,cells2trash)
 
 % Titan analogue damage model for coastal erosion of a lake
 % Rose Palermo 6-2019
@@ -10,7 +10,6 @@ function [lake,strength,erodedind_save,p] = coastal_erosion(lake,fetch_on,streng
 % erosion because it doesn't work for waves (p.boundary is defined in
 % ordershoreline_bw when the shoreline is on the boundary
 if isfield(p,'boundary')
-    erodedind_save = [];
     return
 end
 
@@ -27,6 +26,12 @@ if fetch_on
             erodedind_save = [];
             return
         end
+        
+    else
+        [shoreline] = addidshoreline(lake,land); % corners and edges
+        ind_sl_old = find(shoreline);
+%         ind_sl_old = get_ordered_sl(lake,p); % don't need the ordered
+%         shoreline anymore if we already have the damage
     end
 else
     % calculate damage matrix -- uniform
@@ -40,9 +45,9 @@ end
 % damage the shoreline
 strength = strength - dam_matrix;
 
-lake(strength<=0) = 1;
+lake(find(strength<=0)) = 1;
 land = ~lake;
-erodedind = ind_sl_old(strength(ind_sl_old)==0);
+erodedind = ind_sl_old(find(strength(ind_sl_old)<=0));
 
 % find the points that failed during this time step and erode the
 % neighbors for the amount of time since the coastline points failed
@@ -63,7 +68,7 @@ while sum_dam_excess > 0
     % damage the neighbors for the amount of time after the cell failed
     
     % find max time excess of 8 connected neighbors
-    time_dam_excess = find_max_excess_time(ind_excess,time_excess,ind_new,lake);
+    [time_dam_excess,p] = find_max_excess_time(time_excess,ind_new,lake,p);
     if fetch_on
         % interpolate wave_weighting for the neighboring cells
         wave_weighting_interp = interp_fetch_for_ind(lake,ind_new,wave_matrix);
@@ -79,9 +84,10 @@ while sum_dam_excess > 0
     strength(ind_new) = strength(ind_new) - dam_matrix(ind_new);
 
     % UPDATE LAKE
-    lake(strength<=0) = 1;
+    lake(find(strength<=0)) = 1;
     land = ~lake;
-    erodedind = [erodedind;ind_new(strength(ind_new)==0)];
+    ind_sl_old = ind_sl_new; % update the old shoreline
+    erodedind = [erodedind;ind_new(strength(ind_new)<=0)];
     % recalculate sum of excess damage (if the neighboring cells erode,
     % then the time will need to pass on to their neighbors in the next loop)
     % end
@@ -97,12 +103,11 @@ end
 
 
 if p.doStreamPower % if doing streampower, return strength to IC to represent strength of underlying rock.
-    strength(erodedind) = p.strength;
+    strength(find(strength<=0)) = p.strength;
 end
 
 % change land to lake at eroded pts
 lake(erodedind) = true;
-erodedind_save = erodedind;
 
 
 end

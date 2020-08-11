@@ -1,4 +1,4 @@
-function [init] = get_IC(p,rfactor)
+function [init,depression,p] = get_IC(p,rfactor)
 
 %inputs initial matrix p and outputs initial conditions for coupled tadpole
 % and coastal erosion simulation
@@ -35,6 +35,20 @@ depression = -1 * depth * Hann2D(ones(size(noise))); % this has a max of zero an
 
 % add the depression to the noise to create the initial condition.
 init = depression + noise;
+
+% adjust the elevations so pctwet % of the domain is below initial SL
+pctwet = 10;
+Zshift = prctile(init(:),pctwet);
+init = init - Zshift + p.sealevel_init;
+depression = depression -Zshift + p.sealevel_init;
+
+%% ROSE you need to figure out the p.Ao better!!
+% % find 10th percentile elevation of depression
+% med_dep = prctile(depression(:),pctwet);
+% a0_matrix = (depression<=med_dep);
+% [indshoreline_ordered] = get_ordered_sl(a0_matrix,p);
+% [x,y] = ind2sub(size(depression),indshoreline_ordered);
+% p.Ao = polyarea(x,y).*p.dx.*p.dy;
 
 % A = diag(2*ones(100,1)) + diag(-1*ones(99,1),-1) + diag(-1*ones(99,1),1);
 % plot(.1*mvnrnd(zeros(10,100), inv(A))')

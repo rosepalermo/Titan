@@ -61,7 +61,7 @@ shorelinecorn(2:end,2:end) = shorelinecorn(2:end,2:end) + (land(2:end,2:end) & e
 shorelinecorn(1:end-1,2:end) = shorelinecorn(1:end-1,2:end) + (land(1:end-1,2:end) & edgebr); %is land and bottom right boundary of lake?
 shorelinecorn(2:end,1:end-1) = shorelinecorn(2:end,1:end-1) + (land(2:end,1:end-1) & edgebr); % is land and top left boundary of lake?
 
-shoreline = shorelinecard + shorelinecorn./sqrt(2);
+shoreline = (shorelinecard + shorelinecorn./sqrt(2))./(1+sqrt(2)); % divided everything by 1+sqrt(2) so that when the shoreline is straight, the weighting factor is 1 (1 side and two corners)
 
 
 % figure()

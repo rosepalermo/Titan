@@ -1,4 +1,4 @@
-function [dam_matrix,indshoreline] = get_dam_uniform(lake,p)
+function [dam_matrix, indshoreline] = get_dam_uniform(lake,p)
 % initialize dam matrix
 dam_matrix = zeros(size(lake));
 
@@ -10,7 +10,7 @@ indshoreline = find(shoreline);
 uniform_weight = double(shoreline);
 
 %calc damage matrix for uniform erosion
-dam = p.dt*p.Kcoast*uniform_weight(indshoreline);
+dam = p.dt*p.Kcoast*uniform_weight(indshoreline)*p.So./p.dxo;
 dam_matrix(indshoreline) = dam;
 
 end
