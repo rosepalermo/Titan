@@ -13,6 +13,7 @@ if isfield(p,'boundary')
     return
 end
 
+    
 % initialize lake, land
 land = ~lake;
 
@@ -71,12 +72,12 @@ while sum_dam_excess > 0
     [time_dam_excess,p] = find_max_excess_time(time_excess,ind_new,lake,p);
     if fetch_on
         % interpolate wave_weighting for the neighboring cells
-        wave_weighting_interp = interp_fetch_for_ind(lake,ind_new,wave_matrix);
+        wave_weighting_interp = interp_fetch_for_ind(lake,ind_new,wave_matrix); % this already includes
         % damage for max excess time of 8 con neighbor
-        dam_matrix(ind_new) = time_dam_excess.*p.Kcoast.*shoreline_new(ind_new).*wave_weighting_interp;
+        dam_matrix(ind_new) = time_dam_excess.*p.Kwave.*shoreline_new(ind_new)*p.So./p.dxo.*wave_weighting_interp;
     else
         % damage for max excess time of 8 con neighbor
-        dam_matrix(ind_new) = time_dam_excess.*p.Kcoast.*shoreline_new(ind_new);
+        dam_matrix(ind_new) = time_dam_excess.*p.Kuniform.*shoreline_new(ind_new)*p.So./p.dxo;
     end
     
     % damage shoreline

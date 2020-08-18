@@ -14,6 +14,10 @@ if p.doAdaptiveCoastalTimeStep
     [adt,dam_matrix,wave_matrix,cells2trash,p] = getCADT_wave(p,g.wave_input);
     p.dt = p.dt_save./adt; %adaptive time step
     
+%     if p.t> 1100
+%         disp('testing')
+%     end
+    
     while i<adt
         i = i+1;    
         if i == 1

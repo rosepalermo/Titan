@@ -54,7 +54,7 @@ for ff = 1:length(F_lake_all)
     wave_weighting = cell2mat(WaveArea_cell);
     wave_weighting = cell2mat(WaveArea_cell)./p.Ao;
     wave_weight_matrix(indshoreline_ordered) = wave_weighting;
-    dam = p.dt*p.Kcoast*shoreline(indshoreline_ordered).*wave_weighting*p.So./p.dxo;
+    dam = p.dt*p.Kwave*shoreline(indshoreline_ordered).*wave_weighting*p.So./p.dxo;
     dam_matrix(indshoreline_ordered) = dam_matrix(indshoreline_ordered)+dam; % have to do this because if a shoreline cell is an island on the big one and has a second order lake in it, we don't want the damage from the second order lake to be the only damage it receives. need to add up damage from both sides.
     
     

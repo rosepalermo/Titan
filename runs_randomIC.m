@@ -8,10 +8,6 @@ clear
 folder = fileparts(which('example_Titan_coupled.m'));
 addpath(genpath(folder));
 
-init_circle =0;
-init_square = 0;
-rand_IC = 0;
-river_IC =1;
 %% SET PARAMETERS %%
 
 % --------------- space and time resolution ------------------------------- 
@@ -26,7 +22,7 @@ p.doAdaptiveCoastalTimeStep = 1;
 p.dtmax = 100;%1e4;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
 
-% p.tf = 1e5;                 %     p.tf             Total time of the simulation (yr)
+p.tf = 1e4;                 %     p.tf             Total time of the simulation (yr)
 
 
 % ----- boundary conditions, source terms, and flow routing ---------------
@@ -121,56 +117,32 @@ p.periodic = 1;             %     p.periodic       Elevations will be periodic a
 %% CREATE INITIAL SURFACE %%
 
 % noise = RedNoise(p.Ny,p.Nx,p.beta,p.variance,p.periodic);
-if rand_IC
-    % initgaus = get_gaussian_boundary([800 800], 0.3, 10);
-    % init = (initgaus + noise);
-    rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the noise surface
-    [init,depression,p] = get_IC(p,rfactor);
-    
-    % set fixed points according to initial sea level. Note that p.F will need
-    % to be updated each time step according to changes in elevations,
-    % coastal positions, and sea level. --> No, that is what g.C is for (that's
-    % why it's a "grid" in g and p.F is a parameter in F).
-    
-    p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
-    p.Ao = 8.9298e+07;
-elseif river_IC
-    load('riverIC.mat')
-    init = riverIC;
-    p.Ao = 8.9298e+07;    
-%test circle
-elseif init_circle
-    [init,p] = test_circle(p);
-    p.strength = 1;
-    p.F = zeros(size(init));
-    p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
-elseif init_square
-    [init,p] = test_square(p);
-    p.strength = 1;
-    p.F = zeros(size(init));
-    p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
-    p.So = 1;
-    p.dxo =0.05;
-    p.Ao = 1000;
-end
-% % make lowest 10% of elevations fixed points
-% SL = prctile(init(:),10);
-% init = init - SL;
-% % % init(init < 0) = 0; 
+
+% initgaus = get_gaussian_boundary([800 800], 0.3, 10);
+% init = (initgaus + noise);
+rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the noise surface
+[init,depression,p] = get_IC(p,rfactor);
+
+% set fixed points according to initial sea level. Note that p.F will need
+% to be updated each time step according to changes in elevations,
+% coastal positions, and sea level. --> No, that is what g.C is for (that's
+% why it's a "grid" in g and p.F is a parameter in F). 
+
+p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
+
 
 
 %% RUN THE MODEL %%
 
 % run the model, storing the final elevation grid in solution
 % Kf_ = [5e-10 5e-8 5e-6]; % rivers
-Kc_ = [1e-4 1.5e-4 1.5e-3]; % uniform/wave
-% Kc_ = [1e-4; 1e-3; 1e-2];% 5e-13 2e-13];
+% Kc_ = [1e-4];% 1.5e-4 1.5e-3]; % uniform
+Kc_ = [1e-4; 1e-3; 1e-2];% 5e-13 2e-13];
 % Kc_ = 1.5e-8*1000;%for circle, wave p.Kcoast = 1.5e-8
-% Kc_ = p.Kf;
-p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/riverIC/';
-p.run = 'wave_Kf';
+
+p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/';
+p.run = 'wave_Kc';
 for i = 1:length(Kc_)
-    p.tf = 1e5;
     tic
     if p.doUniformErosion
         p.Kuniform = Kc_(i);

@@ -83,8 +83,8 @@ p.thetac = 0;               %     p.thetac         Threshold for fluvial incisio
 
 % ---------------- coastal erosion -------------------------------                           
 
-p.doWaveErosion = 1;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
-p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
+p.doWaveErosion = 0;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
+p.doUniformErosion = 1;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
 p.So = 1;
 p.dxo = 100;
 % p.SLR = 50/p.tf;                  %     p.SLR            Rate of sea level rise (m/yr)
@@ -167,8 +167,10 @@ Kc_ = [1e-4 1.5e-4 1.5e-3]; % uniform/wave
 % Kc_ = [1e-4; 1e-3; 1e-2];% 5e-13 2e-13];
 % Kc_ = 1.5e-8*1000;%for circle, wave p.Kcoast = 1.5e-8
 % Kc_ = p.Kf;
-p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/riverIC/';
-p.run = 'wave_Kf';
+% p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/riverIC/';
+p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/';
+p.run = 'river_uniform_Kc';
+time = 'time';
 for i = 1:length(Kc_)
     p.tf = 1e5;
     tic
@@ -181,4 +183,6 @@ for i = 1:length(Kc_)
     p.runname = strcat(p.folder,p.run,p.run2);
     solution = Tadpole(init,p);
     time_end(i) = toc;
+    timename = strcat(p.folder,p.run,p.run2,time);
+    save(timename,'time','p.runname','i');
 end

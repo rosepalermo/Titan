@@ -42,13 +42,14 @@ Zshift = prctile(init(:),pctwet);
 init = init - Zshift + p.sealevel_init;
 depression = depression -Zshift + p.sealevel_init;
 
-%% ROSE you need to figure out the p.Ao better!!
-% % find 10th percentile elevation of depression
-% med_dep = prctile(depression(:),pctwet);
-% a0_matrix = (depression<=med_dep);
-% [indshoreline_ordered] = get_ordered_sl(a0_matrix,p);
-% [x,y] = ind2sub(size(depression),indshoreline_ordered);
-% p.Ao = polyarea(x,y).*p.dx.*p.dy;
 
-% A = diag(2*ones(100,1)) + diag(-1*ones(99,1),-1) + diag(-1*ones(99,1),1);
-% plot(.1*mvnrnd(zeros(10,100), inv(A))')
+%% THIS IS WHERE I CALCULATED p.Ao --> for this dataset, i'm using 8.9298e+07
+% diff_ = min(min(depression))-min(min(noise)); % diff_o is 173 -- rng(0)
+% Ao = depression<173; % diff_o is 173 -- rng(0)
+% [shoreline] = addidshoreline(Ao,~Ao);
+% indsl = find(shoreline);
+% x = p.dx*(1:size(Ao,2));
+% y = p.dy*(1:size(Ao,1));
+% [X,Y] = meshgrid(x,y);
+% radius = 0.5*(max(X(indsl))-min(X(indsl)));
+% p.Ao = 3/4*pi*radius^2; 
