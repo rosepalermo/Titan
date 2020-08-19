@@ -5,6 +5,8 @@
 
 clear
 
+cd ..
+
 folder = fileparts(which('getpath_CCT.m'));
 addpath(genpath(folder));
 
