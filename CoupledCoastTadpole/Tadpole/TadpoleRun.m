@@ -47,6 +47,7 @@ while p.t < p.tf
                 g.output(:,:,p.lastsave) = g.U;
                 g.t(p.lastsave) = p.t;
                 g.sealevelsave(p.lastsave) = g.sealevel;
+                save(p.runname, '-v7.3', 'p', 'g');
             end
         else
             if p.n == 1 | ~rem(n,p.saveint)
