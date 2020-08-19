@@ -5,7 +5,7 @@
 
 clear
 
-cd ..
+% cd ..
 
 folder = fileparts(which('getpath_CCT.m'));
 addpath(genpath(folder));

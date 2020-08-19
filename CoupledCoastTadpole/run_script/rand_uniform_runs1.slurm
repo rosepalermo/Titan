@@ -6,5 +6,5 @@
 #SBATCH --exclusive  
 #SBATCH -p sched_engaging_default
 . /etc/profile.d/modules.sh
-module load mit/matlab/2018a 
+module load mit/matlab/2019a 
 matlab -nodisplay -nodesktop -nosplash -r "run rand_uniform_runs1.m"
