@@ -186,5 +186,5 @@ for i = 2
     solution = Tadpole(init,p);
     time_end(i) = toc;
     timename = strcat(p.folder,p.run,p.run2,time);
-    save(timename,'time','p.runname','i');
+    save(timename,'time','p','i');
 end
