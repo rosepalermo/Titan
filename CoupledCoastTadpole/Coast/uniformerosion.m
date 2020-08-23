@@ -1,9 +1,9 @@
 function [p,g] = uniformerosion(p,g)
-%% ROSE MAKE AN ADAPTIVE TIMESTEP FOR UNIFORM EROSION
 
 g.uniform_input = g.U<g.sealevel;
 p.dt_save = p.dt;
 
+g.nLakeCells = length(find(g.uniform_input));
 if p.doAdaptiveCoastalTimeStep
     i = 0;
     [adt,dam_matrix,p] = getCADT_uniform(p,g.uniform_input);
@@ -36,6 +36,7 @@ else
     g.U(erodedind) = g.sealevel-0.5;
 end
 
+g.nLakeCells = length(find(g.uniform_output));
 
 
 end

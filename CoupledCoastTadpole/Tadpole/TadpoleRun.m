@@ -6,7 +6,7 @@ function [p,g] = TadpoleRun(p,g)
 
 n=0;
 p.lastsave = 0;
-while p.t < p.tf
+while p.t < p.tf || g.nLakeCells < p.Ao_cells*p.size_final % if either the final time is reached or the max lake size-- keeping final time to keep my kill switches
     
     n = n + 1;
     p.n = n;
@@ -41,7 +41,7 @@ while p.t < p.tf
     if p.doSaveOutput
         %         if ~rem(n,p.saveint)
         if ~p.noSLR
-            if p.n == 1 | ((sign(g.SL_slope(p.n)) == -1) && (sign(g.SL_slope(p.n-1)) == 1)) % if first ts iteration or if highstand
+            if p.n == 1 || ((sign(g.SL_slope(p.n)) == -1) && (sign(g.SL_slope(p.n-1)) == 1)) % if first ts iteration or if highstand
                 %             p.lastsave = n/p.saveint + 1;
                 p.lastsave = p.lastsave+1;
                 g.output(:,:,p.lastsave) = g.U;
@@ -50,7 +50,7 @@ while p.t < p.tf
                 save(p.runname, '-v7.3', 'p', 'g');
             end
         else
-            if p.n == 1 | ~rem(n,p.saveint)
+            if p.n == 1 || ~rem(n,p.saveint)
                 %             p.lastsave = n/p.saveint + 1;
                 p.lastsave = p.lastsave+1;
                 g.output(:,:,p.lastsave) = g.U;

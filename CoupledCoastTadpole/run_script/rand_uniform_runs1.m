@@ -29,7 +29,7 @@ p.dtmax = 100;%1e4;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
 
 % p.tf = 1e5;                 %     p.tf             Total time of the simulation (yr)
-
+p.size_final = 1.2;
 
 % ----- boundary conditions, source terms, and flow routing ---------------
 
@@ -136,10 +136,12 @@ if rand_IC
     
     p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
     p.Ao = 8.9298e+07;
+    p.Ao_cells = 30368;
 elseif river_IC
     load('riverIC.mat')
     init = riverIC;
-    p.Ao = 8.9298e+07;    
+    p.Ao = 8.9298e+07;   
+    p.Ao_cells = 30368;
 %test circle
 elseif init_circle
     [init,p] = test_circle(p);

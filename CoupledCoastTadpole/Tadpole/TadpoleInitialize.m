@@ -35,11 +35,9 @@ else
     g.Channels = zeros(p.K,p.J);
 end
 
-% if p.doWaveErosion | p.doUniformErosion
-%    addpath('/Users/rosepalermo/Documents/GitHub/Titan2/Cellular Damage Model') 
-%    addpath('/Users/rosepalermo/Documents/GitHub/VisiLibity1/src') 
-% end
 g.Strength = p.strength*ones(size(g.U));  % initial "strength" of the bedrock -- same across the entire field
+
+g.nLakeCells = 0; % number of cells in the lake-- will get updated later
 
 %%%%%%%%%%%%%%%%%
 % SET UP OUTPUT % 

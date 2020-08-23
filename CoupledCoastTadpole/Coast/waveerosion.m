@@ -8,6 +8,7 @@ end
 % g.wave_input = g.U<g.sealevel(p.n); % a meter above 0 I'm calling the coastline. 
 g.wave_input = g.U<g.sealevel; % a meter above 0 I'm calling the coastline. 
 p.dt_save = p.dt;
+g.nLakeCells = length(find(g.wave_input));
 
 if p.doAdaptiveCoastalTimeStep
     i = 0;
@@ -36,7 +37,7 @@ if p.doAdaptiveCoastalTimeStep
 else
     
     % call wave erosion function, output updates U and strength
-    [g.wave_output,g.Strength,erodedind,p] = coastal_erosion(g.wave_input,1,g.Strength,p,[],[],[]);
+    [g.wave_output,g.Strength,p] = coastal_erosion(g.wave_input,1,g.Strength,p,[],[],[]);
     erodedind = find(g.wave_output - g.wave_input);
     % make new subaqueous points elevation 0.5 below sea level? Talk to Andrew about what this depth
     % should be.
@@ -44,6 +45,7 @@ else
     g.U(erodedind) = g.sealevel-0.5;
 end
 
-imagesc(g.wave_output)
+% imagesc(g.wave_output)
+g.nLakeCells = length(find(g.wave_output));
 
 end

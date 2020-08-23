@@ -53,4 +53,4 @@ y = p.dy*(1:size(Ao,1));
 [X,Y] = meshgrid(x,y);
 radius = 0.5*(max(X(indsl))-min(X(indsl)));
 p.Ao = 3/4*pi*radius^2; 
-p.Ao_cells = length(find(Ao));
+p.Ao_cells = length(find
