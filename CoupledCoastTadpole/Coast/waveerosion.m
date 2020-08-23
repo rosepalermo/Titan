@@ -22,9 +22,9 @@ if p.doAdaptiveCoastalTimeStep
     while i<adt
         i = i+1;    
         if i == 1
-            [g.wave_output,g.Strength,p] = coastal_erosion(g.wave_input,1,g.Strength,p,dam_matrix,wave_matrix,cells2trash);
+            [g.wave_output,g.Strength,p,dam_matrix] = coastal_erosion(g.wave_input,1,g.Strength,p,dam_matrix,wave_matrix,cells2trash);
         else
-            [g.wave_output,g.Strength,p] = coastal_erosion(g.wave_input,1,g.Strength,p,[],[],[]);
+            [g.wave_output,g.Strength,p,dam_matrix] = coastal_erosion(g.wave_input,1,g.Strength,p,[],[],[]);
         end
         erodedind = find(g.wave_output - g.wave_input);
         g.wave_input = g.wave_output; % update the input for the loop!!
@@ -37,7 +37,7 @@ if p.doAdaptiveCoastalTimeStep
 else
     
     % call wave erosion function, output updates U and strength
-    [g.wave_output,g.Strength,p] = coastal_erosion(g.wave_input,1,g.Strength,p,[],[],[]);
+    [g.wave_output,g.Strength,p,dam_matrix] = coastal_erosion(g.wave_input,1,g.Strength,p,[],[],[]);
     erodedind = find(g.wave_output - g.wave_input);
     % make new subaqueous points elevation 0.5 below sea level? Talk to Andrew about what this depth
     % should be.
@@ -47,5 +47,5 @@ end
 
 % imagesc(g.wave_output)
 g.nLakeCells = length(find(g.wave_output));
-
+g.dam_wave = dam_matrix;
 end

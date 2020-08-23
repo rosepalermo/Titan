@@ -1,4 +1,4 @@
-function [lake,strength,p] = coastal_erosion(lake,fetch_on,strength,p,dam_matrix,wave_matrix,cells2trash)
+function [lake,strength,p,dam_matrix] = coastal_erosion(lake,fetch_on,strength,p,dam_matrix,wave_matrix,cells2trash)
 
 % Titan analogue damage model for coastal erosion of a lake
 % Rose Palermo 6-2019

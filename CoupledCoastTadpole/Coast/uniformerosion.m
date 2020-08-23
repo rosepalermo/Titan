@@ -13,7 +13,7 @@ if p.doAdaptiveCoastalTimeStep
     while i<adt
         i = i+1;
         p.dt_test = p.dt*adt;
-        [g.uniform_output,g.Strength] = coastal_erosion(g.uniform_input,0,g.Strength,p,[],[],[]);
+        [g.uniform_output,g.Strength,p,~] = coastal_erosion(g.uniform_input,0,g.Strength,p,[],[],[]);
         % make new subaqueous points elevation 0.5 below sea level? Talk to Andrew about what this depth
         % should be.
         % g.U(erodedind) = g.sealevel(p.n)-0.5;
@@ -27,7 +27,7 @@ if p.doAdaptiveCoastalTimeStep
     p.dt = p.dt_save; %return the time step to what it was.
 else
     % call wave erosion function, output updates U and strength
-    [g.uniform_output,g.Strength] = coastal_erosion(g.uniform_input,0,g.Strength,p,[],[],[]);
+    [g.uniform_output,g.Strength,p,~] = coastal_erosion(g.uniform_input,0,g.Strength,p,[],[],[]);
     erodedind = find(g.uniform_output - g.uniform_input);
     
     % make new subaqueous points elevation 0.5 below sea level? Talk to Andrew about what this depth
