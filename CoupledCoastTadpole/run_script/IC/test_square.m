@@ -14,6 +14,15 @@ Yinon = reshape(Y,[],1);
 
 [in, on] = inpoly([Xinon,Yinon]',[lakex;lakey]);
 lake = in + on;
-init = double(~reshape(lake,length(y),length(x)));
+lake = reshape(lake,length(y),length(x));
+init = double(~lake);
 
 p.dx = dx; p.dy = dy; p.Nx = length(x); p.Ny = length(y);
+
+
+    p.strength = 1;
+    p.So = 1;
+    p.dxo =0.05;
+    p.Ao = 100;
+    p.Ao_cells = length(find(lake));
+end

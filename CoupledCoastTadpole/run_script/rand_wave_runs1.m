@@ -122,43 +122,26 @@ p.periodic = 1;             %     p.periodic       Elevations will be periodic a
 
 %% CREATE INITIAL SURFACE %%
 
-% noise = RedNoise(p.Ny,p.Nx,p.beta,p.variance,p.periodic);
 if rand_IC
     % initgaus = get_gaussian_boundary([800 800], 0.3, 10);
     % init = (initgaus + noise);
     rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the noise surface
-    [init,depression,p] = get_IC(p,rfactor);
-    
-    % set fixed points according to initial sea level. Note that p.F will need
-    % to be updated each time step according to changes in elevations,
-    % coastal positions, and sea level. --> No, that is what g.C is for (that's
-    % why it's a "grid" in g and p.F is a parameter in F).
-    
-    p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
-    p.Ao = 8.9298e+07;
+    [init,p] = get_IC(p,rfactor);
 elseif river_IC
     load('riverIC.mat')
     init = riverIC;
-    p.Ao = 8.9298e+07;    
+    p.Ao = 8.9298e+07; 
+    p.Ao_cells = 30368;
 %test circle
 elseif init_circle
     [init,p] = test_circle(p);
-    p.strength = 1;
-    p.F = zeros(size(init));
-    p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
 elseif init_square
     [init,p] = test_square(p);
-    p.strength = 1;
-    p.F = zeros(size(init));
-    p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
-    p.So = 1;
-    p.dxo =0.05;
-    p.Ao = 1000;
 end
-% % make lowest 10% of elevations fixed points
-% SL = prctile(init(:),10);
-% init = init - SL;
-% % % init(init < 0) = 0; 
+
+% % set fixed points
+p.F = zeros(size(init));
+p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
 
 
 %% RUN THE MODEL %%

@@ -20,3 +20,7 @@ init = double(~reshape(lake,length(y),length(x)));
 p.dx = dx; p.dy = dy; p.Nx = length(x); p.Ny = length(y);
 
 p.Ao = 3/4*pi*radius^2;
+p.strength = 1;
+p.So = 1;
+p.dxo =0.05;
+end
