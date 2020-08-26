@@ -162,7 +162,7 @@ Kc_ = [1e-4 1.5e-4 1.5e-3]; % uniform/wave
 p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/';
 p.run = 'river_wave_Kc';
 time = 'time';
-for i = 2
+for i = 3
     p.tf = 1e5;
     tic
     if p.doUniformErosion

@@ -12,8 +12,8 @@ addpath(genpath(folder));
 
 init_circle =0;
 init_square = 0;
-rand_IC = 0;
-river_IC =1;
+rand_IC = 1;
+river_IC =0;
 %% SET PARAMETERS %%
 
 % --------------- space and time resolution ------------------------------- 
@@ -56,7 +56,7 @@ p.plotint = 1;%100;            %     p.plotint        Plot will be redrawn every
 p.plottype = 'elevation';             %     p.plottype       1=perspective view, 2=drainage area map, 3=curvature map, 4=elevation map, 5=contour map, 6=shaded relief, 7=colored shaded relief
                             %
 p.doSaveOutput = 1;         %     p.SaveOutput     Save model output to a .mat file
-p.saveint = 1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
+p.saveint = 1000; %1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
 % p.runname = 'trash';        %     p.runname:       Character string naming the run. If specified 
                             %                      (and if p.saveint~=0), the parameters and elevations at each 
                             %                      save interal will be saved in a binary .MAT file called <runname>.mat
@@ -122,21 +122,15 @@ p.periodic = 1;             %     p.periodic       Elevations will be periodic a
 
 %% CREATE INITIAL SURFACE %%
 
-% noise = RedNoise(p.Ny,p.Nx,p.beta,p.variance,p.periodic);
 if rand_IC
     % initgaus = get_gaussian_boundary([800 800], 0.3, 10);
     % init = (initgaus + noise);
     rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the noise surface
     [init,p] = get_IC(p,rfactor);
-    
-    % set fixed points according to initial sea level. Note that p.F will need
-    % to be updated each time step according to changes in elevations,
-    % coastal positions, and sea level. --> No, that is what g.C is for (that's
-    % why it's a "grid" in g and p.F is a parameter in F).
 elseif river_IC
     load('riverIC.mat')
     init = riverIC;
-    p.Ao = 8.9298e+07;  
+    p.Ao = 8.9298e+07; 
     p.Ao_cells = 30368;
 %test circle
 elseif init_circle
@@ -144,10 +138,10 @@ elseif init_circle
 elseif init_square
     [init,p] = test_square(p);
 end
-% % make lowest 10% of elevations fixed points
-% SL = prctile(init(:),10);
-% init = init - SL;
-% % % init(init < 0) = 0; 
+
+% % set fixed points
+p.F = zeros(size(init));
+p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
 
 
 %% RUN THE MODEL %%
@@ -160,9 +154,9 @@ Kc_ = [1e-4 1.5e-4 1.5e-3]; % uniform/wave
 % Kc_ = p.Kf;
 % p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/riverIC/';
 p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/';
-p.run = 'river_wave_Kc';
+p.run = 'rand_wave_Kc';
 time = 'time';
-for i = 2
+for i = 3
     p.tf = 1e5;
     tic
     if p.doUniformErosion

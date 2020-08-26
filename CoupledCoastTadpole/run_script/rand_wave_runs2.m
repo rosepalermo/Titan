@@ -11,8 +11,8 @@ folder = fileparts(which('getpath_CCT.m'));
 addpath(genpath(folder));
 
 init_circle =0;
-init_square = 1;
-rand_IC = 0;
+init_square = 0;
+rand_IC = 1;
 river_IC =0;
 %% SET PARAMETERS %%
 
@@ -56,7 +56,7 @@ p.plotint = 1;%100;            %     p.plotint        Plot will be redrawn every
 p.plottype = 'elevation';             %     p.plottype       1=perspective view, 2=drainage area map, 3=curvature map, 4=elevation map, 5=contour map, 6=shaded relief, 7=colored shaded relief
                             %
 p.doSaveOutput = 1;         %     p.SaveOutput     Save model output to a .mat file
-p.saveint = 10; %1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
+p.saveint = 1000; %1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
 % p.runname = 'trash';        %     p.runname:       Character string naming the run. If specified 
                             %                      (and if p.saveint~=0), the parameters and elevations at each 
                             %                      save interal will be saved in a binary .MAT file called <runname>.mat
@@ -122,65 +122,52 @@ p.periodic = 1;             %     p.periodic       Elevations will be periodic a
 
 %% CREATE INITIAL SURFACE %%
 
-% noise = RedNoise(p.Ny,p.Nx,p.beta,p.variance,p.periodic);
 if rand_IC
+    % initgaus = get_gaussian_boundary([800 800], 0.3, 10);
+    % init = (initgaus + noise);
     rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the noise surface
-    [init,depression,p] = get_IC(p,rfactor);
-    
-    % set fixed points according to initial sea level. Note that p.F will need
-    % to be updated each time step according to changes in elevations,
-    % coastal positions, and sea level. --> No, that is what g.C is for (that's
-    % why it's a "grid" in g and p.F is a parameter in F).
-    
-    p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
-    p.Ao = 8.9298e+07;
+    [init,p] = get_IC(p,rfactor);
 elseif river_IC
     load('riverIC.mat')
     init = riverIC;
-    p.Ao = 8.9298e+07;    
+    p.Ao = 8.9298e+07; 
+    p.Ao_cells = 30368;
 %test circle
 elseif init_circle
     [init,p] = test_circle(p);
-    p.strength = 1;
-    p.F = zeros(size(init));
-    p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
-    p.Ao = pi*5^2;
 elseif init_square
     [init,p] = test_square(p);
-    p.strength = 1;
-    p.F = zeros(size(init));
-    p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
-    p.So = 1;
-    p.dxo =0.05;
-    p.Ao = 100;
 end
-% % make lowest 10% of elevations fixed points
-% SL = prctile(init(:),10);
-% init = init - SL;
-% % % init(init < 0) = 0; 
+
+% % set fixed points
+p.F = zeros(size(init));
+p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elevations equal to SL would be considered land or submerged. Here I assumed they are land; if submerged, this line should be <= instead of <
 
 
 %% RUN THE MODEL %%
 
 % run the model, storing the final elevation grid in solution
 % Kf_ = [5e-10 5e-8 5e-6]; % rivers
-Kc_ = [1e-4  0];%1.5e-4 1.5e-3]; % uniform/wave
+Kc_ = [1e-4 1.5e-4 1.5e-3]; % uniform/wave
 % Kc_ = [1e-4; 1e-3; 1e-2];% 5e-13 2e-13];
 % Kc_ = 1.5e-8*1000;%for circle, wave p.Kcoast = 1.5e-8
 % Kc_ = p.Kf;
-p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/squaretest/';
-p.run = 'uniform_0_wave_K';
-for i = 1%:length(Kc_)
-    p.tf = 1e10;
+% p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/riverIC/';
+p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/';
+p.run = 'rand_wave_Kc';
+time = 'time';
+for i = 2
+    p.tf = 1e5;
     tic
     if p.doUniformErosion
-        p.Kuniform = Kc_(i+1);
-    end
-    if p.doWaveErosion
+        p.Kuniform = Kc_(i);
+    elseif p.doWaveErosion
         p.Kwave = Kc_(i);
     end
     p.run2 = strrep(num2str(Kc_(i)),'.','_');
     p.runname = strcat(p.folder,p.run,p.run2);
     solution = Tadpole(init,p);
     time_end(i) = toc;
+    timename = strcat(p.folder,p.run,p.run2,time);
+    save(timename,'time_end','p','i');
 end
