@@ -1,4 +1,4 @@
-function [lake,strength,p,dam_matrix] = coastal_erosion(lake,fetch_on,strength,p,dam_matrix,wave_matrix,cells2trash)
+function [lake,strength,p,dam_matrix,wave_matrix] = coastal_erosion(lake,fetch_on,strength,p,dam_matrix,wave_matrix,cells2trash)
 
 % Titan analogue damage model for coastal erosion of a lake
 % Rose Palermo 6-2019
@@ -75,6 +75,7 @@ while sum_dam_excess > 0
         wave_weighting_interp = interp_fetch_for_ind(lake,ind_new,wave_matrix); % this already includes
         % damage for max excess time of 8 con neighbor
         dam_matrix(ind_new) = time_dam_excess.*p.Kwave.*shoreline_new(ind_new)*p.So./p.dxo.*wave_weighting_interp;
+        wave_matrix(ind_new) = wave_weighting_interp;
     else
         % damage for max excess time of 8 con neighbor
         dam_matrix(ind_new) = time_dam_excess.*p.Kuniform.*shoreline_new(ind_new)*p.So./p.dxo;

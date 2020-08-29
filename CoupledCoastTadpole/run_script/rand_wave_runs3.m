@@ -56,7 +56,7 @@ p.plotint = 1;%100;            %     p.plotint        Plot will be redrawn every
 p.plottype = 'elevation';             %     p.plottype       1=perspective view, 2=drainage area map, 3=curvature map, 4=elevation map, 5=contour map, 6=shaded relief, 7=colored shaded relief
                             %
 p.doSaveOutput = 1;         %     p.SaveOutput     Save model output to a .mat file
-p.saveint = 1000; %1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
+p.saveint = 300; %1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
 % p.runname = 'trash';        %     p.runname:       Character string naming the run. If specified 
                             %                      (and if p.saveint~=0), the parameters and elevations at each 
                             %                      save interal will be saved in a binary .MAT file called <runname>.mat
@@ -153,12 +153,12 @@ Kc_ = [1e-4 1.5e-4 1.5e-3]; % uniform/wave
 % Kc_ = 1.5e-8*1000;%for circle, wave p.Kcoast = 1.5e-8
 % Kc_ = p.Kf;
 % p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/riverIC/';
-p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/';
+p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/save_more/';
 p.run = 'rand_wave_Kc';
 time = 'time';
 for i = 3
     p.tf = 1e5;
-    tic
+    tstart = tic;
     if p.doUniformErosion
         p.Kuniform = Kc_(i);
     elseif p.doWaveErosion
@@ -167,7 +167,7 @@ for i = 3
     p.run2 = strrep(num2str(Kc_(i)),'.','_');
     p.runname = strcat(p.folder,p.run,p.run2);
     solution = Tadpole(init,p);
-    time_end(i) = toc;
+    time_end(i) = toc(tstart);
     timename = strcat(p.folder,p.run,p.run2,time);
     save(timename,'time_end','p','i');
 end

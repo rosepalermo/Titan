@@ -56,7 +56,7 @@ p.plotint = 1;%100;            %     p.plotint        Plot will be redrawn every
 p.plottype = 'elevation';             %     p.plottype       1=perspective view, 2=drainage area map, 3=curvature map, 4=elevation map, 5=contour map, 6=shaded relief, 7=colored shaded relief
                             %
 p.doSaveOutput = 1;         %     p.SaveOutput     Save model output to a .mat file
-p.saveint = 1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
+p.saveint = 300;              %     p.saveint        Elevation grid will be saved every saveint iterations
 % p.runname = 'trash';        %     p.runname:       Character string naming the run. If specified 
                             %                      (and if p.saveint~=0), the parameters and elevations at each 
                             %                      save interal will be saved in a binary .MAT file called <runname>.mat
@@ -155,7 +155,7 @@ Kc_ = [1e-4 1.5e-4 1.5e-3]; % uniform/wave
 % Kc_ = 1.5e-8*1000;%for circle, wave p.Kcoast = 1.5e-8
 % Kc_ = p.Kf;
 % p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/riverIC/';
-p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/';
+p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/save_more/';
 p.run = 'rand_uniform_Kc';
 time = 'time';
 for i = 1:length(Kc_)

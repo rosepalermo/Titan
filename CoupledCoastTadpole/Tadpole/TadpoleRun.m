@@ -7,7 +7,7 @@ function [p,g] = TadpoleRun(p,g)
 n=0;
 p.lastsave = 0;
 kill_switch = 0;
-while ~kill_switch || g.nLakeCells < p.Ao_cells*p.size_final % if either the final time is reached or the max lake size-- keeping final time to keep my kill switches
+while ~kill_switch && g.nLakeCells < p.Ao_cells*p.size_final % if either the final time is reached or the max lake size-- keeping final time to keep my kill switches
     
     n = n + 1;
     p.n = n;
@@ -41,7 +41,7 @@ while ~kill_switch || g.nLakeCells < p.Ao_cells*p.size_final % if either the fin
     
     if p.doSaveOutput
         %         if ~rem(n,p.saveint)
-        if ~p.noSLR
+        if ~p.noSLR% if sea level rise simulaiton (future runs)
             if p.n == 1 || ((sign(g.SL_slope(p.n)) == -1) && (sign(g.SL_slope(p.n-1)) == 1)) % if first ts iteration or if highstand
                 %             p.lastsave = n/p.saveint + 1;
                 p.lastsave = p.lastsave+1;
@@ -50,20 +50,27 @@ while ~kill_switch || g.nLakeCells < p.Ao_cells*p.size_final % if either the fin
                 g.sealevelsave(p.lastsave) = g.sealevel;
                 save(p.runname, '-v7.3', 'p', 'g');
             end
-        else
-            if p.n == 1 || ~rem(n,p.saveint)
+        else % if no sea level rise
+            if p.n == 1 || ~rem(n,p.saveint) || kill_switch
                 %             p.lastsave = n/p.saveint + 1;
                 p.lastsave = p.lastsave+1;
                 g.output(:,:,p.lastsave) = g.U;
+                if p.doWaveErosion
+                    g.dam_wave_save(:,:,p.lastsave) = dam_wave;
+                    g.wave_matrix_save(:,:,p.lastsave) = g.wave_matrix;
+                end
+                if p.doUniformErosion
+                    g.dam_uniform_save(:,:,p.lastsave) = g.dam_uniform;
+                end
                 g.t(p.lastsave) = p.t;
                 g.sealevelsave(p.lastsave) = g.sealevel;
+                save(p.runname, '-v7.3', 'p', 'g');
             end
         end
     end
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    exist p.Boundary
-    kill_switch = ans;
+    kill_switch = isfield(p,'boundary');
 end
 
 p.iterations = n;
