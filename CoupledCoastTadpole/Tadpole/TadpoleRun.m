@@ -56,7 +56,7 @@ while ~kill_switch && g.nLakeCells < p.Ao_cells*p.size_final % if either the fin
                 p.lastsave = p.lastsave+1;
                 g.output(:,:,p.lastsave) = g.U;
                 if p.doWaveErosion
-                    g.dam_wave_save(:,:,p.lastsave) = dam_wave;
+                    g.dam_wave_save(:,:,p.lastsave) = g.dam_wave;
                     g.wave_matrix_save(:,:,p.lastsave) = g.wave_matrix;
                 end
                 if p.doUniformErosion
