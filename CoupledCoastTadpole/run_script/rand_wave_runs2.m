@@ -29,7 +29,7 @@ p.dtmax = 100;%1e4;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
 
 % p.tf = 1e5;                 %     p.tf             Total time of the simulation (yr)
-p.size_final = 1.2;
+p.size_final = 1;
 
 % ----- boundary conditions, source terms, and flow routing ---------------
 
@@ -56,7 +56,7 @@ p.plotint = 1;%100;            %     p.plotint        Plot will be redrawn every
 p.plottype = 'elevation';             %     p.plottype       1=perspective view, 2=drainage area map, 3=curvature map, 4=elevation map, 5=contour map, 6=shaded relief, 7=colored shaded relief
                             %
 p.doSaveOutput = 1;         %     p.SaveOutput     Save model output to a .mat file
-p.saveint = 300; %1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
+p.saveint = 10; %1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
 % p.runname = 'trash';        %     p.runname:       Character string naming the run. If specified 
                             %                      (and if p.saveint~=0), the parameters and elevations at each 
                             %                      save interal will be saved in a binary .MAT file called <runname>.mat
@@ -152,7 +152,7 @@ Kc_ = [1e-4 1.5e-4 1.5e-3]; % uniform/wave
 % Kc_ = [1e-4; 1e-3; 1e-2];% 5e-13 2e-13];
 % Kc_ = 1.5e-8*1000;%for circle, wave p.Kcoast = 1.5e-8
 % Kc_ = p.Kf;
-% p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/riverIC/';
+% p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/randomIC/stop_after_1_2_percent/';
 p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/save_more/';
 p.run = 'rand_wave_Kc';
 time = 'time';

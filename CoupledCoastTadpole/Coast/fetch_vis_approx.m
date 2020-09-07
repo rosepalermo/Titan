@@ -83,7 +83,7 @@ for k = 1:length(slccw)
 end
 
 runtime = toc;
-% disp(['dist=' num2str(dist) ' took ' num2str(runtime) ' sec'])
+disp(['dist=' num2str(dist) ' took ' num2str(runtime) ' sec'])
 
 %% Calculate fetch polygon areas and compare with exact calculation
 % NEED TO UPDATED EXACT CALCULATION TO INCLUDE ISLANDS
