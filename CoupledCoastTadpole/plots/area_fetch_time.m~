@@ -1,0 +1,46 @@
+% make plots of things changing through time
+
+% area through time
+ind = 1:size(g.output,3);
+nLakeCells = zeros(1,length(ind));
+for i = 1:length(ind)
+nLakeCells(i) = length(find(g.output(:,:,ind(i))<=p.sealevel_init));
+end
+
+pct_Ao = nLakeCells./p.Ao_cells;
+time = g.t;
+
+% % figure()
+% hold on
+% plot(time,pct_Ao,'r','LineWidth',2)
+% set(gca,'FontSize',14)
+% xlabel('time')
+% ylabel('Lake area/A_o area')
+
+neroded = zeros(size(pct_Ao));
+for i = 2:length(ind)
+    neroded(i) = nLakeCells(i) - nLakeCells(i-1);
+end
+
+hold on
+plot(time,neroded,'k','LineWidth',2)
+set(gca,'FontSize',14)
+xlabel('time')
+ylabel('Lake area/A_o area')
+
+
+%calculate mean damage through time
+if p.doWaveErosion
+    for i = 1:length(ind)
+    meandam(i) = 
+end
+if p.doUniformErosion
+    
+end
+% figure()
+% for i = 1:10:(length(ind))
+% subplot(2,ceil(ind(end)/10),i)
+% temp = g.dam_wave_save(:,:,i);
+% temp(temp==0) =nan;
+% histogram(temp)
+% end

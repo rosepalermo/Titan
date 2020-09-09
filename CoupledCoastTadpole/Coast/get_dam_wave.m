@@ -1,8 +1,8 @@
 function [dam_matrix,wave_weight_matrix,indshoreline_ordered,cells2trash,p] = get_dam_wave(lake,p)
 
 % initialize
-x = 1:size(lake,2);
-y = 1:size(lake,1);
+x = 1:p.Nx;
+y = 1:p.Ny;
 [X,Y] = meshgrid(x,y);
 X = X*p.dx; Y = Y*p.dy;
 wave_weight_matrix = nan(size(lake));
