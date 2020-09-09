@@ -161,7 +161,8 @@ for i = 1
     tstart = tic;
     if p.doUniformErosion
         p.Kuniform = Kc_(2);
-    elseif p.doWaveErosion
+    end
+    if p.doWaveErosion
         p.Kwave = Kc_(2);
     end
     p.runname = strcat(p.folder,p.run);

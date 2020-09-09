@@ -162,7 +162,8 @@ for i = 1:length(Kc_)
     tstart = tic;
     if p.doUniformErosion
         p.Kuniform = Kc_(i);
-    elseif p.doWaveErosion
+    end
+    if p.doWaveErosion
         p.Kwave = Kc_(i);
     end
     p.run2 = strrep(num2str(Kc_(i)),'.','_');
