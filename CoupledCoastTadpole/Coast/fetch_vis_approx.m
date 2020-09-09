@@ -70,7 +70,7 @@ for k = 1:length(slccw)
         % fetch & wave area & distance & cos(theta-phi)
         FetchArea{k,1}(l,1) = polyarea(V(:,1),V(:,2));
         Fetch_dist = sqrt(sum(([slccw{k}(l,1),slccw{k}(l,2)] - V).^2,2));
-        minFetch_dist = min(Fetch_dist,200);
+        minFetch_dist = min(Fetch_dist,200); % this is how we can limit fetch eventually
         % Wave weighting = (F)*cosang
         weighted_fetch_dist = ([slccw{k}(l,1),slccw{k}(l,2)] - V)*nbi'; % magnitude of fetch * magnitude of normal vector * cosang
         % cos(theta - phi) = dot product of slvec and losvec
