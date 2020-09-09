@@ -72,9 +72,9 @@ for k = 1:length(slccw)
         Fetch_dist = sqrt(sum(([slccw{k}(l,1),slccw{k}(l,2)] - V).^2,2));
         minFetch_dist = min(Fetch_dist,200);
         % Wave weighting = (F)*cosang
-        weighted_fetch_dist = ([slccw{k}(l,1),slccw{k}(l,2)] - V)*nbi'./eps;
+        weighted_fetch_dist = ([slccw{k}(l,1),slccw{k}(l,2)] - V)*nbi'; % magnitude of fetch * magnitude of normal vector * cosang
         % cos(theta - phi) = dot product of slvec and losvec
-        cosang = weighted_fetch_dist./Fetch_dist;
+        cosang = weighted_fetch_dist./Fetch_dist; %[mag_fetch*mag_norm(which is 1)*cosang]/mag_fetch = cosang
         cosang(isnan(cosang)) = 0;
         Wavepts = [slccw{k}(l,1),slccw{k}(l,2)]+(V-[slccw{k}(l,1),slccw{k}(l,2)]).*cosang;
         WaveArea{k,1}(l,1) = polyarea(Wavepts(:,1),Wavepts(:,2));
