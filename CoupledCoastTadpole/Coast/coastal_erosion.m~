@@ -15,9 +15,8 @@ end
 
 % if it's the first time step, make the shoreline strength random from 0,1
 if p.t == 0
-    [shoreline] = addidshoreline(lake,~lake); % corners and edges
-    ind_sl = find(shoreline);
-    strength(ind_sl) = rand(size(ind_sl));
+    [shoreline] = addidshoreline(lake,land); % corners and edges
+    strength(shoreline) = rand(size(shoreline));
 end
     
 % initialize lake, land

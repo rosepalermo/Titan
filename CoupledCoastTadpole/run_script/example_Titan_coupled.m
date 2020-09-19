@@ -11,8 +11,8 @@ folder = fileparts(which('getpath_CCT.m'));
 addpath(genpath(folder));
 
 init_circle =0;
-init_square = 1;
-rand_IC = 0;
+init_square = 0;
+rand_IC = 1;
 river_IC =0;
 %% SET PARAMETERS %%
 
@@ -29,7 +29,7 @@ p.dtmax = 100;%1e4;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
 
 % p.tf = 1e5;                 %     p.tf             Total time of the simulation (yr)
-p.size_final = 1.2;
+p.size_final = 0.53;
 
 % ----- boundary conditions, source terms, and flow routing ---------------
 
@@ -56,7 +56,7 @@ p.plotint = 1;%100;            %     p.plotint        Plot will be redrawn every
 p.plottype = 'elevation';             %     p.plottype       1=perspective view, 2=drainage area map, 3=curvature map, 4=elevation map, 5=contour map, 6=shaded relief, 7=colored shaded relief
                             %
 p.doSaveOutput = 1;         %     p.SaveOutput     Save model output to a .mat file
-p.saveint = 10; %1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
+p.saveint = 1; %1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
 % p.runname = 'trash';        %     p.runname:       Character string naming the run. If specified 
                             %                      (and if p.saveint~=0), the parameters and elevations at each 
                             %                      save interal will be saved in a binary .MAT file called <runname>.mat
@@ -85,7 +85,7 @@ p.thetac = 0;               %     p.thetac         Threshold for fluvial incisio
 
 % ---------------- coastal erosion -------------------------------                           
 
-p.doWaveErosion = 1;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
+p.doWaveErosion = 0;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
 p.doUniformErosion = 1;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
 p.So = 1;
 p.dxo = 100;
@@ -125,7 +125,7 @@ p.periodic = 1;             %     p.periodic       Elevations will be periodic a
 % noise = RedNoise(p.Ny,p.Nx,p.beta,p.variance,p.periodic);
 if rand_IC
     rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the noise surface
-    [init,depression,p] = get_IC(p,rfactor);
+    [init,p] = get_IC(p,rfactor);
     
     % set fixed points according to initial sea level. Note that p.F will need
     % to be updated each time step according to changes in elevations,
@@ -168,13 +168,13 @@ Kc_ = [1e-4  0];%1.5e-4 1.5e-3]; % uniform/wave
 % Kc_ = [1e-4; 1e-3; 1e-2];% 5e-13 2e-13];
 % Kc_ = 1.5e-8*1000;%for circle, wave p.Kcoast = 1.5e-8
 % Kc_ = p.Kf;
-p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/squaretest/';
-p.run = 'uniform_0_wave_K';
+p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/';
+p.run = 'uniform_test_size_K';
 for i = 1%:length(Kc_)
-    p.tf = 1e10;
+    p.tf = 1000;
     tic
     if p.doUniformErosion
-        p.Kuniform = Kc_(i+1);
+        p.Kuniform = Kc_(i);
     end
     if p.doWaveErosion
         p.Kwave = Kc_(i);

@@ -7,7 +7,7 @@ function [p,g] = TadpoleRun(p,g)
 n=0;
 p.lastsave = 0;
 kill_switch = 0;
-while ~kill_switch && g.nLakeCells < p.Ao_cells*p.size_final % if either the final time is reached or the max lake size-- keeping final time to keep my kill switches
+while ~kill_switch && g.nLakeCells < p.Ao_cells*p.size_final % if either the lake hits the bournday or the max lake size
     
     n = n + 1;
     p.n = n;
