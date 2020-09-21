@@ -153,7 +153,7 @@ Kc_ = [1e-4 1.5e-4 1.5e-3]; % uniform/wave
 % Kc_ = 1.5e-8*1000;%for circle, wave p.Kcoast = 1.5e-8
 % Kc_ = p.Kf;
 % p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/riverIC/';
-p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/091820/';
+p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/092020/';
 p.run = 'rand_lwave_huniform';
 time = 'time';
 for i = 1
