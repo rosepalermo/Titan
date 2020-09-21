@@ -20,7 +20,7 @@ while ~kill_switch && g.nLakeCells < p.Ao_cells*p.size_final % if either the lak
     
     %%%%%%%%%%%%%%%%%%%%%%% INCREMENT TIME %%%%%%%%%%%%%%%%%%%%%%%%%
     
-    p.t = p.t + p.dt;
+    p.t = p.t + p.dt
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
