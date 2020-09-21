@@ -9,19 +9,22 @@ end
 
 pct_Ao = nLakeCells./p.Ao_cells;
 time = g.t;
-
-% % figure()
-% hold on
-% plot(time,pct_Ao,'r','LineWidth',2)
-% set(gca,'FontSize',14)
-% xlabel('time')
-% ylabel('Lake area/A_o area')
+figure(1)
+hold on
+if p.doWaveErosion
+    plot(time,pct_Ao,'r','LineWidth',2)
+elseif p.doUniformErosion
+    plot(time,pct_Ao,'k','LineWidth',2)
+end
+set(gca,'FontSize',14)
+xlabel('time')
+ylabel('Lake area/A_o area')
 
 neroded = zeros(size(pct_Ao));
 for i = 2:length(ind)
     neroded(i) = nLakeCells(i) - nLakeCells(i-1);
 end
-figure(1)
+figure(2)
 hold on
 if p.doWaveErosion
     plot(time,neroded,'r','LineWidth',2)
@@ -30,7 +33,7 @@ elseif p.doUniformErosion
 end
 set(gca,'FontSize',14)
 xlabel('time')
-ylabel('Lake area/A_o area')
+ylabel('n eroded points')
 
 
 %calculate mean damage through time
@@ -48,7 +51,7 @@ if p.doUniformErosion
         meandam(i) = nanmean(temp,'all');
     end
 end
-figure(2)
+figure(3)
 hold on
 if p.doWaveErosion
     plot(time(1:end-1), meandam,'r','LineWidth',2)
@@ -67,7 +70,7 @@ if p.doWaveErosion
         meandam(i) = nanmean(temp,'all');
     end
 end
-figure(3)
+figure(4)
 hold on
 if p.doWaveErosion
     plot(time(1:end-1), meandam,'r','LineWidth',2)
