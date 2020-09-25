@@ -18,8 +18,8 @@ river_IC =0;
 
 % --------------- space and time resolution ------------------------------- 
 
-p.Nx = 400;                 %     p.Nx             Number of grid points in x direction
-p.Ny = 400;                 %     p.Ny             Number of grid points in y direction
+p.Nx = 200;                 %     p.Nx             Number of grid points in x direction
+p.Ny = 200;                 %     p.Ny             Number of grid points in y direction
 p.dx = 125/2;                 %     p.dx             Grid spacing in the x direction (m)
 p.dy = 125/2;                 %     p.dy             Grid spacing in the y direction (m)
 
