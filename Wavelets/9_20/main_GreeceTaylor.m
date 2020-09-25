@@ -2,8 +2,8 @@
 % clear
 addpath('/Users/rosepalermo/Documents/GitHub/Titan2/Wavelets/Current Working folder')
 save_on = false;
-% load('river_coastal_sl4wavelets.mat')
-% load('original_river_incised.mat')
+%     load('river_coastal_sl4wavelets.mat')
+load('original_river_incised.mat')
 for i = 3
     
 %     clearvars -except period global_Save i save_on eq14save sl_cell_wave sl_cell_uniform
@@ -30,8 +30,8 @@ for i = 3
         %     xx = A(5).cord{1,1}(:,2); yy = A(5).cord{1,1}(:,1);
         %     A(5).cord{1,1}(:,1) = yy;
         %     A(5).cord{1,1}(:,2) = xx;
-%         x0 = sl{ii}(:,1);
-%         y0 = sl{ii}(:,2);
+        x0 = sl{ii}(:,1);
+        y0 = sl{ii}(:,2);
         
         % fetch = WaveArea_save{1, i}{1, 1};
         M = [x0 y0];

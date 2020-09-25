@@ -36,28 +36,29 @@ xlabel('time')
 ylabel('n eroded points')
 
 
-%calculate mean damage through time
+%calculate perimeter & mean damage through time
+figure(3)
+hold on
 if p.doWaveErosion
     for i = 1:length(ind)-1
         temp = g.dam_wave_save(:,:,i);
         temp(temp==0) =nan;
-        meandam(i) = nanmean(temp,'all');
+        meandam_wave(i) = nanmean(temp,'all');
+        perimeter(i) = length(find(g.dam_wave_save(:,:,i)));
     end
+        plot(time(1:end-1), meandam_wave,'r','LineWidth',2)
 end
 if p.doUniformErosion
     for i = 1:length(ind)-1
         temp = g.dam_uniform_save(:,:,i);
         temp(temp==0) =nan;
-        meandam(i) = nanmean(temp,'all');
+        meandam_uniform(i) = nanmean(temp,'all');
+        perimeter(i) = length(find(g.dam_uniform_save(:,:,i)));
     end
+        plot(time(1:end-1), meandam_uniform,'k','LineWidth',2)
+
 end
-figure(3)
-hold on
-if p.doWaveErosion
-    plot(time(1:end-1), meandam,'r','LineWidth',2)
-elseif p.doUniformErosion
-    plot(time(1:end-1), meandam,'k','LineWidth',2)
-end
+
 set(gca,'FontSize',14)
 xlabel('time')
 ylabel('mean damage')
@@ -67,20 +68,30 @@ if p.doWaveErosion
     for i = 1:length(ind)-1
         temp = g.wave_matrix_save(:,:,i);
         temp(temp==0) =nan;
-        meandam(i) = nanmean(temp,'all');
+        meanwave(i) = nanmean(temp,'all');
     end
 end
 figure(4)
 hold on
 if p.doWaveErosion
-    plot(time(1:end-1), meandam,'r','LineWidth',2)
-elseif p.doUniformErosion
-    plot(time(1:end-1), meandam,'k','LineWidth',2)
+    plot(time(1:end-1), meanwave,'r','LineWidth',2)
 end
 set(gca,'FontSize',14)
 xlabel('time')
 ylabel('mean wave weight')
 
+
+% perimeter through time
+figure(5)
+hold on
+if p.doWaveErosion
+    plot(time(1:end-1), perimeter,'r','LineWidth',2)
+elseif p.doUniformErosion
+    plot(time(1:end-1), perimeter,'k','LineWidth',2)
+end
+set(gca,'FontSize',14)
+xlabel('time')
+ylabel('perimeter')
 % figure()
 % for i = 1:10:(length(ind))
 % subplot(2,ceil(ind(end)/10),i)

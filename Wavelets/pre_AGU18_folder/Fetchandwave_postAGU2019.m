@@ -5,7 +5,7 @@
 
 %% load shoreline coordinates
 addpath('D:\Titan\Modeling\river_and_wave_1_2019')
-addpath('C:\Users\Rose Palermo\Documents\GitHub\Titan2\Wavelets\Current Working folder')
+addpath(genpath('/Users/rosepalermo/Documents/GitHub/Titan/Wavelets/pre_AGU18_folder/'))
 
 %% t2v1 WAVE 
 
@@ -27,12 +27,12 @@ SL_matrix(2).cord{1,1}(:,2) = ordered_sl_save{runsplot(3),1}{1,1}(:,2);
 load('uniformt1v1.mat')
 runsplot = [1; 10; 20];
 
-shoreline = addidshoreline_cardonly(lake_save{runsplot(2),1},~lake_save{runsplot(2),1});
+shoreline = addidshoreline(lake_save{runsplot(2),1},~lake_save{runsplot(2),1});
 [sl_cell,cells2trash] = order_cw_lastpoint(lake_save{runsplot(2),1},shoreline);
 SL_matrix(3).cord{1,1}(:,1) = X(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:,2)));
 SL_matrix(3).cord{1,1}(:,2) = Y(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:,2)));
 
-shoreline = addidshoreline_cardonly(lake_save{runsplot(3),1},~lake_save{runsplot(3),1});
+shoreline = addidshoreline(lake_save{runsplot(3),1},~lake_save{runsplot(3),1});
 [sl_cell,cells2trash] = order_cw_lastpoint(lake_save{runsplot(3),1},shoreline);
 SL_matrix(4).cord{1,1}(:,1) = X(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:,2)));
 SL_matrix(4).cord{1,1}(:,2) = Y(sub2ind(size(X),sl_cell{1,1}(:,1),sl_cell{1,1}(:,2)));
