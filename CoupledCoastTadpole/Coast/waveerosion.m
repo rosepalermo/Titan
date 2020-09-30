@@ -49,4 +49,5 @@ end
 g.nLakeCells = length(find(g.wave_output));
 g.dam_wave = dam_matrix;
 g.wave_matrix = wave_matrix;
+g.adt = adt;
 end

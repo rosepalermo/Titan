@@ -38,6 +38,6 @@ end
 
 g.nLakeCells = length(find(g.uniform_output));
 g.dam_uniform = dam_matrix;
-
+g.adt = adt;
 
 end
