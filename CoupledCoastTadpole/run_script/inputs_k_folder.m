@@ -5,10 +5,10 @@ function [Kc_,folder] = inputs_k_folder(cluster);
 % cluster -- 1 running on cluster, 2 running locally
 
 if cluster
-    folder = '/home/rpalermo/TitanModelOutput/092520/';
+    folder = '/home/rpalermo/TitanModelOutput/093020/';
     
 elseif ~cluster
-    folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/riverIC/';
+    folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/093020/';
     
 end
 

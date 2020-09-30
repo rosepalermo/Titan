@@ -12,13 +12,6 @@ function [lake,strength,p,dam_matrix,wave_matrix] = coastal_erosion(lake,fetch_o
 if isfield(p,'boundary')
     return
 end
-
-% if it's the first time step, make the shoreline strength random from 0,1
-if p.t == 0
-    [shoreline] = addidshoreline(lake,~lake); % corners and edges
-    ind_sl = find(shoreline);
-    strength(ind_sl) = rand(size(ind_sl));
-end
     
 % initialize lake, land
 land = ~lake;

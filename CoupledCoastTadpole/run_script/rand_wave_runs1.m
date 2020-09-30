@@ -29,7 +29,7 @@ p.dtmax = 100;%1e4;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
 
 % p.tf = 1e5;                 %     p.tf             Total time of the simulation (yr)
-p.size_final = 1;
+p.size_final = 0.5;
 
 % ----- boundary conditions, source terms, and flow routing ---------------
 
@@ -130,8 +130,10 @@ if rand_IC
 elseif river_IC
     load('riverIC.mat')
     init = riverIC;
+    if p.Nx == 400;
     p.Ao = 8.9298e+07; 
     p.Ao_cells = 30368;
+    end
 %test circle
 elseif init_circle
     [init,p] = test_circle(p);
@@ -156,7 +158,7 @@ p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elev
 % p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/091820/';
 cluster = 1;
 [Kc_,p.folder] = inputs_k_folder(cluster);
-p.run = 'rand_wave_Kc';
+p.run = 'rand_wave_Kc_';
 time = 'time';
 for i = 1
     p.tf = 1e5;

@@ -18,8 +18,8 @@ river_IC =0;
 
 % --------------- space and time resolution ------------------------------- 
 
-p.Nx = 400;                 %     p.Nx             Number of grid points in x direction
-p.Ny = 400;                 %     p.Ny             Number of grid points in y direction
+p.Nx = 200;                 %     p.Nx             Number of grid points in x direction
+p.Ny = 200;                 %     p.Ny             Number of grid points in y direction
 p.dx = 125/2;                 %     p.dx             Grid spacing in the x direction (m)
 p.dy = 125/2;                 %     p.dy             Grid spacing in the y direction (m)
 
@@ -29,7 +29,7 @@ p.dtmax = 100;%1e4;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
 
 % p.tf = 1e5;                 %     p.tf             Total time of the simulation (yr)
-p.size_final = 1.2;
+p.size_final = 0.5;
 
 % ----- boundary conditions, source terms, and flow routing ---------------
 
