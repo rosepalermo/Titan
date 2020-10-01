@@ -167,6 +167,7 @@ for i = 1
     if p.doWaveErosion
         p.Kwave = Kc_(2);
     end
+    p.run2 = strrep(num2str(Kc_(i)),'.','_');
     p.runname = strcat(p.folder,p.run);
     solution = Tadpole(init,p);
     time_end(i) = toc(tstart);

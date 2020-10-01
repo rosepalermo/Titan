@@ -168,6 +168,7 @@ for i = 1
         p.Kwave = Kc_(1);
     end
     p.runname = strcat(p.folder,p.run);
+    p.run2 = strrep(num2str(Kc_(i)),'.','_');
     solution = Tadpole(init,p);
     time_end(i) = toc(tstart);
     timename = strcat(p.folder,p.run,p.run2,time);

@@ -1,6 +1,10 @@
 function [p,g] = waveerosion(p,g)
 
 if isfield(p,'boundary')
+    g.nLakeCells = length(find(g.U<g.sealevel));
+    g.dam_wave = zeros(size(g.U));
+    g.wave_matrix = zeros(size(g.U));
+    g.adt = 0;
     return
 end
 
