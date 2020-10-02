@@ -76,6 +76,7 @@ for k = 1:length(slccw)
         % cos(theta - phi) = dot product of slvec and losvec
         cosang = -weighted_fetch_dist./Fetch_dist; %[mag_fetch*mag_norm(which is 1)*cosang]/mag_fetch = cosang
         cosang(isnan(cosang)) = 0;
+        cosang(cosang<0) = 0; % any less than 0 are artifacts of discritezation and not physical
         Wavepts = [slccw{k}(l,1),slccw{k}(l,2)]+(V-[slccw{k}(l,1),slccw{k}(l,2)]).*cosang;
         WaveArea{k,1}(l,1) = polyarea(Wavepts(:,1),Wavepts(:,2));
         
