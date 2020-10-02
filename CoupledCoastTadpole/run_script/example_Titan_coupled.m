@@ -18,8 +18,8 @@ river_IC =0;
 
 % --------------- space and time resolution ------------------------------- 
 
-p.Nx = 400;                 %     p.Nx             Number of grid points in x direction
-p.Ny = 400;                 %     p.Ny             Number of grid points in y direction
+p.Nx = 200;                 %     p.Nx             Number of grid points in x direction
+p.Ny = 200;                 %     p.Ny             Number of grid points in y direction
 p.dx = 125/2;                 %     p.dx             Grid spacing in the x direction (m)
 p.dy = 125/2;                 %     p.dy             Grid spacing in the y direction (m)
 
@@ -29,7 +29,7 @@ p.dtmax = 100;%1e4;              %     p.dtmax          maximum time step (yr)
 p.Courant = 0.9;            %     p.Courant        maximum Courant number
 
 % p.tf = 1e5;                 %     p.tf             Total time of the simulation (yr)
-p.size_final = 0.53;
+% p.size_final = 0.53;
 
 % ----- boundary conditions, source terms, and flow routing ---------------
 
@@ -56,7 +56,7 @@ p.plotint = 1;%100;            %     p.plotint        Plot will be redrawn every
 p.plottype = 'elevation';             %     p.plottype       1=perspective view, 2=drainage area map, 3=curvature map, 4=elevation map, 5=contour map, 6=shaded relief, 7=colored shaded relief
                             %
 p.doSaveOutput = 1;         %     p.SaveOutput     Save model output to a .mat file
-p.saveint = 1; %1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
+p.saveint = 100; %1000;              %     p.saveint        Elevation grid will be saved every saveint iterations
 % p.runname = 'trash';        %     p.runname:       Character string naming the run. If specified 
                             %                      (and if p.saveint~=0), the parameters and elevations at each 
                             %                      save interal will be saved in a binary .MAT file called <runname>.mat
@@ -68,13 +68,13 @@ p.saveint = 1; %1000;              %     p.saveint        Elevation grid will be
 p.doDiffusion = 0;          %     p.doDiffusion    Turn hillslope diffusion on (1) or off (0)
 p.D = 0.005;                %     p.D              Hillslope diffusivity (m^2/yr)
                             %
-p.doLandslides = 0;         %     p.doLandslides   Turn landslides on (1) or off (0)
+p.doLandslides = 1;         %     p.doLandslides   Turn landslides on (1) or off (0)
 p.Sc = 0.6;                 %     p.Sc             Critical slope (m/m)
 
 
 % ---------------- bedrock channel incision -------------------------------                           
 
-p.doStreamPower = 0;        %     p.doStreamPower  Turn bedrock channel incision on (1) or off (0)
+p.doStreamPower = 1;        %     p.doStreamPower  Turn bedrock channel incision on (1) or off (0)
 p.doChannelDiffusion = 0;   %     p.doChannelDiffusion Turn diffusion in channels on (1) or off (0)
 p.Kf = 1e-5; % 5e-6;                %     p.Kf             Coefficient in stream power incision law (kg m^(1+2m) yr^-2)
 p.m = 0.5;                  %     p.m              Drainage area exponent in stream power law
@@ -85,7 +85,7 @@ p.thetac = 0;               %     p.thetac         Threshold for fluvial incisio
 
 % ---------------- coastal erosion -------------------------------                           
 
-p.doWaveErosion = 1;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
+p.doWaveErosion = 0;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
 p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
 p.So = 1;
 p.dxo = 100;
@@ -163,13 +163,15 @@ end
 %% RUN THE MODEL %%
 
 % run the model, storing the final elevation grid in solution
-% Kf_ = [5e-10 5e-8 5e-6]; % rivers
-Kc_ = [1e-4  0];%1.5e-4 1.5e-3]; % uniform/wave
+Kf_ = [5e-10 5e-8 5e-6]; % rivers
+% Kc_ = [1e-4  0];%1.5e-4 1.5e-3]; % uniform/wave
 % Kc_ = [1e-4; 1e-3; 1e-2];% 5e-13 2e-13];
 % Kc_ = 1.5e-8*1000;%for circle, wave p.Kcoast = 1.5e-8
 % Kc_ = p.Kf;
+cluster = 0;
+[Kc_,~,p.size_final] = inputs_k_folder(cluster);
 p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/';
-p.run = 'uniform_test_size_K';
+p.run = 'river_IC_200x200';
 for i = 1%:length(Kc_)
     p.tf = 1000;
     tic
@@ -179,7 +181,7 @@ for i = 1%:length(Kc_)
     if p.doWaveErosion
         p.Kwave = Kc_(i);
     end
-    p.run2 = strrep(num2str(Kc_(i)),'.','_');
+    p.run2 = strrep(num2str(Kf_(i)),'.','_');
     p.runname = strcat(p.folder,p.run,p.run2);
     solution = Tadpole(init,p);
     time_end(i) = toc;

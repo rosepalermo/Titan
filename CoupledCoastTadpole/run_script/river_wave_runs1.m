@@ -129,10 +129,14 @@ if rand_IC
     rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the noise surface
     [init,p] = get_IC(p,rfactor);
 elseif river_IC
-    load('riverIC.mat')
-    init = riverIC;
-    p.Ao = 8.9298e+07;  
-    p.Ao_cells = 30368;
+    load('river_ic_200x200.mat')
+    init = River_IC_200x200;
+    p.Ao = 89298000;
+    p.Ao_cells =15808;
+%     load('riverIC.mat')
+%     init = riverIC;
+%     p.Ao = 8.9298e+07;  
+%     p.Ao_cells = 30368;
 %test circle
 elseif init_circle
     [init,p] = test_circle(p);

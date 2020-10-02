@@ -68,7 +68,7 @@ while ~kill_switch && g.nLakeCells < p.Ao_cells*p.size_final % if either the lak
                 g.t(p.lastsave) = p.t;
                 g.sealevelsave(p.lastsave) = g.sealevel;
                 save(p.runname, '-v7.3', 'p', 'g');
-                g.nLakeCells = length(find(g.U<=p.sealevel_init));
+                g.nLakeCells = length(find(g.output(:,:,1)<=p.sealevel_init));
             end
         end
     end
