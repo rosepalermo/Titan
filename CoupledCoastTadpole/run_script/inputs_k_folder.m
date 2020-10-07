@@ -9,7 +9,7 @@ if cluster
     folder = '/home/rpalermo/TitanModelOutput/100220/';
     
 elseif ~cluster
-    folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/cluster/093020/';
+    folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/cluster/100220/';
     
 end
 

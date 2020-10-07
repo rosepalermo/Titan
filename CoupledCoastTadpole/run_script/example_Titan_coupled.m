@@ -85,7 +85,7 @@ p.thetac = 0;               %     p.thetac         Threshold for fluvial incisio
 
 % ---------------- coastal erosion -------------------------------                           
 
-p.doWaveErosion = 0;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
+p.doWaveErosion = 1;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
 p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
 p.So = 1;
 p.dxo = 100;
@@ -170,8 +170,11 @@ Kf_ = [5e-10 5e-8 5e-6]; % rivers
 % Kc_ = p.Kf;
 cluster = 0;
 [Kc_,~,p.size_final] = inputs_k_folder(cluster);
+load('wave_debug.mat')
+init = wave_debug;
 p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/';
-p.run = 'river_IC_200x200';
+p.run = 'debug_wave';
+
 for i = 1%:length(Kc_)
     p.tf = 1000;
     tic

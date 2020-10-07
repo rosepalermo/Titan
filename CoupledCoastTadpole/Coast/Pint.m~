@@ -29,16 +29,16 @@ if ~any(nbi) % x0,y0 is on a promontory or a zero-width inlet, so nbi == [0,0]
     % WOULD IT BE THE OTHER WAY AROUND FOR ISLANDS? HERE I HAVE ASSUMED
     % ONLY PROMONTORIES, SO WE CAN JUST EXTRAPOLATE ALONG THE PREVIOUS
     % SEGMENT TO GET THE OBSERVATION POINT
-    nbi = vp;
-%     % continue along the previous segment a distance eps
-%     P = [x0,y0]+eps.*(vp./norm(vp));
-% %     if norm(vp) == 0
-% %         disp("we have a problem")
-% %     end
-end
-nbi = nbi/sqrt(nbi(1)^2+nbi(2)^2);
-P = [x0,y0]+eps*nbi;
-
+    
+    % continue along the previous segment a distance eps
+    P = [x0,y0]+eps.*vp./norm(vp);
+%     if norm(vp) == 0
+%         disp("we have a problem")
+%     end
+    nbi = np;
+else
+    nbi = nbi/sqrt(nbi(1)^2+nbi(2)^2);
+    P = [x0,y0]+eps*nbi;
 end
 
 % figure
