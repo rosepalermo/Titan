@@ -1,4 +1,4 @@
-function [dam_matrix,wave_weight_matrix,indshoreline_ordered,cells2trash,p] = get_dam_wave(lake,p)
+function [dam_matrix,wave_weight_matrix,fetch_matrix,indshoreline_ordered,cells2trash,p] = get_dam_wave(lake,p)
 
 % initialize
 x = 1:p.Nx;
@@ -6,6 +6,7 @@ y = 1:p.Ny;
 [X,Y] = meshgrid(x,y);
 X = X*p.dx; Y = Y*p.dy;
 wave_weight_matrix = nan(size(lake));
+fetch_matrix = nan(size(lake));
 dam_matrix = zeros(size(lake));
 cells2trash = [];
 
@@ -44,7 +45,7 @@ for ff = 1:length(F_lake_all)
         fetch_sl_cells{l,1}(:,2) = Y(indshoreline_ordered{l,1});
     end
     % calculate wave weighted (sqrt(F)*cos(theta-phi))
-    [WaveArea_cell,~] = fetch_vis_approx(fetch_sl_cells);% first is wave, second is fetch!!
+    [WaveArea_cell,FetchArea_cell] = fetch_vis_approx(fetch_sl_cells);% first is wave, second is fetch!!
     clearvars erodedind
     %         end
     
@@ -54,6 +55,7 @@ for ff = 1:length(F_lake_all)
     wave_weighting = cell2mat(WaveArea_cell);
     wave_weighting = cell2mat(WaveArea_cell)./p.Ao;
     wave_weight_matrix(indshoreline_ordered) = wave_weighting;
+    fetch_matrix(indshoreline_ordered) = cell2mat(FetchArea_cell);
     dam = p.dt*p.Kwave*shoreline(indshoreline_ordered).*wave_weighting*p.So./p.dxo;
     dam_matrix(indshoreline_ordered) = dam_matrix(indshoreline_ordered)+dam; % have to do this because if a shoreline cell is an island on the big one and has a second order lake in it, we don't want the damage from the second order lake to be the only damage it receives. need to add up damage from both sides.
     

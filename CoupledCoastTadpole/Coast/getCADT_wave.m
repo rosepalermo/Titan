@@ -8,7 +8,7 @@ if isfield(p,'boundary')
     return
 end
 
-[dam_matrix,wave_matrix,~,cells2trash,p] = get_dam_wave(lake,p);
+[dam_matrix,wave_matrix,fetch_matrix,~,cells2trash,p] = get_dam_wave(lake,p);
 
 % because damage is normalized to 1, we need as many time steps as if we
 % round up the damage. When <1, only one time step, so not really adaptive.

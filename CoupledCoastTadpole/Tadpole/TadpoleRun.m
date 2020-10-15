@@ -75,6 +75,7 @@ while ~kill_switch && g.nLakeCells < p.Ao_cells*p.size_final % if either the lak
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     kill_switch = isfield(p,'boundary');
+    toc
 end
 
 p.iterations = n;

@@ -179,7 +179,6 @@ set(gca,'YLim',log2([min(period),max(period)]), ...
 set(gca,'XLim',[0,1.25*max(global_ws)])
 
 
-
 %Model lakes
 pmin1 = 2^2;
 pmax1 = 2^4;
@@ -209,7 +208,8 @@ eq14 = dj.*dt./0.776./length(y)*sum(powernorm_sub./scale(pband1)');
 
 %% shoreline w/ eq4
     figure()
-    scatter3(xx,yy,eq14,20,eq14,'filled')
+    offset = 10000;
+    scatter3(xx/1e3+offset,yy/1e3+offset,eq14,20,eq14,'filled')
     %     scatter3(xx/1e3+0.75,yy/1e3+1.65,eq14,30,eq14,'filled')
     
     view(2)

@@ -130,6 +130,10 @@ keepme = (length_cells) > 3;
 cells2trash = cell2mat(coasts(~keepme)');
 sl_cell = coasts(keepme);
 
+if isfield(p,'lake_only')
+    [~,sl_cell_ind] = max(length_cells);
+    sl_cell = coasts(sl_cell_ind);
+end
 
 % % PLOT
 % figure
