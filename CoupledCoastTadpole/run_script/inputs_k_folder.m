@@ -2,14 +2,14 @@
 
 function [Kc_,folder,size_final] = inputs_k_folder(cluster);
 
-size_final = 1;
+size_final = 0.5757;
 % cluster -- 1 running on cluster, 2 running locally
 
 if cluster
-    folder = '/home/rpalermo/TitanModelOutput/101520/';
+    folder = '/home/rpalermo/TitanModelOutput/101620/';
     
 elseif ~cluster
-    folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/cluster/100220/';
+    folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/cluster/101520/';
     
 end
 
