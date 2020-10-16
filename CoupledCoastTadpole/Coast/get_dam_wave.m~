@@ -58,9 +58,7 @@ for ff = 1:length(F_lake_all)
     fetch_all = cell2mat(FetchArea_cell);
     
     % when nonunique (on promontories), only will use first value unless
-    % add them up. This part of the code finds duplicate indices and adds
-    % up the wave & fetch areas to get waves from both sides of
-    % promontories
+    % add them up. This part of the code finds duplicate indices and
     A = [indshoreline_ordered wave_weighting];
     [a,~,c] = unique(A(:,1),'rows');
     out_wave = [a(:,1),accumarray(c,A(:,2))];

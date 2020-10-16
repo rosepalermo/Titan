@@ -170,8 +170,8 @@ Kf_ = [5e-10 5e-8 5e-6]; % rivers
 % Kc_ = p.Kf;
 cluster = 0;
 [Kc_,~,p.size_final] = inputs_k_folder(cluster);
-load('wave_debug.mat')
-init = wave_debug;
+load('init_test.mat')
+% init = wave_debug;
 p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/';
 p.run = 'debug_wave';
 
