@@ -30,6 +30,9 @@ if ~any(nbi) % x0,y0 is on a promontory or a zero-width inlet, so nbi == [0,0]
     % ONLY PROMONTORIES, SO WE CAN JUST EXTRAPOLATE ALONG THE PREVIOUS
     % SEGMENT TO GET THE OBSERVATION POINT
     nbi = vp;
+    if vp == 0
+        nbi = [x0-xn,y0-yn]; % The vector from P1 to P3 -- this occurs when P1 and P2 are the same point.
+    end
 %     % continue along the previous segment a distance eps
 %     P = [x0,y0]+eps.*(vp./norm(vp));
 % %     if norm(vp) == 0
