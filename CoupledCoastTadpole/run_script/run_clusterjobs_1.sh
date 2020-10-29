@@ -5,6 +5,7 @@
 # sbatch rand_wave_runs2.slurm
 # sbatch rand_wave_runs3.slurm
 sbatch river_uniform_runs1.slurm
+sbatch river_wave_uniform_runs3.slurm
 sbatch river_wave_runs1.slurm
 sbatch river_wave_runs2.slurm
 sbatch river_wave_runs3.slurm
