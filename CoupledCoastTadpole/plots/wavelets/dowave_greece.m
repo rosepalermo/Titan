@@ -16,7 +16,7 @@ function [period, eq14] = dowave_greece(y,dt,ord,xx,yy,savename,save_on,fetch,i)
 % y = (y - mean(y))/sqrt(variance);
 
 % close the loop
-figure(); scatter3(xx,yy,[(0:length(xx)-1)*dt],[],[(0:length(xx)-1)*dt]);view(2)
+figure(); scatter3(xx,yy,[(0:length(xx)-1)*dt],100,[(0:length(xx)-1)*dt],'.');view(2);axis equal tight; colormap jet; colorbar
 
 n = length(y);
 t = (0:length(y)-1)*dt;  % construct time array
@@ -130,10 +130,12 @@ figure
 
 %--- Plot time series
 subplot('position',[0.1 0.75 0.65 0.2])
-plot(t,y)
+scatter3(t,y,[(0:length(xx)-1)*dt],100,[(0:length(xx)-1)*dt],'.');view(2)
+hold on;
+plot(t,y,'k')
 set(gca,'XLim',xlim(:))
-xlabel('t')
-ylabel('y')
+xlabel('Alongshore location')
+ylabel('Azimuth')
 title('data')
 hold off
 
@@ -144,11 +146,13 @@ Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
 
 % contour(t,log2(period),log2(power),log2(levels));  %*** or use 'contourf'
 imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
-colormap gray
+colormap jet
 
 xlabel('t')
-ylabel('Period (units of t)')
+ylabel('Period (units of Alongshore location)')
 title('Wavelet Power Spectrum')
+load('climits_wps.mat')
+set(gca,'Clim',climits)
 set(gca,'XLim',xlim(:))
 set(gca,'YLim',log2([min(period),max(period)]), ...
 	'YDir','reverse', ...
@@ -181,11 +185,30 @@ set(gca,'XLim',[0,1.25*max(global_ws)])
 
 %Model lakes
 pmin1 = 2^2;
-pmax1 = 2^4;
-pmin2 = 2^3;
-pmax2 = 2^4;
+pmax1 = 2^3.8;
 
-size(power)
+
+h = figure();
+imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
+colormap jet
+xlabel('Alongshore location')
+ylabel('Period (units of Alongshore location)')
+title('Wavelet Power Spectrum')
+load('climits_wps.mat')
+set(gca,'Clim',climits)
+set(gca,'XLim',xlim(:))
+    set(gca,'YLim',log2([pmin1,pmax1]), ...
+    	'YDir','reverse', ...
+    	'YTick',log2(Yticks(:)), ...
+    	'YTickLabel',Yticks)
+% set(gca,'YLim',log2([min(period),max(period)]), ...
+%     'YDir','reverse', ...
+%     'YTick',log2(Yticks(:)), ...
+%     'YTickLabel',Yticks)
+set(gca,'FontSize',14)
+load('position_wps.mat')
+h.Position = position_wps;
+
 fracloc = 0.3;
 % don't like doing bespoke data editing but here we go anyway
 %big kluge
@@ -208,19 +231,18 @@ eq14 = dj.*dt./0.776./length(y)*sum(powernorm_sub./scale(pband1)');
 
 %% shoreline w/ eq4
     figure()
-    offset = 10000;
-    scatter3(xx/1e3+offset,yy/1e3+offset,eq14,20,eq14,'filled')
+    scatter3(xx,yy,eq14',[],eq14','filled')
     %     scatter3(xx/1e3+0.75,yy/1e3+1.65,eq14,30,eq14,'filled')
     
     view(2)
     axis equal tight
-    
+    colorbar
     %  set(gca,'XLim',([2.100 2.400])); set(gca,'YLim',([1.800 2.000])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
     %   set(gca,'XLim',([2.0500 2.4500])); set(gca,'YLim',([1.7500 2.0500])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
     
     
-    
-%     set(gca,'Clim',[0 0.00005])
+    load('clim_eq14.mat')
+    set(gca,'Clim',clim_eq14)
     set(gca,'FontSize',14)
 %     set(gca,'xtick',[],'ytick',[])
 %     set(gca,'xticklabel',[],'yticklabel',[])
@@ -235,7 +257,6 @@ eq14 = dj.*dt./0.776./length(y)*sum(powernorm_sub./scale(pband1)');
     set(gca,'fontsize',18)
     %     set(gca,'fontweight','bold')
     grid off
-    [max(xx) max(yy)]
     % Full figure
     
     %     figure()
@@ -254,4 +275,10 @@ if save_on
     saveas(gcf,figname)
 end
 
+% Plot fetch vs roughness
+figure()
+scatter(log(fetch),eq14')
+xlabel('log fetch')
+ylabel('wavelet variance')
+set(gca,'FontSize',14)
 

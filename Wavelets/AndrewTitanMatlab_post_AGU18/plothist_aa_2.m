@@ -11,8 +11,8 @@
 
 fs = 32;    % font size
 titleboost = 1.2 %
-edgespace = .005 ;
-edgemax = 0.15 ;
+edgespace = .2 ;
+edgemax = 6 ;
 radscale = 10^-4;
 % ylimits = [0 0.2]
 xlimits = [0 edgemax];
@@ -35,7 +35,7 @@ datatitle(12,:) = 'Eastern Uist';
 %% main loop
 
 
-for ii = 3
+for ii = 1
     
     % load a specific set of values
     figure
@@ -77,7 +77,7 @@ for ii = 3
     xlim(xlimits)
    
     set(gca,'ytick',0:0.1:0.2)
-set(gca,'xtick',0:0.5:2)
+set(gca,'xtick',0:5:5)
     
     h.FaceColor = 'k';
     h.EdgeColor = 'w';

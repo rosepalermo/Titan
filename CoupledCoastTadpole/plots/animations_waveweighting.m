@@ -21,8 +21,9 @@ end
 load('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/cluster/100220/rand_wave_Kc0_15.mat')
 figure()
 for i = 1:size(g.output,3);
-    imagesc(g.output(:,:,i)<=p.sealevel_init)
+%     imagesc(g.output(:,:,i)<=p.sealevel_init)
 %     caxis([0 1])
+plotisl(p,g,i)
     title(i)
     drawnow
 end

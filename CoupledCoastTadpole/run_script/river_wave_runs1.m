@@ -129,7 +129,7 @@ if rand_IC
     rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the noise surface
     [init,p] = get_IC(p,rfactor);
 elseif river_IC
-    load('river_ic_200x200.mat')
+    load('river_wideria_200x200.mat')
     init = River_IC_200x200;
     p.Ao = 89298000;
     p.Ao_cells =15808;

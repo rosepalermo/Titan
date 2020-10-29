@@ -9,6 +9,6 @@ patch( V(:,1) , V(:,2) , 0.1*ones( size(V,1) , 1 ) , ...
            'b' , 'linewidth' , 1.5 );
        alpha(.3)
     plot3( V(:,1) , V(:,2) , 0.1*ones( size(V,1) , 1 ) , ...
-           'bo' , 'Markersize' , 5 );
+           'b.' , 'Markersize' , 5 );
 end
        scatter(Pobs(1),Pobs(2),40,'r*')
