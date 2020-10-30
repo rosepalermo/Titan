@@ -130,7 +130,7 @@ if rand_IC
     [init,p] = get_IC(p,rfactor);
 elseif river_IC
     load('river_wideria_200x200.mat')
-    init = River_IC_200x200;
+%     init = River_IC_200x200;
     p.Ao = 89298000;
     p.Ao_cells =15808;
 %test circle
