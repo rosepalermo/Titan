@@ -11,6 +11,6 @@ function [period, eq14] = wavelets(x,y,fetch)
 
 n=2;
 
-[period,eq14] = dowave_greece(theta,deltad,n,x,y,'test',0,fetch,2);
+[period,eq14] = dowave_greece(theta,deltad,n,x,y,'test',0,fetch,4,16);
 
 end

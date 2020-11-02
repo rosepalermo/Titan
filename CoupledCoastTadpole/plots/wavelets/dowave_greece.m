@@ -1,4 +1,4 @@
-function [period, eq14] = dowave_greece(y,dt,ord,xx,yy,savename,save_on,fetch,i)
+function [period, eq14] = dowave_greece(y,dt,ord,xx,yy,savename,save_on,fetch,pmin,pmax)
 %%
 % Computes the continuous wavelet transform of a function y with point
 % spacing dt, compares it with the spectrum for a random process with
@@ -16,7 +16,12 @@ function [period, eq14] = dowave_greece(y,dt,ord,xx,yy,savename,save_on,fetch,i)
 % y = (y - mean(y))/sqrt(variance);
 
 % close the loop
-figure(); scatter3(xx,yy,[(0:length(xx)-1)*dt],100,[(0:length(xx)-1)*dt],'.');view(2);axis equal tight; colormap jet; colorbar
+figure(); scatter3(xx,yy,[(0:length(xx)-1)*dt],100,[(0:length(xx)-1)*dt],'.');view(2);axis equal tight; colormap parula; colorbar
+
+    if save_on
+        fig = '.eps'; fig_suf ='_pts'; figname = strcat(savename,fig_suf);
+        saveas(gcf,figname)
+    end
 
 n = length(y);
 t = (0:length(y)-1)*dt;  % construct time array
@@ -29,7 +34,7 @@ s0 = 2*dt; % figure()
 % % contour(t,log2(period),log2(power),log2(levels));  %*** or use 'contourf'
 % % imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
 % imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
-% colormap jet
+% colormap parula
 % set(gca,'FontSize',12)
 % set(gca,'Clim',[-20 15])
 % this says start at a scale of 2*dt (analogous to the Nyquist wavelength of a time series)
@@ -126,7 +131,7 @@ global_signif = wave_signif_ARn(std(y)^2,dt,scale,1,fft_theor,-1,dof,mother);
 eq14 = dj.*dt./0.776./length(y)*sum(sum(power./scale'));
 
 % PLOTTING
-figure
+figure()
 
 %--- Plot time series
 subplot('position',[0.1 0.75 0.65 0.2])
@@ -146,7 +151,7 @@ Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
 
 % contour(t,log2(period),log2(power),log2(levels));  %*** or use 'contourf'
 imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
-colormap jet
+colormap parula
 
 xlabel('t')
 ylabel('Period (units of Alongshore location)')
@@ -173,6 +178,7 @@ semilogx(fft_theor,log2(period),'k')
 hold on
 semilogx(global_signif,log2(period),'r')
 semilogx(global_ws,log2(period))
+legend('fft estimate','significance','spatial average')
 hold off
 xlabel('Power (amplitude^2)')
 title('Global Wavelet Spectrum')
@@ -181,23 +187,26 @@ set(gca,'YLim',log2([min(period),max(period)]), ...
 	'YTick',log2(Yticks(:)), ...
 	'YTickLabel','')
 set(gca,'XLim',[0,1.25*max(global_ws)])
-
+    if save_on
+        fig = '.eps'; fig_suf ='_wps_all'; figname = strcat(savename,fig_suf);
+        saveas(gcf,figname)
+    end
 
 %Model lakes
-pmin1 = 2^2;
-pmax1 = 2^3.8;
+% pmin = 2^2;
+% pmax = 2^3.8;
 
 
 h = figure();
 imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
-colormap jet
+colormap parula
 xlabel('Alongshore location')
 ylabel('Period (units of Alongshore location)')
 title('Wavelet Power Spectrum')
 load('climits_wps.mat')
 set(gca,'Clim',climits)
 set(gca,'XLim',xlim(:))
-    set(gca,'YLim',log2([pmin1,pmax1]), ...
+    set(gca,'YLim',log2([pmin,pmax]), ...
     	'YDir','reverse', ...
     	'YTick',log2(Yticks(:)), ...
     	'YTickLabel',Yticks)
@@ -208,8 +217,12 @@ set(gca,'XLim',xlim(:))
 set(gca,'FontSize',14)
 load('position_wps.mat')
 h.Position = position_wps;
+    if save_on
+        fig = '.eps'; fig_suf ='_wps'; figname = strcat(savename,fig_suf);
+        saveas(gcf,figname)
+    end
 
-fracloc = 0.3;
+
 % don't like doing bespoke data editing but here we go anyway
 %big kluge
 % this was for scotland - not using but I renamed the values
@@ -221,7 +234,7 @@ goodi = 1:realabsolutepower;
 
 
 % this computation is i specific and comes after plotting
-pband1 = period >= pmin1 & period <= pmax1;
+pband1 = period >= pmin & period <= pmax;
 
 powernorm_sub = power(pband1,goodi);
 eq14 = dj.*dt./0.776./length(y)*sum(powernorm_sub./scale(pband1)');
@@ -232,48 +245,18 @@ eq14 = dj.*dt./0.776./length(y)*sum(powernorm_sub./scale(pband1)');
 %% shoreline w/ eq4
     figure()
     scatter3(xx,yy,eq14',[],eq14','filled')
-    %     scatter3(xx/1e3+0.75,yy/1e3+1.65,eq14,30,eq14,'filled')
-    
     view(2)
     axis equal tight
     colorbar
-    %  set(gca,'XLim',([2.100 2.400])); set(gca,'YLim',([1.800 2.000])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
-    %   set(gca,'XLim',([2.0500 2.4500])); set(gca,'YLim',([1.7500 2.0500])); %set(gca,'Clim',[0 mean(rness)+2*std(rness)])
-    
-    
     load('clim_eq14.mat')
     set(gca,'Clim',clim_eq14)
     set(gca,'FontSize',14)
-%     set(gca,'xtick',[],'ytick',[])
-%     set(gca,'xticklabel',[],'yticklabel',[])
-    %text(xx(1:length(t)/20:end-20)/1e3,yy(1:length(t)/20:end-20)/1e3,plotidx,'FontSize',14);
+    set(gca,'fontsize',18)
+    grid off
     if save_on
-        fig = '.eps'; rn3z ='eq14zoom'; figname = strcat(savename,rn3z);
-        print(figname,'-depsc')
-        fig = '.fig'; rn3z ='eq14zoom'; figname = strcat(savename,rn3z);
+        fig = '.eps'; fig_suf ='r_sl'; figname = strcat(savename,fig_suf);
         saveas(gcf,figname)
     end
-    %  colorbar
-    set(gca,'fontsize',18)
-    %     set(gca,'fontweight','bold')
-    grid off
-    % Full figure
-    
-    %     figure()
-    %     scatter3(xx,yy,eq14,[],eq14,'.')
-    %    % title('sum of eq14')
-    %     view(2)
-    %     colorbar
-    %     set(gca,'Clim',[0 0.00005])
-    %     axis equal tight
-    %     %text(xx(1:length(t)/20:end-20),yy(1:length(t)/20:end-20),plotidx,'FontSize',14);
-
-if save_on
-    fig = '.eps'; EQ14_ ='EQ14'; figname = strcat(savename,EQ14_);
-    print(figname,'-depsc')
-    fig = '.fig'; EQ14_ ='EQ14'; figname = strcat(savename,EQ14_);
-    saveas(gcf,figname)
-end
 
 % Plot fetch vs roughness
 figure()
@@ -281,4 +264,8 @@ scatter(log(fetch),eq14')
 xlabel('log fetch')
 ylabel('wavelet variance')
 set(gca,'FontSize',14)
+    if save_on
+        fig = '.eps'; fig_suf ='fvr'; figname = strcat(savename,fig_suf);
+        saveas(gcf,figname)
+    end
 
