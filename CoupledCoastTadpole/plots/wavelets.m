@@ -1,4 +1,4 @@
-function [period, eq14] = wavelets(x,y,fetch)
+function [period, eq14] = wavelets(x,y,fetch,pmin,pmax,save_name)
 
 % calculate wavelet power spectrum
 % input is x and y coordinates
@@ -11,6 +11,6 @@ function [period, eq14] = wavelets(x,y,fetch)
 
 n=2;
 
-[period,eq14] = dowave_greece(theta,deltad,n,x,y,'test',0,fetch,4,16);
+[period,eq14] = dowave_greece(theta,deltad,n,x,y,save_name,1,fetch,pmin,pmax);
 
 end

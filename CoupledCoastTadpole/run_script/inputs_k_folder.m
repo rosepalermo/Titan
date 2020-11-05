@@ -2,7 +2,7 @@
 
 function [Kc_,folder,size_final] = inputs_k_folder(cluster);
 
-size_final = 0.6;
+size_final = 0.8;
 % cluster -- 1 running on cluster, 2 running locally
 
 if cluster
