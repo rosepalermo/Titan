@@ -171,7 +171,7 @@ end
 % Kc_ = 1.5e-8*1000;%for circle, wave p.Kcoast = 1.5e-8
 % Kc_ = p.Kf;
 cluster = 1;
-[~,~,p.size_final] = inputs_k_folder(cluster);
+[~,p.folder,p.size_final] = inputs_k_folder(cluster);
 % load('init_test.mat')
 % init = wave_debug;
 % p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/';
