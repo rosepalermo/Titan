@@ -19,7 +19,7 @@ edgeb = xor(lakea,lakeb); % true when boundary with neighbor below is land/lake
 lakel = lake(1:end-1,:);
 laker = lake(2:end,:);
 edger = xor(lakel,laker); % true when boundary with neighbor to right is land/lake
-if ~p.con8 %if 4 connected shoreline, include corners
+if ~p.8con %if 4 connected shoreline, include corners
     % bottom left corner
     lakea = lake(1:end-1,1:end-1);
     lakeb = lake(2:end,2:end);
@@ -55,7 +55,7 @@ shorelinecard(:,1:end-1) = land(:,1:end-1) & edgeb; %is this cell land and bound
 shorelinecard(:,2:end) = shorelinecard(:,2:end) + (land(:,2:end) & edgeb);% is this cell land and boundary above?
 shorelinecard(1:end-1,:) = shorelinecard(1:end-1,:) + (land(1:end-1,:) & edger); % is this cell land and boundary right?
 shorelinecard(2:end,:) = shorelinecard(2:end,:) + (land(2:end,:) & edger); % is this cell land and boundary left?
-if ~p.con8 % if 4 connected shoreline, include corners
+if ~p.8con % if 4 connected shoreline, include corners
     shorelinecorn = zeros(size(lake));
     shorelinecorn(1:end-1,1:end-1) = land(1:end-1,1:end-1) & edgebl; % is land and bottom left boundary of lake?
     shorelinecorn(2:end,2:end) = shorelinecorn(2:end,2:end) + (land(2:end,2:end) & edgebl); %is land and top right boundary of lake?

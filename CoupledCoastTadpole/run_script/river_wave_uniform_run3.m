@@ -83,8 +83,9 @@ p.Kw = 0.5*p.dx;                 %     p.Kw             Coefficient relating cha
 p.wexp = 0;                 %     p.wexp           Exponent relating channel width to drainage area
 p.thetac = 0;               %     p.thetac         Threshold for fluvial incision
 
-% ---------------- coastal erosion -------------------------------                           
+% ---------------- coastal erosion -------------------------------        
 
+p.con8 = 1;                 %     p.con8  1 for 8 connected shoreline (no corners), 0 for 4 connected shoreline (corners)
 p.doWaveErosion = 1;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
 p.doUniformErosion = 1;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
 p.So = 1;

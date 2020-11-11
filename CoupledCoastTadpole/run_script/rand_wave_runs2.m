@@ -85,6 +85,7 @@ p.thetac = 0;               %     p.thetac         Threshold for fluvial incisio
 
 % ---------------- coastal erosion -------------------------------                           
 
+p.con8 = 1;                 %     p.con8  1 for 8 connected shoreline (no corners), 0 for 4 connected shoreline (corners)
 p.doWaveErosion = 1;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
 p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
 p.So = 1;

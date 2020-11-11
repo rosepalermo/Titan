@@ -6,7 +6,7 @@ size_final = 1;
 % cluster -- 1 running on cluster, 2 running locally
 
 if cluster
-    folder = '/home/rpalermo/TitanModelOutput/110920/';
+    folder = '/home/rpalermo/TitanModelOutput/111120/';
     
 elseif ~cluster
     folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/cluster/101520/';
