@@ -3,7 +3,7 @@ function [dam_matrix, indshoreline] = get_dam_uniform(lake,p)
 dam_matrix = zeros(size(lake));
 
 % find the shoreline and shoreline indices
-[shoreline] = addidshoreline(lake,~lake);
+[shoreline] = addidshoreline(lake,~lake,p);
 indshoreline = find(shoreline);
 
 % uniform weighting

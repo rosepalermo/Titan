@@ -28,7 +28,7 @@ if fetch_on
         end
         
     else
-        [shoreline] = addidshoreline(lake,land); % corners and edges
+        [shoreline] = addidshoreline(lake,land,p); % corners and edges
         ind_sl_old = find(shoreline);
 %         ind_sl_old = get_ordered_sl(lake,p); % don't need the ordered
 %         shoreline anymore if we already have the damage
@@ -57,7 +57,7 @@ while sum_dam_excess > 0
     if any(any(isinf(time_excess)))
     end
     %update the lake & shoreline & find new sl indices
-    [shoreline_new] = addidshoreline(lake,land); % corners and edges
+    [shoreline_new] = addidshoreline(lake,land,p); % corners and edges
     ind_sl_new = find(shoreline_new);
     ind_new = ind_sl_new(~ismember(ind_sl_new,ind_sl_old));
     

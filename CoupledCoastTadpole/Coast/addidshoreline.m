@@ -1,4 +1,4 @@
-function [shoreline] = addidshoreline(lake,land)
+function [shoreline] = addidshoreline(lake,land,p)
 
 %identify the shoreline by checking neighbors (boundaries btw land and lake) in logical
 %

@@ -20,7 +20,7 @@ function [sl_cell,keepme,cells2trash,p] = order_shoreline_bwbound(lake,p);
 %                               length. sl_cells(~keep me).
 
 % if the shoreline has a boundary in it...
-[shoreline_if_bound] = addidshoreline(lake,double(~lake)); % corners are part of the shoreline!
+[shoreline_if_bound] = addidshoreline(lake,double(~lake),p); % corners are part of the shoreline!
 test_sl = find(shoreline_if_bound);
 [testr,testc] = ind2sub(size(lake),test_sl);
 if any(ismember([1 size(lake,2)],[testr,testc]))

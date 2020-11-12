@@ -11,7 +11,7 @@ dam_matrix = zeros(size(lake));
 cells2trash = [];
 
 % find the shoreline
-[shoreline] = addidshoreline(lake,~lake);
+[shoreline] = addidshoreline(lake,~lake,p);
 
 % find number of first order lakes
 [F_lake_all,~,~,~] = find_first_order_lakes(lake);

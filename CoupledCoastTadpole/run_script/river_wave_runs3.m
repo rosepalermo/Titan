@@ -167,7 +167,7 @@ end
 % Kc_ = p.Kf;
 % p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/riverIC/';
 % p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/091820/';
-cluster = 1;
+cluster = 0;
 [Kc_,p.folder,p.size_final] = inputs_k_folder(cluster);
 p.run = 'river_wave_Kc';
 time = 'time';
