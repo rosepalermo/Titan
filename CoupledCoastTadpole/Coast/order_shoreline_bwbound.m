@@ -33,16 +33,19 @@ if any(ismember([1 size(lake,2)],[testr,testc]))
 end
 
 
-[~,total_lakes,total_islands] = find_first_order_lakes(lake);
+[~,total_lakes,total_islands] = find_first_order_lakes(lake,p);
 land = double(~lake);
-[B_land,L_land,~,~] = bwboundaries(land,8);
+if ~p.con8
+    [B_land,L_land,~,~] = bwboundaries(land,8);
+    [B,L,N,A] = bwboundaries(lake,8);
+else
+    [B_land,L_land,~,~] = bwboundaries(land,4);
+    [B,L,N,A] = bwboundaries(lake,4);
+end
 if length(B_land) ==1 % this occurs when shoreline hits the boundary
     sl_cells = [];
     return
 end
-
-[B,L,N,A] = bwboundaries(lake,8);
-
 % As long as there isn't liquid on the boundary of the grid, the first
 % object should be the main landmass. The holes of that object will be the
 % lakes/seas, and the object children of the main object will be islands --
@@ -101,8 +104,11 @@ for l = find(lakes)
     cidx = 2+dc;
     rowCCW = r1 + nextrow(ridx,cidx);
     colCCW = c1 + nextcol(ridx,cidx);
-    
-    coasts{1} = (bwtraceboundary(land,[rowCCW,colCCW],'S',4,Inf,'counterclockwise'));
+    if ~p.con8
+        coasts{1} = (bwtraceboundary(land,[rowCCW,colCCW],'S',4,Inf,'counterclockwise'));
+    else
+        coasts{1} = (bwtraceboundary(land,[rowCCW,colCCW],'S',8,Inf,'counterclockwise'));
+    end
     coasts{1}(end,:) = [];
 end
 

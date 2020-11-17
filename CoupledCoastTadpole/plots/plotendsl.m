@@ -1,7 +1,7 @@
 % plot end shoreline from data
 function [x,y] = plotendsl(p,g,colors_)
 lake = g.output(:,:,end)<=p.sealevel_init;
-[F_lake_all,~,~,~] = find_first_order_lakes(lake);
+[F_lake_all,~,~,~] = find_first_order_lakes(lake,p);
 for i = 1:length(F_lake_all)
 lengthF(i) = length(find(F_lake_all{i}));
 end

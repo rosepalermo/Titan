@@ -14,7 +14,7 @@ cells2trash = [];
 [shoreline] = addidshoreline(lake,~lake,p);
 
 % find number of first order lakes
-[F_lake_all,~,~,~] = find_first_order_lakes(lake);
+[F_lake_all,~,~,~] = find_first_order_lakes(lake,p);
 
 for ff = 1:length(F_lake_all)
     F_lake = F_lake_all{ff};

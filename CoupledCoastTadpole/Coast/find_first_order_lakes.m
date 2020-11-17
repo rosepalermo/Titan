@@ -1,6 +1,10 @@
-function [F_lake,total_lakes,total_islands,L] = find_first_order_lakes(lake)
+function [F_lake,total_lakes,total_islands,L] = find_first_order_lakes(lake,p)
 
-[bound, L, ~, A]  = bwboundaries(lake,8);
+if ~p.con8
+    [bound, L, ~, A]  = bwboundaries(lake,8);
+else
+    [bound, L, ~, A]  = bwboundaries(lake,4);
+end
 n = length(bound);
 
 first_order_lakes = zeros(n,1);
