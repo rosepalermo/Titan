@@ -6,6 +6,7 @@ lengthF(i) = length(find(F_lake_all{i}));
 end
 [~,indmaxL] = max(lengthF);
 lake = F_lake_all{indmaxL};
+p.sl_analysis = 1;
 [sl_cell,~,~,~] = order_shoreline_bwbound(lake,p);
 for i = 1:length(sl_cell)
     sl_cell_length = length(sl_cell{i});

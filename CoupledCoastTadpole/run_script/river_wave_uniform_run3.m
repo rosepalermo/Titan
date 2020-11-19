@@ -158,13 +158,13 @@ p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elev
 % p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/091820/';
 cluster = 1;
 [Kc_,p.folder,p.size_final] = inputs_k_folder(cluster);
-p.run = 'rand_mwave_muniform';
+p.run = 'river_mwave_muniform';
 time = 'time';
 for i = 1
     p.tf = 1e5;
     tstart = tic;
     if p.doUniformErosion
-        p.Kuniform = Kc_(2);
+        p.Kuniform = Kc_(3);
     end
     if p.doWaveErosion
         p.Kwave = Kc_(2);

@@ -2,7 +2,7 @@
 #SBATCH --gres=gpu:1  
 #SBATCH -N 1  
 #SBATCH -n 16  
-#SBATCH --time=02:00:00  
+#SBATCH --time=04:00:00  
 #SBATCH --exclusive  
 #SBATCH -p sched_engaging_default
 . /etc/profile.d/modules.sh

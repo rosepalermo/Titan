@@ -263,7 +263,8 @@ eq14 = dj.*dt./0.776./length(y)*sum(powernorm_sub./scale(pband1)');
     figure()
     scatter3(xx,yy,eq14',[],eq14','filled')
     view(2)
-    axis equal tight
+    axis equal
+%         set(gca,'Ydir','reverse')
     colorbar
 %     load('clim_eq14.mat')
 %     set(gca,'Clim',clim_eq14)
@@ -294,10 +295,20 @@ eq14 = dj.*dt./0.776./length(y)*sum(powernorm_sub./scale(pband1)');
 %         saveas(gcf,figname)
 %     end
     
-    % Plot fetch vs roughness
+    %% Plot fetch vs roughness
 figure()
 % scatter(log(fetch),eq14')
 [B,~,idx] = histcounts(fetch);
+plot(B);
+xlabel('bin')
+ylabel('N')
+    if save_on
+        fig = '.eps'; fig_suf ='hist_lin'; 
+        range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
+        figname = strcat(savename,range,fig_suf,'.jpg');
+        saveas(gcf,figname)
+    end
+figure()
 idx = idx+1; % this is because it starts at 0
 meaneq14 = accumarray(idx(:),eq14,[],@mean);
 meaneq14(meaneq14==0)=NaN;
@@ -309,19 +320,67 @@ medianfetch = accumarray(idx(:),fetch,[],@median);
 medianfetch(medianfetch==0)=NaN;
 stdeq14 = accumarray(idx(:),eq14,[],@std);
 stdeq14(stdeq14==0)=NaN;
+B = [1 B]';
+SEM = stdeq14./sqrt(B);                         % Standard Error Of The Mean
+CI95 = SEM .* tinv(0.975, B-1);              % 95% Confidence Intervals
 stdfetch = accumarray(idx(:),fetch,[],@std);
 stdfetch(stdfetch==0)=NaN;
 
 plot(meanfetch,meaneq14,'k','LineWidth',2)
 hold on
-scatter(medianfetch,medianeq14,'k*')
-errorbar(meanfetch,meaneq14,stdeq14)
-legend('mean','median')
+% scatter(medianfetch,medianeq14,'k*')
+errorbar(meanfetch,meaneq14,CI95)
+% legend('mean','median')
 xlabel('Wave weighting')
 ylabel('Wavelet variance')
 set(gca,'FontSize',14)
     if save_on
         fig = '.eps'; fig_suf ='fvr_mean'; 
+        range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
+        figname = strcat(savename,range,fig_suf,'.jpg');
+        saveas(gcf,figname)
+    end
+    
+    figure()
+% scatter(log(fetch),eq14')
+[B,~,idx] = loghistcounts(fetch);
+plot(B);
+xlabel('bin')
+ylabel('N')
+    if save_on
+        fig = '.eps'; fig_suf ='hist_log'; 
+        range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
+        figname = strcat(savename,range,fig_suf,'.jpg');
+        saveas(gcf,figname)
+    end
+figure()
+idx = idx+1; % this is because it starts at 0
+meaneq14 = accumarray(idx(:),eq14,[],@mean);
+meaneq14(meaneq14==0)=NaN;
+meanfetch = accumarray(idx(:),fetch,[],@mean);
+meanfetch(meanfetch==0)=NaN;
+medianeq14 = accumarray(idx(:),eq14,[],@median);
+medianeq14(medianeq14==0)=NaN;
+medianfetch = accumarray(idx(:),fetch,[],@median);
+medianfetch(medianfetch==0)=NaN;
+stdeq14 = accumarray(idx(:),eq14,[],@std);
+stdeq14(stdeq14==0)=NaN;
+B = [1 B]';
+SEM = stdeq14./sqrt(B);                         % Standard Error Of The Mean
+CI95 = SEM .* tinv(0.975, B-1);              % 95% Confidence Intervals
+stdfetch = accumarray(idx(:),fetch,[],@std);
+stdfetch(stdfetch==0)=NaN;
+
+semilogx(meanfetch,meaneq14,'k','LineWidth',2)
+hold on
+% scatter(medianfetch,medianeq14,'k*')
+errorbar(meanfetch,meaneq14,CI95)
+% legend('mean','median')
+xlabel('Wave weighting')
+ylabel('Wavelet variance')
+set(gca,'FontSize',14)
+    if save_on
+        fig = '.eps'; fig_suf ='fvr_mean_log'; 
         range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
         figname = strcat(savename,range,fig_suf,'.jpg');
         saveas(gcf,figname)

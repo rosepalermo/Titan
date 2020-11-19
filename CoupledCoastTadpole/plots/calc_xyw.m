@@ -1,8 +1,8 @@
 % calculate x,y and fetch
 
-function [x,y,wave_weight] = calc_xyw(file_name,i,save_on)
-
+function [x,y,wave_weight] = calc_xyw(file_name,i,save_on,x,y)
 load(file_name)
+p.sl_analysis = 1;
 sn = '_xyw';
 iter = num2str(i);
 save_name = strcat(file_name(1:end-4),'_',iter,sn,file_name(end-3:end));

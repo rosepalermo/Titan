@@ -26,7 +26,7 @@ for ff = 1:length(F_lake_all)
     %order the shoreline and islands
     % new order the shoreline code
     [indshoreline_ocw,~,cells2trash_ff,p] = order_shoreline_bwbound(F_lake,p);
-    if isfield(p,'boundary')
+    if isfield(p,'boundary') && ~isfield(p,'sl_analysis')
         dam_matrix= [];
         wave_weight_matrix= [];
         indshoreline_ordered= [];

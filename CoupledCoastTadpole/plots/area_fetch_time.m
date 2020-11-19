@@ -12,7 +12,7 @@ time = 1:length(g.t);
 figure(1)
 hold on
 if p.doWaveErosion
-    plot(time,pct_Ao,'r','LineWidth',2)
+    plot(time,pct_Ao,'b','LineWidth',2)
 elseif p.doUniformErosion
     plot(time,pct_Ao,'k','LineWidth',2)
 end
