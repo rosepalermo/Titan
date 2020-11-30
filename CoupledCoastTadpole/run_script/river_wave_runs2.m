@@ -135,7 +135,9 @@ if rand_IC
     % coastal positions, and sea level. --> No, that is what g.C is for (that's
     % why it's a "grid" in g and p.F is a parameter in F).
 elseif river_IC
-    load('river_wideria_200x200.mat')
+%     load('river_wideria_200x200.mat')
+    load('river_IC_v2.mat')
+
         p.sealevel_init=40;
 
 %     init = River_IC_200x200;

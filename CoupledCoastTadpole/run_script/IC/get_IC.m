@@ -21,11 +21,11 @@ function [init,p] = get_IC(p,rfactor)
 % % plot(.1*mvnrnd(zeros(10,100), inv(A))')
 
 % Taylor code:
-if p.Nx ==400
-rng(0)
-elseif p.Nx ==200
-    rng(1)
-end
+% if p.Nx ==400
+% rng(0)
+% elseif p.Nx ==200
+%     rng(1)
+% end
 
 % create a random component
 noise = RedNoise(p.Ny,p.Nx,p.beta,p.variance,p.periodic);
@@ -52,7 +52,7 @@ p.Ao_cells = 30368;
 else
 diff_ = min(min(depression))-min(min(noise)); % diff_o is 173 -- rng(0)
 Ao = depression<ceil(diff_); % diff_o is 173 -- rng(0)
-[shoreline] = addidshoreline(Ao,~Ao);
+[shoreline] = addidshoreline(Ao,~Ao,p);
 indsl = find(shoreline);
 x = p.dx*(1:size(Ao,2));
 y = p.dy*(1:size(Ao,1));

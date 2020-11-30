@@ -10,9 +10,9 @@ cd ..
 folder = fileparts(which('getpath_CCT.m'));
 addpath(genpath(folder));
 
-init_circle =1;
+init_circle =0;
 init_square = 0;
-rand_IC = 0;
+rand_IC = 1;
 river_IC =0;
 %% SET PARAMETERS %%
 
@@ -68,13 +68,13 @@ p.saveint = 10; %1000;              %     p.saveint        Elevation grid will b
 p.doDiffusion = 0;          %     p.doDiffusion    Turn hillslope diffusion on (1) or off (0)
 p.D = 0.005;                %     p.D              Hillslope diffusivity (m^2/yr)
                             %
-p.doLandslides = 0;         %     p.doLandslides   Turn landslides on (1) or off (0)
+p.doLandslides = 1;         %     p.doLandslides   Turn landslides on (1) or off (0)
 p.Sc = 0.6;                 %     p.Sc             Critical slope (m/m)
 
 
 % ---------------- bedrock channel incision -------------------------------                           
 
-p.doStreamPower = 0;        %     p.doStreamPower  Turn bedrock channel incision on (1) or off (0)
+p.doStreamPower = 1;        %     p.doStreamPower  Turn bedrock channel incision on (1) or off (0)
 p.doChannelDiffusion = 0;   %     p.doChannelDiffusion Turn diffusion in channels on (1) or off (0)
 p.Kf = 1e-5; % 5e-6;                %     p.Kf             Coefficient in stream power incision law (kg m^(1+2m) yr^-2)
 p.m = 0.5;                  %     p.m              Drainage area exponent in stream power law
@@ -87,7 +87,7 @@ p.thetac = 0;               %     p.thetac         Threshold for fluvial incisio
 
 p.con8 = 1;                 %     p.con8  1 for 8 connected shoreline (no corners), 0 for 4 connected shoreline (corners)
 p.doWaveErosion = 0;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
-p.doUniformErosion = 1;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
+p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
 p.So = 1;
 p.dxo = 100;
 % p.SLR = 50/p.tf;                  %     p.SLR            Rate of sea level rise (m/yr)
@@ -176,8 +176,10 @@ cluster = 0;
 % load('init_test.mat')
 % init = wave_debug;
 % p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/';
-p.run = 'grid_bias_test_4con_sl';
-
+p.run = 'river_IC_v2';
+if ~p.doUniformErosion | ~p.doWaveErosion
+    Kc_ = p.Kf;
+end
 for i = 1%:length(Kc_)
     p.tf = 1000;
     tic
