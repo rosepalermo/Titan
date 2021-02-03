@@ -30,4 +30,4 @@ end
 clearvars p
 end
 
-save('ic_generated_v1','init','idx_save')
+save('/home/rpalermo/TitanModelOutput/generate_init/ic_generated_v1','init','idx_save')
