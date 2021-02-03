@@ -20,13 +20,6 @@ if fetch_on
     % calculate damage matrix -- wave
     if sum(dam_matrix,'all')==0 % if the wave matrix doesn't already exist
         [dam_matrix,wave_matrix,~,ind_sl_old,cells2trash,p] = get_dam_wave(lake,p);
-        
-        % if it hit a boundary, quit
-        if isfield(p,'boundary')
-            erodedind_save = [];
-            return
-        end
-        
     else
         [shoreline] = addidshoreline(lake,land,p); % corners and edges
         ind_sl_old = find(shoreline);
@@ -35,7 +28,13 @@ if fetch_on
     end
 else
     % calculate damage matrix -- uniform
-    [dam_matrix,ind_sl_old] = get_dam_uniform(lake,p);
+    [dam_matrix,ind_sl_old,p] = get_dam_uniform(lake,p);
+end
+
+% if it hit a boundary, quit
+if isfield(p,'boundary')
+    erodedind_save = [];
+    return
 end
 
 % avoid grid bias with adaptive timestep if needed

@@ -76,7 +76,7 @@ p.Sc = 0.6;                 %     p.Sc             Critical slope (m/m)
 
 p.doStreamPower = 1;        %     p.doStreamPower  Turn bedrock channel incision on (1) or off (0)
 p.doChannelDiffusion = 0;   %     p.doChannelDiffusion Turn diffusion in channels on (1) or off (0)
-p.Kf = 1e-5; % 5e-6;                %     p.Kf             Coefficient in stream power incision law (kg m^(1+2m) yr^-2)
+p.Kf = 5e-6; %1e-5               %     p.Kf             Coefficient in stream power incision law (kg m^(1+2m) yr^-2)
 p.m = 0.5;                  %     p.m              Drainage area exponent in stream power law
 p.w = 1.0;                  %     p.w              Slope exponent in stream power law
 p.Kw = 0.5*p.dx;                 %     p.Kw             Coefficient relating channel width to drainage area

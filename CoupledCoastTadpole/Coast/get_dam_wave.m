@@ -75,6 +75,6 @@ for ff = 1:length(F_lake_all)
     dam = p.dt*p.Kwave*shoreline(unique_ind).*unique_sum_wave*p.So./p.dxo;
     dam_matrix(unique_ind) = dam_matrix(unique_ind)+dam; % have to do this because if a shoreline cell is an island on the big one and has a second order lake in it, we don't want the damage from the second order lake to be the only damage it receives. need to add up damage from both sides.
     
-    
+end
     
 end

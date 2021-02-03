@@ -262,32 +262,62 @@ eq14 = dj.*dt./0.776./length(y)*sum(powernorm_sub./scale(pband1)');
 
 
 %% shoreline w/ eq4
-    figure()
-    scatter3(xx,yy,fetch,[],fetch,'filled')
-    view(2)
-    grid off
-    axis equal
-%     xlim([0 200])
-%     ylim([20 180])
-%         set(gca,'Ydir','reverse')
-    colorbar
-    set(gca,'Clim',[0 0.3])
-    xlabel('meters');ylabel('meters');
-%     load('clim_eq14.mat')
-%     set(gca,'Clim',clim_eq14)
-    set(gca,'FontSize',16)
-%     set(gca,'YTickLabel',[])
-%     set(gca,'XTickLabel',[])
-%     set(gca,'fontsize',18)
-    grid off
-    if save_on
-        fig = '.eps'; fig_suf ='_fetch_sl'; 
-        range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
-        figname = strcat(savename,range,fig_suf,'.jpg');
-        saveas(gcf,figname)
-    end
-
-% % Plot fetch vs roughness
+%     figure()
+%     scatter3(xx,yy,eq14',[],eq14','filled')
+%     view(2)
+%     grid off
+%     axis tight
+%     axis equal
+% %     xlim([0 200])
+% %     ylim([20 180])
+% %         set(gca,'Ydir','reverse')
+%     h = colorbar;
+%     ylabel(h, 'azimuthal variance')
+%     set(gca,'Clim',[0 3e-4])
+%     xlabel('meters');ylabel('meters');
+% %     load('clim_eq14.mat')
+% %     set(gca,'Clim',clim_eq14)
+%     set(gca,'FontSize',16)
+% %     set(gca,'ColorScale','log')
+% %     set(gca,'YTickLabel',[])
+% %     set(gca,'XTickLabel',[])
+% %     set(gca,'fontsize',18)
+%     grid off
+%     if save_on
+%         fig = '.eps'; fig_suf ='_eq14_sl'; 
+%         range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
+%         figname = strcat(savename,range,fig_suf,'.jpg');
+%         saveas(gcf,figname)
+%     end
+%% Plot fetch on shoreline
+%         figure()
+%     scatter3(xx,yy,fetch,[],fetch,'filled')
+%     view(2)
+%     grid off
+%     axis tight
+%     axis equal
+% %     xlim([0 200])
+% %     ylim([20 180])
+% %         set(gca,'Ydir','reverse')
+%     h = colorbar;
+%     ylabel(h, 'fetch area')
+% %     set(gca,'Clim',[1e9 1e10])
+%     xlabel('meters');ylabel('meters');
+% %     load('clim_eq14.mat')
+% %     set(gca,'Clim',clim_eq14)
+%     set(gca,'FontSize',16)
+% %     set(gca,'ColorScale','log')
+% %     set(gca,'YTickLabel',[])
+% %     set(gca,'XTickLabel',[])
+% %     set(gca,'fontsize',18)
+%     if save_on
+%         fig = '.eps'; fig_suf ='_ww_sl'; 
+%         range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
+%         figname = strcat(savename,range,fig_suf,'.jpg');
+%         saveas(gcf,figname)
+%     end
+    
+%% Plot fetch vs roughness
 % figure()
 % % scatter(log(fetch),eq14')
 % X = [log(fetch),eq14'];
@@ -364,7 +394,7 @@ eq14 = dj.*dt./0.776./length(y)*sum(powernorm_sub./scale(pband1)');
 %         figname = strcat(savename,range,fig_suf,'.jpg');
 %         saveas(gcf,figname)
 %     end
-figure()
+% figure()
 idx = idx+1; % this is because it starts at 0
 meaneq14 = accumarray(idx(:),eq14,[],@mean);
 meaneq14(meaneq14==0)=NaN;
@@ -382,22 +412,22 @@ CI95 = SEM .* tinv(0.975, B-1);              % 95% Confidence Intervals
 stdfetch = accumarray(idx(:),fetch,[],@std);
 stdfetch(stdfetch==0)=NaN;
 
-semilogx(meanfetch,meaneq14,'k','LineWidth',2)
+p_2 = semilogx(meanfetch(B>1),meaneq14(B>1),'k','LineWidth',2);
 hold on
-plot(fetch,eq14,'.','Color',[0.8 0.8 0.8])
+p2_2 = plot(fetch,eq14,'.','Color',[0.8 0.8 0.8]);
 % plot(fetch,eq14,'.','Color','g')
 % scatter(medianfetch,medianeq14,'k*')
-errorbar(meanfetch,meaneq14,CI95,'k')
+p3_2 = errorbar(meanfetch(B>1),meaneq14(B>1),CI95(B>1),'k');
 % legend('mean','median')
-% ylim([0 5e-4])
+ylim([0 5e-4])
 xlabel('weighted fetch area')
 ylabel('azimuthal variance (radians^2)')
 % legend('mean','data','95% CI')
 set(gca,'FontSize',16)
-%     if save_on
-%         fig = '.eps'; fig_suf ='fvr_mean_log'; 
-%         range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
-%         figname = strcat(savename,range,fig_suf,'.jpg');
-%         saveas(gcf,figname)
-%     end
+    if save_on
+        fig = '.eps'; fig_suf ='fvr_mean_log'; 
+        range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
+        figname = strcat(savename,range,fig_suf,'.jpg');
+        saveas(gcf,figname)
+    end
 

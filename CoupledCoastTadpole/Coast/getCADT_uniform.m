@@ -8,7 +8,7 @@ if isfield(p,'boundary')
     return
 end
 
-[dam_matrix] = get_dam_uniform(lake,p);
+[dam_matrix,~,p] = get_dam_uniform(lake,p);
 
 if max(dam_matrix,[],'all')>0.1
 adt = ceil(max(dam_matrix,[],'all'))*10;
