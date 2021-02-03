@@ -28,6 +28,7 @@ if ~isfield(p,'boundary')
    ii = ii+1;
 end
 clearvars p
+save('/home/rpalermo/TitanModelOutput/generate_init/idx_test','idx')
 end
 
 save('/home/rpalermo/TitanModelOutput/generate_init/ic_generated_v1','init','idx_save')
