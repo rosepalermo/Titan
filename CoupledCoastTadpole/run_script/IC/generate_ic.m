@@ -1,4 +1,7 @@
+cd ..
 
+folder = fileparts(which('getpath_CCT.m'));
+addpath(genpath(folder));
 
 rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the noise surface
 init_temp = cell(0);
