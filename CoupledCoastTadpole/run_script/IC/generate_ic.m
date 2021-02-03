@@ -3,7 +3,7 @@
 rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the noise surface
 init_temp = cell(0);
 ii = 1;
-parfor idx = 1:10000
+for idx = 1:10000
 load('p_init_v1.mat')
 p.dtmax = 1e6;
 p.Kf = 5e-6;
