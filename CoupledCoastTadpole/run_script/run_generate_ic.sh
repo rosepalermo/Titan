@@ -1,5 +1,5 @@
 #!/bin/bash  
-# run generate_ic_code
+# run generate ic code
 sbatch generate_ic_1.slurm
 sbatch generate_ic_2.slurm
 sbatch generate_ic_3.slurm
