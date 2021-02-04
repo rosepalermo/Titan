@@ -5,9 +5,9 @@ load('fetch_input8con_lake','F_lake'); % lake is 1 for water, 0 for land
 load('fetch_input8con','fetch_sl_cells'); % x and y are ordered clockwise if i increases downward, first point != last point
 
 % visilibity run
-% tic
-% [WA_vislib,FA_vislib] = fetch_vis_approx(fetch_sl_cells);% first is wave, second is fetch!!
-% time_vis = toc;
+tic
+[WA_vislib,FA_vislib] = fetch_vis_approx(fetch_sl_cells);% first is wave, second is fetch!!
+time_vis = toc;
 WA_vislib_ = cell2mat(WA_vislib);
 
 cellsize = 62.5;

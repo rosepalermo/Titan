@@ -6,11 +6,11 @@ size_final = 1.2;
 % cluster -- 1 running on cluster, 2 running locally
 
 if cluster
-    folder = '/home/rpalermo/TitanModelOutput/112920/';
+    folder = '/home/rpalermo/TitanModelOutput/ray_fetch_test/';
     
 elseif ~cluster
 %     folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/cluster/111820_/';
-    folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/newIC/';
+    folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/ray_fetch_test/';
 end
 
 % K

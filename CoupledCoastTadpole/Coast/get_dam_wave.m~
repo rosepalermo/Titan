@@ -46,7 +46,7 @@ for ff = 1:length(F_lake_all)
     end
     % calculate wave weighted (sqrt(F)*cos(theta-phi))
 %     [WaveArea_cell,FetchArea_cell] = fetch_vis_approx(fetch_sl_cells);% first is wave, second is fetch!!
-[WaveArea_cell,FetchArea_cell,~,~,~,~,~,~] = GetFetchArea(fetch_sl_cells,F_lake,p.nrays,p.delta,p.dx);    
+[warea,,~,~,~,~,~,~] = GetFetchArea(fetch_sl_cells,F_lake,p.nrays,p.delta,p.dx);    
 clearvars erodedind
     %         end
     

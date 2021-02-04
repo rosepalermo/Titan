@@ -90,6 +90,8 @@ p.doWaveErosion = 1;        %     p.doWaveErosion  Turn fetch based coastal eros
 p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
 p.So = 1;
 p.dxo = 100;
+p.delta = 0.05;
+p.nrays = 150;
 % p.SLR = 50/p.tf;                  %     p.SLR            Rate of sea level rise (m/yr)
 p.sealevel_init = 1;        %     p.sealevel_init  Initial sea level
 if p.doUniformErosion
