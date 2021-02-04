@@ -7,4 +7,4 @@
 #SBATCH -p sched_engaging_default
 . /etc/profile.d/modules.sh
 module load mit/matlab/2019a 
-matlab -nodisplay -nodesktop -nosplash -r "run generate_ic.m"
+matlab -nodisplay -nodesktop -nosplash -r "run generate_ic_9.m"
