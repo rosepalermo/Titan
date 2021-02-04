@@ -6,7 +6,7 @@ addpath(genpath(folder));
 rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the noise surface
 init_temp = cell(0);
 ii = 1;
-for idx = 1:1000
+for idx = 1001:2000
 load('p_init_v1.mat')
 p.dtmax = 1e6;
 p.Kf = 5e-6;
@@ -31,7 +31,7 @@ if ~isfield(p,'boundary')
    ii = ii+1;
 end
 clearvars p
-save('/home/rpalermo/TitanModelOutput/generate_init/idx_test','idx')
+save('/home/rpalermo/TitanModelOutput/generate_init/idx_test_2','idx')
 end
 
-save('/home/rpalermo/TitanModelOutput/generate_init/ic_generated_v1','init','idx_save')
+save('/home/rpalermo/TitanModelOutput/generate_init/ic_generated_2','init','idx_save')
