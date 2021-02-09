@@ -6,7 +6,7 @@ load('fetch_input8con','fetch_sl_cells'); % x and y are ordered clockwise if i i
 
 % visilibity run
 tic
-[WA_vislib,FA_vislib] = fetch_vis_approx(fetch_sl_cells);% first is wave, second is fetch!!
+[WA_vislib,FA_vislib] = fetch_vis_full_sl(fetch_sl_cells);% first is wave, second is fetch!!
 time_vis = toc;
 WA_vislib_ = cell2mat(WA_vislib);
 

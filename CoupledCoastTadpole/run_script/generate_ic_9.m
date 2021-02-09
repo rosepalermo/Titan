@@ -16,11 +16,9 @@ p.saveint = 40;
 % p.sealevel_init = 20;
 [init_temp,p] = get_IC(p,rfactor,idx);
 
-solution = Tadpole(init_temp,p);
+init = solution(:,:,end);
 
-init{idx} = solution(:,:,end);
-
-lake = init{idx}<40;
+lake = init<40;
 
 % does the SL hit a boundary?
 [p] = check_boundary(lake,p);
@@ -28,10 +26,10 @@ lake = init{idx}<40;
 % if it doesn't hit the boundary, then we're good
 if ~isfield(p,'boundary')
    idx_save(ii) = idx;
+   init_save{ii} = init;
    ii = ii+1;
 end
 clearvars p
 save('/home/rpalermo/TitanModelOutput/generate_init/idx_test_9','idx')
+save('/home/rpalermo/TitanModelOutput/generate_init/ic_generated_9','init_save','idx_save')
 end
-
-save('/home/rpalermo/TitanModelOutput/generate_init/ic_generated_9','init','idx_save')
