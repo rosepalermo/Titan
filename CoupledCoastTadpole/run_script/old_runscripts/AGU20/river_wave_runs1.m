@@ -133,10 +133,10 @@ if rand_IC
     [init,p] = get_IC(p,rfactor);
 elseif river_IC
 %     load('river_wideria_200x200.mat')
-    load('river_IC_v2.mat')
+%     load('river_IC_v2.mat')
 %     init = River_IC_200x200;
     p.sealevel_init=40;
-
+load('init_idx_9_v1')
     p.Ao = 89298000;
     p.Ao_cells =15808;
 %     load('riverIC.mat')
@@ -164,9 +164,9 @@ p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elev
 % Kc_ = p.Kf;
 % p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/riverIC/';
 % p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/091820/';
-cluster = 1;
+cluster = 0;
 [Kc_,p.folder,p.size_final] = inputs_k_folder(cluster);
-p.run = 'river_wave_Kc';
+p.run = 'river_idx_9_v1_wave_Kc';
 time = 'time';
 for i = 1
     p.tf = 1e5;

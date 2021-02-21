@@ -8,10 +8,10 @@ n=0;
 p.lastsave = 0;
 kill_switch = 0;
 if isfield(p,'rand_gen')
-    g.meanrelief = p.relief_init;
+    g.neroded_cells = p.relief_init*p.relief_final+1;
 end
 while (~kill_switch && g.nLakeCells < p.Ao_cells*p.size_final) % if either the lake hits the bournday or the max lake size
-    if isfield(p,'rand_gen') && (g.meanrelief < p.relief_init*p.relief_final)
+    if isfield(p,'rand_gen') && (g.neroded_cells < p.relief_init*p.relief_final)
         break;
     end
     n = n + 1;
@@ -86,7 +86,7 @@ while (~kill_switch && g.nLakeCells < p.Ao_cells*p.size_final) % if either the l
     kill_switch = isfield(p,'boundary');
     if isfield(p,'rand_gen')
     temp = g.output(:,:,1)-g.U;
-    g.meanrelief = mean(g.U,'all')-min(g.U,[],'all');
+    g.neroded_cells = mean(g.U,'all')-min(g.U,[],'all');
     end
 end
 

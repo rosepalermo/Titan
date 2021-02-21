@@ -1,7 +1,10 @@
 % CoupledModelPlot.m
-
+% file_name = ('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/ray_fetch_test/river_wave_Kc0_1_idx69_.mat');
+% file_name = ('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/ray_fetch_test/river_uniform_Kc_idx69_0_1.mat');
+% file_name = ('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/ray_fetch_test/AGU_wave_rayfetch0_1.mat');
+file_name = ('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/ray_fetch_test/river_idx_5_v1_wave_Kc0_1.mat');
 % file_name = ('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/cluster/111120/river_uniform_Kc0_15.mat');
-file_name = ('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/cluster/111120/river_wave_Kc0_1.mat');
+% file_name = ('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/cluster/111120/river_wave_Kc0_1.mat');
 % file_name = ('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/cluster/111820/river_mwave_muniform.mat');
 load(file_name)
 % close(p.fighandle)
@@ -9,7 +12,8 @@ v = VideoWriter(file_name(1:end-4));
 x = p.dx*(0:p.Nx-1);
 y = p.dy*(p.Ny-1:-1:0);
 open(v)
-i2plot = 248; % saved frames to plot
+i2plot = size(g.output,3);
+% i2plot = 248; % saved frames to plot
 figure()
 for i = 1:i2plot
     for ii = 1
