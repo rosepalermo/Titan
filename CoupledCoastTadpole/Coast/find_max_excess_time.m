@@ -11,7 +11,7 @@ time_dam_excess = zeros(length(ind_new),1);
 for xxx = 1: length(ind_new)
     if indxsldif(xxx) == 1 | indxsldif(xxx) == length(lake) | indysldif(xxx) == 1 | indysldif(xxx) == length(lake)
         time_dam_excess = zeros(length(ind_new),1);
-        p.t = p.tf; % hit the boundary, end the simulation
+        p.boundary = 1; % hit the boundary, end the simulation
         return
     else
         U = sub2ind(size(lake),indxsldif(xxx),indysldif(xxx)-1);

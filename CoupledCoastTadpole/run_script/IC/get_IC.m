@@ -2,7 +2,7 @@ function [init,p] = get_IC(p,rfactor,idx)
 
 %inputs initial matrix p and outputs initial conditions for coupled tadpole
 % and coastal erosion simulation;
-if isfield(p,'rand_gen')
+if isfield(p,'rand_gen')|exist('idx')
     rng(idx)
 end
 
@@ -47,23 +47,23 @@ Zshift = prctile(init(:),pctwet);
 init = init - Zshift + p.sealevel_init;
 depression = depression -Zshift + p.sealevel_init;
 noise = noise-Zshift+p.sealevel_init;
-    if p.Nx == 400
-        p.Ao = 8.9298e+07;
-        p.Ao_cells = 30368;
-    else
-        diff_ = min(min(depression))-min(min(noise)); % diff_o is 173 -- rng(0)
-        Ao = depression<ceil(diff_); % diff_o is 173 -- rng(0)
-        [shoreline] = addidshoreline(Ao,~Ao,p);
-        indsl = find(shoreline);
-        x = p.dx*(1:size(Ao,2));
-        y = p.dy*(1:size(Ao,1));
-        [X,Y] = meshgrid(x,y);
-        radius = 0.5*(max(X(indsl))-min(X(indsl)));
-        if isempty(radius)
-            radius = 1;
-        end
-        p.Ao = 3/4*pi*radius^2;
-        p.Ao_cells = length(find(Ao));
-    end
+%     if p.Nx == 400
+%         p.Ao = 8.9298e+07;
+%         p.Ao_cells = 30368;
+%     else
+%         diff_ = min(min(depression))-min(min(noise)); % diff_o is 173 -- rng(0)
+%         Ao = depression<ceil(diff_); % diff_o is 173 -- rng(0)
+%         [shoreline] = addidshoreline(Ao,~Ao,p);
+%         indsl = find(shoreline);
+%         x = p.dx*(1:size(Ao,2));
+%         y = p.dy*(1:size(Ao,1));
+%         [X,Y] = meshgrid(x,y);
+%         radius = 0.5*(max(X(indsl))-min(X(indsl)));
+%         if isempty(radius)
+%             radius = 1;
+%         end
+%         p.Ao = 3/4*pi*radius^2;
+%         p.Ao_cells = length(find(Ao));
+%     end
 
 end

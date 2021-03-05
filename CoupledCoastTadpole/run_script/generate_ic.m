@@ -9,7 +9,7 @@ init_temp = cell(0);
 
 for idx = 1:1000
     load('p_init_v1.mat')
-    p.relief_final = 0.94;
+    p.relief_final = 0.92;
     p.size_final = 1;
     p.dtmax = 1e6;
     p.Kf = 5e-6;
@@ -34,7 +34,7 @@ for idx = 1:1000
         %     init_save{ii} = init;
         %     ii = ii+1;
         folder = '/home/rpalermo/TitanModelOutput/generate_init/';
-        savename = ['mrfn94_idx_',num2str(idx)];
+        savename = ['mrfn92_idx_',num2str(idx)];
         f_savename = [folder,savename];
         save(f_savename,'init','idx','p')
     end

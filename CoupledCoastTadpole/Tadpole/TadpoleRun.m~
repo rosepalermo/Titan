@@ -7,13 +7,12 @@ function [p,g] = TadpoleRun(p,g)
 n=0;
 p.lastsave = 0;
 kill_switch = 0;
+keepgoing = 1;
+g.nLakeCells_init = length(find(g.U<=p.sealevel_init));
 if isfield(p,'rand_gen')
-    g.neroded_cells = p.relief_init*p.relief_final+1;
+    g.meanrelief = p.relief_init;
 end
-while (~kill_switch && g.nLakeCells < p.Ao_cells*p.size_final) % if either the lake hits the bournday or the max lake size
-    if isfield(p,'rand_gen') && (g.neroded_cells < p.relief_init*p.relief_final)
-        break;
-    end
+while keepgoing
     n = n + 1;
     p.n = n;
     %%%%%%%%%%%%%%%%%%%%%% UPDATE ELEVATIONS %%%%%%%%%%%%%%%%%%%%%%%
@@ -64,8 +63,12 @@ while (~kill_switch && g.nLakeCells < p.Ao_cells*p.size_final) % if either the l
                 g.adt_save(p.lastsave) = g.adt;
                 end
                 if p.doWaveErosion
-%                     g.dam_wave_save(:,:,p.lastsave) = g.dam_wave;
-                    g.wave_matrix_save(:,:,p.lastsave) = g.wave_matrix;
+                    if isempty(g.wave_matrix)
+                        continue
+                    else
+                        %                     g.dam_wave_save(:,:,p.lastsave) = g.dam_wave;
+                        g.wave_matrix_save(:,:,p.lastsave) = g.wave_matrix;
+                    end
                 end
                 if p.doUniformErosion && ~p.doWaveErosion
                     if isempty(g.dam_uniform)
@@ -84,9 +87,15 @@ while (~kill_switch && g.nLakeCells < p.Ao_cells*p.size_final) % if either the l
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     kill_switch = isfield(p,'boundary');
+    g.nLakeCells = length(find(g.U<=p.sealevel_init));
+    
     if isfield(p,'rand_gen')
     temp = g.output(:,:,1)-g.U;
-    g.neroded_cells = mean(g.U,'all')-min(g.U,[],'all');
+    g.meanrelief = mean(g.U,'all')-min(g.U,[],'all');
+    end
+    (~kill_switch && g.nLakeCells < 1.2*g.nLakeCells_init)%g.nLakeCells < p.Ao_cells*p.size_final) % if either the lake hits the bournday or the max lake size
+    if isfield(p,'rand_gen') && (g.meanrelief < p.relief_init*p.relief_final)
+        break;
     end
 end
 

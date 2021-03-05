@@ -1,6 +1,6 @@
 % calculate x,y and fetch
 
-function [x,y,wave_weight] = calc_xyw(file_name,i,save_on,x,y)
+function [x,y,wave_weight,save_name] = calc_xyw(file_name,i,save_on,x,y)
 load(file_name)
 p.sl_analysis = 1;
 sn = '_xyw';
@@ -17,7 +17,7 @@ end
 if ~isfield(p,'Kwave')
     p.Kwave = p.Kuniform;
 end
-[dam_matrix,wave_weight_matrix,fetch_matrix,indshoreline_ordered,cells2trash,p] = get_dam_wave(lake,p);
+[~,wave_weight_matrix,fetch_matrix,~,~,~] = get_dam_wave(lake,p);
 
 ind = sub2ind(size(lake),y,x);
 wave_weight = wave_weight_matrix(ind);

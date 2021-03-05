@@ -14,9 +14,9 @@ init_circle =0;
 init_square = 0;
 rand_IC = 0;
 river_IC =1;
-run_idx = [14 16];
+load('idx_list_v1')
 
-for runs = 1:2
+for runs = 1:10%:length(idx_list)
 %% SET PARAMETERS %%
 
 % --------------- space and time resolution ------------------------------- 
@@ -94,7 +94,7 @@ p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosi
 p.So = 1;
 p.dxo = 100;
 p.delta = 0.05;
-p.nrays = 150;
+p.nrays = 180;
 % p.SLR = 50/p.tf;                  %     p.SLR            Rate of sea level rise (m/yr)
 p.sealevel_init = 1;        %     p.sealevel_init  Initial sea level
 if p.doUniformErosion
@@ -136,13 +136,12 @@ if rand_IC
     [init,p] = get_IC(p,rfactor);
 elseif river_IC
     p.sealevel_init=40;
-    load('test_idx_list.mat')
-    init_name = ['test_idx_',num2str(idx_list(runs))];
-    load(init_name)
+    init_name = ['/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/cluster/generate_init/mrfn94_idx_',num2str(idx_list(runs))];
+    load(init_name,'init')
     rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the noise surface
-    
-    [~,p] = get_IC(p,rfactor,idx_list(runs));
-
+    load('mmf')
+    p.Ao = Ao;
+    p.Ao_cells = Ao_cells;
 %test circle
 elseif init_circle
     [init,p] = test_circle(p);

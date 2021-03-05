@@ -384,50 +384,50 @@ eq14 = dj.*dt./0.776./length(y)*sum(powernorm_sub./scale(pband1)');
     %% log
 %     figure()
 % scatter(log(fetch),eq14')
-[B,~,idx] = loghistcounts(fetch);
-% plot(B);
-% xlabel('bin')
-% ylabel('N')
+% [B,~,idx] = loghistcounts(fetch);
+% % plot(B);
+% % xlabel('bin')
+% % ylabel('N')
+% %     if save_on
+% %         fig = '.eps'; fig_suf ='hist_log'; 
+% %         range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
+% %         figname = strcat(savename,range,fig_suf,'.jpg');
+% %         saveas(gcf,figname)
+% %     end
+% % figure()
+% idx = idx+1; % this is because it starts at 0
+% meaneq14 = accumarray(idx(:),eq14,[],@mean);
+% meaneq14(meaneq14==0)=NaN;
+% meanfetch = accumarray(idx(:),fetch,[],@mean);
+% meanfetch(meanfetch==0)=NaN;
+% medianeq14 = accumarray(idx(:),eq14,[],@median);
+% medianeq14(medianeq14==0)=NaN;
+% medianfetch = accumarray(idx(:),fetch,[],@median);
+% medianfetch(medianfetch==0)=NaN;
+% stdeq14 = accumarray(idx(:),eq14,[],@std);
+% stdeq14(stdeq14==0)=NaN;
+% B = [1 B]';
+% SEM = stdeq14./sqrt(B);                         % Standard Error Of The Mean
+% CI95 = SEM .* tinv(0.975, B-1);              % 95% Confidence Intervals
+% stdfetch = accumarray(idx(:),fetch,[],@std);
+% stdfetch(stdfetch==0)=NaN;
+% 
+% p_2 = semilogx(meanfetch(B>1),meaneq14(B>1),'k','LineWidth',2);
+% hold on
+% p2_2 = plot(fetch,eq14,'.','Color',[0.8 0.8 0.8]);
+% % plot(fetch,eq14,'.','Color','g')
+% % scatter(medianfetch,medianeq14,'k*')
+% p3_2 = errorbar(meanfetch(B>1),meaneq14(B>1),CI95(B>1),'k');
+% % legend('mean','median')
+% ylim([0 5e-4])
+% xlabel('weighted fetch area')
+% ylabel('azimuthal variance (radians^2)')
+% % legend('mean','data','95% CI')
+% set(gca,'FontSize',16)
 %     if save_on
-%         fig = '.eps'; fig_suf ='hist_log'; 
+%         fig = '.eps'; fig_suf ='fvr_mean_log'; 
 %         range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
 %         figname = strcat(savename,range,fig_suf,'.jpg');
 %         saveas(gcf,figname)
 %     end
-% figure()
-idx = idx+1; % this is because it starts at 0
-meaneq14 = accumarray(idx(:),eq14,[],@mean);
-meaneq14(meaneq14==0)=NaN;
-meanfetch = accumarray(idx(:),fetch,[],@mean);
-meanfetch(meanfetch==0)=NaN;
-medianeq14 = accumarray(idx(:),eq14,[],@median);
-medianeq14(medianeq14==0)=NaN;
-medianfetch = accumarray(idx(:),fetch,[],@median);
-medianfetch(medianfetch==0)=NaN;
-stdeq14 = accumarray(idx(:),eq14,[],@std);
-stdeq14(stdeq14==0)=NaN;
-B = [1 B]';
-SEM = stdeq14./sqrt(B);                         % Standard Error Of The Mean
-CI95 = SEM .* tinv(0.975, B-1);              % 95% Confidence Intervals
-stdfetch = accumarray(idx(:),fetch,[],@std);
-stdfetch(stdfetch==0)=NaN;
-
-p_2 = semilogx(meanfetch(B>1),meaneq14(B>1),'k','LineWidth',2);
-hold on
-p2_2 = plot(fetch,eq14,'.','Color',[0.8 0.8 0.8]);
-% plot(fetch,eq14,'.','Color','g')
-% scatter(medianfetch,medianeq14,'k*')
-p3_2 = errorbar(meanfetch(B>1),meaneq14(B>1),CI95(B>1),'k');
-% legend('mean','median')
-ylim([0 5e-4])
-xlabel('weighted fetch area')
-ylabel('azimuthal variance (radians^2)')
-% legend('mean','data','95% CI')
-set(gca,'FontSize',16)
-    if save_on
-        fig = '.eps'; fig_suf ='fvr_mean_log'; 
-        range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
-        figname = strcat(savename,range,fig_suf,'.jpg');
-        saveas(gcf,figname)
-    end
 

@@ -2,7 +2,7 @@
 
 function [Kc_,folder,size_final] = inputs_k_folder(cluster);
 
-size_final = 0.7;
+size_final = 2;
 % cluster -- 1 running on cluster, 2 running locally
 
 if cluster
@@ -10,7 +10,7 @@ if cluster
     
 elseif ~cluster
 %     folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/cluster/111820_/';
-    folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/ray_fetch_test/';
+    folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/022021/';
 end
 
 % K
