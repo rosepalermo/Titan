@@ -7,7 +7,7 @@ rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the
 init_temp = cell(0);
 % ii = 1;
 
-for idx = 1:1000
+for idx = 1000:2000
     load('p_init_v1.mat')
     p.relief_final = 0.92;
     p.size_final = 1;
