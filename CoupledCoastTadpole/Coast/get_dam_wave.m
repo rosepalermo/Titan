@@ -56,7 +56,6 @@ clearvars erodedind
     %         [shoreline] = addidshoreline_cardonly(lake,land); % edges only
 
     wave_weighting = cell2mat(WaveArea_cell);
-    wave_weighting = cell2mat(WaveArea_cell)./p.Ao;
     fetch_all = cell2mat(FetchArea_cell);
     
     % when nonunique (on promontories), only will use first value unless
@@ -74,7 +73,7 @@ clearvars erodedind
     
     wave_weight_matrix(unique_ind) = unique_sum_wave;
     fetch_matrix(unique_ind) = unique_sum_fetch;
-    dam = p.dt*p.Kwave*shoreline(unique_ind).*unique_sum_wave*p.So./p.dxo;
+    dam = p.dt*p.Kwave*shoreline(unique_ind).*unique_sum_wave*p.So./p.dxo./p.Ao;
     dam_matrix(unique_ind) = dam_matrix(unique_ind)+dam; % have to do this because if a shoreline cell is an island on the big one and has a second order lake in it, we don't want the damage from the second order lake to be the only damage it receives. need to add up damage from both sides.
     
 end

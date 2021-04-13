@@ -1,6 +1,6 @@
 % automate plots
-load('idx_list_v1')
-idx_list(33) = NaN; idx_list(46) = NaN; idx_list(isnan(idx_list)) = [];
+load('idx_list_mrfn94'); idx_list(33) = NaN; idx_list(46) = NaN; idx_list(isnan(idx_list)) = [];
+% load('idx_list_mrfn92'); idx_list(1) = NaN; idx_list(5:6) = NaN; idx_list(21) = NaN; idx_list(isnan(idx_list)) = [];
 figure()
 hold on
 wave_edges = linspace(5e-4,1e0,100);
@@ -35,10 +35,10 @@ semilogx(meanwave_weight(B>1),meaneq_14(B>1),'k','LineWidth',2);
 hold on
 % plot(wave_weight,eq_14,'.','Color',[0.8 0.8 0.8]);
 
-% errorbar(meanwave_weight(B>1),meaneq_14(B>1),CI95(B>1),'k');
+errorbar(meanwave_weight(B>1),meaneq_14(B>1),CI95(B>1),'k');
 % legend('mean','median')
-ylim([0 8e-4])
-xlim([1e-4 1e0])
+% ylim([0 8e-4])
+% xlim([1e-4 1e0])
 xlabel('weighted weighted fetch area')
 ylabel('azimuthal variance (radians^2)')
 % legend('mean','data','95% CI')
@@ -74,7 +74,7 @@ semilogx(meanwave_weight(B>1),meaneq_14(B>1),'k','LineWidth',2);
 hold on
 % plot(wave_weight,eq_14,'.','Color',[0.8 0.8 0.8]);
 
-% errorbar(meanwave_weight(B>1),meaneq_14(B>1),CI95(B>1),'k');
+errorbar(meanwave_weight(B>1),meaneq_14(B>1),CI95(B>1),'k');
 % legend('mean','median')
 ylim([0 8e-4])
 xlim([1e-4 1e0])
@@ -114,7 +114,7 @@ semilogx(meanwave_weight(B>1),meaneq_14(B>1),'k','LineWidth',2);
 hold on
 % plot(wave_weight,eq_14,'.','Color',[0.8 0.8 0.8]);
 
-% errorbar(meanwave_weight(B>1),meaneq_14(B>1),CI95(B>1),'k');
+errorbar(meanwave_weight(B>1),meaneq_14(B>1),CI95(B>1),'k');
 % legend('mean','median')
 ylim([0 8e-4])
 xlim([1e-4 1e0])
@@ -123,7 +123,7 @@ ylabel('azimuthal variance (radians^2)')
 % legend('mean','data','95% CI')
 set(gca,'FontSize',16)
 title('Wave')
-
+whos x
 end
 %%
 figure()

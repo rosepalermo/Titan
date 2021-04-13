@@ -105,11 +105,11 @@ sjnext = sjnext(:);
 % Now loop through the shorelines to compute fetch area 
 for n = 1:ns
 
-%     si = shorelines{n}(:,2)/cellsize; % row (y) indices
-%     sj = shorelines{n}(:,1)/cellsize; % column (x) indices
+    si = shorelines{n}(:,2)/cellsize; % row (y) indices
+    sj = shorelines{n}(:,1)/cellsize; % column (x) indices
 
-    si = shorelines{n}(:,2); % row (y) indices
-    sj = shorelines{n}(:,1); % column (x) indices
+%     si = shorelines{n}(:,2); % row (y) indices
+%     sj = shorelines{n}(:,1); % column (x) indices
 
     [fpi,fpj,rayaz,coastaz] = rayfetch(lake,si(:),sj(:),nrays,delta,Sidx,siprev,sinext,sjprev,sjnext);
     

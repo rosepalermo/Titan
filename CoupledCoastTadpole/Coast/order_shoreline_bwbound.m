@@ -23,7 +23,7 @@ function [sl_cell,keepme,cells2trash,p] = order_shoreline_bwbound(lake,p);
 [shoreline_if_bound] = addidshoreline(lake,double(~lake),p); % corners are part of the shoreline!
 test_sl = find(shoreline_if_bound);
 [testr,testc] = ind2sub(size(lake),test_sl);
-if any(ismember([1 size(lake,2)],[testr,testc]))
+if any(ismember([1 size(lake,2)],testc))||any(ismember([1 size(lake,1)],testr))
     clearvars sl_cell;
     sl_cell = [];
     keepme = [];

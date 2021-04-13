@@ -94,7 +94,7 @@ while keepgoing
     g.meanrelief = mean(g.U,'all')-min(g.U,[],'all');
     keepgoing = g.meanrelief > p.relief_init*p.relief_final; %keepgoing if the relief isn't eroded past final
     else
-    keepgoing = (~kill_switch && g.nLakeCells < 1.2*g.nLakeCells_init)%g.nLakeCells < p.Ao_cells*p.size_final) % if either the lake hits the bournday or the max lake size
+    keepgoing = (~kill_switch && g.nLakeCells < 1.2*g.nLakeCells_init);%g.nLakeCells < p.Ao_cells*p.size_final) % if either the lake hits the bournday or the max lake size
     end
 end
 

@@ -1,9 +1,12 @@
 % plot end shoreline from data
-function [x,y] = plotisl(p,g,i)
-if i == 'end'
-    lake = g.output(:,:,end)<=p.sealevel_init;
-else
-    lake = g.output(:,:,i)<=p.sealevel_init;
+function [x,y] = plotisl(p,g,i,lake)
+temp = exist('lake');
+if ~temp
+    if i == 'end'
+        lake = g.output(:,:,end)<=p.sealevel_init;
+    else
+        lake = g.output(:,:,i)<=p.sealevel_init;
+    end
 end
 [F_lake_all,~,~,~] = find_first_order_lakes(lake,p);
 for i = 1:length(F_lake_all)

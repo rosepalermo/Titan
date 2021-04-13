@@ -14,9 +14,9 @@ init_circle =0;
 init_square = 0;
 rand_IC = 0;
 river_IC =1;
-load('idx_list_v1')
+load('idx_list_mrfn92')
 
-for runs = 1:10%:length(idx_list)
+for runs = 1:length(idx_list)
 %% SET PARAMETERS %%
 
 % --------------- space and time resolution ------------------------------- 
@@ -89,8 +89,8 @@ p.thetac = 0;               %     p.thetac         Threshold for fluvial incisio
 % ---------------- coastal erosion -------------------------------                           
 
 p.con8 = 1;                 %     p.con8  1 for 8 connected shoreline (no corners), 0 for 4 connected shoreline (corners)
-p.doWaveErosion = 1;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
-p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
+p.doWaveErosion = 0;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
+p.doUniformErosion = 1;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
 p.So = 1;
 p.dxo = 100;
 p.delta = 0.05;
@@ -136,7 +136,7 @@ if rand_IC
     [init,p] = get_IC(p,rfactor);
 elseif river_IC
     p.sealevel_init=40;
-    init_name = ['/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/cluster/generate_init/mrfn94_idx_',num2str(idx_list(runs))];
+    init_name = ['/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/cluster/generate_init/mrfn92_idx_',num2str(idx_list(runs))];
     load(init_name,'init')
     rfactor = 0.25; % 0.25; % depth of the depression as a function of relief of the noise surface
     load('mmf')
@@ -165,7 +165,7 @@ p.F(init < p.sealevel_init) = 1; % I forget if you decided that points with elev
 % p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/091820/';
 cluster = 0;
 [K_,p.folder,p.size_final] = inputs_k_folder(cluster);
-p.run = ['r_idx_',num2str(idx_list(runs)),'_wave_K_'];
+p.run = ['mrfn92_idx_',num2str(idx_list(runs)),'_uniform_K_'];
 time = 'time';
 for i = 1
     tstart = tic;
