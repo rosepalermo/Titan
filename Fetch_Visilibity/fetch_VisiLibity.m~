@@ -1,0 +1,57 @@
+function [Fetch_dist,cosang] = fetch_VisiLibity(shorelines,eps,epsilon,snap_distance)
+
+% initialize
+WaveArea = cell(length(shorelines),1);
+% Fetch_dist = cell(length(shorelines),1);
+% cosang = cell(length(shorelines),1);
+
+% find all fetch for each point
+for k = 1:length(shorelines)
+    ind{k} = find(shorelines{k};
+    for l = 1:length(shorelines{k})
+        
+        % Get the next and previous points.
+        l_ind = find(ind{k} == l);
+        if l_ind > 1
+            l_ind_prev = l_ind-1;
+        else
+            l_ind_prev = length(ind{k});
+        end
+        
+        if l_ind < length(ind{k})
+            l_ind_next = l_ind+1;
+        else
+            l_ind_next = 1;
+        end
+        
+        xp = shorelines{k}(ind{k}(l_ind_prev), 1);
+        yp = shorelines{k}(ind{k}(l_ind_prev), 2);
+        xn = shorelines{k}(ind{k}(l_ind_next), 1);
+        yn = shorelines{k}(ind{k}(l_ind_next), 2);
+        
+        % Get the observer position.
+        if k == 1 % this is the lake
+            [Pobs,nbi] = Pint([xn,yn],[x_l,y_l],[xp,yp],eps);
+        else % this is an island
+            [Pobs,nbi] = Pint([xp,yp],[x_l,y_l],[xn,yn],eps);
+        end
+        
+        V = visibility_polygon(Pobs, shorelines, epsilon, snap_distance);
+        
+        
+        % fetch & wave area & distance & cos(theta-phi)
+        FetchArea{k,1}(l,1) = polyarea(V(:,1),V(:,2));
+        Fetch_dist = sqrt(sum(([shorelines{k}(l,1),shorelines{k}(l,2)] - V).^2,2));
+        minFetch_dist = min(Fetch_dist,200); % this is how we can limit fetch eventually
+        % Wave weighting = (F)*cosang
+        weighted_fetch_dist = ([shorelines{k}(l,1),shorelines{k}(l,2)] - V)*nbi'; % magnitude of fetch * magnitude of normal vector * cosang
+        % cos(theta - phi) = dot product of slvec and losvec
+        cosang = -weighted_fetch_dist./Fetch_dist; %[mag_fetch*mag_norm(which is 1)*cosang]/mag_fetch = cosang
+        cosang(isnan(cosang)) = 0;
+        cosang(cosang<0) = 0; % any less than 0 are artifacts of discritezation and not physical
+        Wavepts = [shorelines{k}(l,1),shorelines{k}(l,2)]+(V-[shorelines{k}(l,1),shorelines{k}(l,2)]).*cosang;
+        WaveArea{k,1}(l,1) = polyarea(Wavepts(:,1),Wavepts(:,2));
+        
+    end
+end
+end

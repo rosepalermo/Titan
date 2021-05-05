@@ -1,10 +1,13 @@
 function [dam_matrix,wave_weight_matrix,fetch_matrix,indshoreline_ordered,cells2trash,p] = get_dam_wave(lake,p)
 
-% initialize
-x = 1:p.Nx;
-y = 1:p.Ny;
+% initialize (in matrix units)
+if ~isfield(p,'Nx')
+    p.Nx = size(lake,1);
+    p.Ny = size(lake,2);
+end
+x = (1:p.Nx)*p.dx;
+y = (1:p.Ny)*p.dy;
 [X,Y] = meshgrid(x,y);
-X = X*p.dx; Y = Y*p.dy;
 wave_weight_matrix = nan(size(lake));
 fetch_matrix = nan(size(lake));
 dam_matrix = zeros(size(lake));

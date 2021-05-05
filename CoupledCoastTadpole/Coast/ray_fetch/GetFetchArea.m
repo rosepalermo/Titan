@@ -30,11 +30,10 @@ for n = 1:ns
         end
     end
 
-    % Convert from x,y units to matrix indices
-    if island(n)
-        shorelines{n}(:,1) = flipud(sj);
-        shorelines{n}(:,2) = flipud(si);        
-    end
+%     if island(n)
+%         shorelines{n}(:,1) = flipud(sj);
+%         shorelines{n}(:,2) = flipud(si);        
+%     end
     
 end
 
@@ -82,7 +81,7 @@ for n = 1:ns
     si = shorelines{n}(:,2); % row (y) indices
     sj = shorelines{n}(:,1); % column (x) indices
        
-    sind = sub2ind(sz,si,sj); % linear indices
+    sind = int32(sub2ind(sz,si,sj)); % linear indices
     
     npts = length(sind); % Number of points in this shoreline segment
 
@@ -105,11 +104,11 @@ sjnext = sjnext(:);
 % Now loop through the shorelines to compute fetch area 
 for n = 1:ns
 
-    si = shorelines{n}(:,2)/cellsize; % row (y) indices
-    sj = shorelines{n}(:,1)/cellsize; % column (x) indices
+%     si = shorelines{n}(:,2)/cellsize; % row (y) indices
+%     sj = shorelines{n}(:,1)/cellsize; % column (x) indices
 
-%     si = shorelines{n}(:,2); % row (y) indices
-%     sj = shorelines{n}(:,1); % column (x) indices
+    si = shorelines{n}(:,2); % row (y) indices
+    sj = shorelines{n}(:,1); % column (x) indices
 
     [fpi,fpj,rayaz,coastaz] = rayfetch(lake,si(:),sj(:),nrays,delta,Sidx,siprev,sinext,sjprev,sjnext);
     

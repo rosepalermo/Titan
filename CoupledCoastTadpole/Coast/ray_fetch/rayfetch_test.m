@@ -17,27 +17,29 @@ load('fetch_input8con_lake','F_lake'); % lake is 1 for water, 0 for land
 load('fetch_input8con','fetch_sl_cells'); % x and y are ordered clockwise if i increases downward, first point != last point
 
 shorelines = fetch_sl_cells;
+% shorelines{1}(:,1) = flipud(shorelines{1}(:,1));
+% shorelines{1}(:,2) = flipud(shorelines{1}(:,2));
 lake = F_lake;
 
 cellsize = 62.5; % in units of x and y
-nrays = 360/5; % number of rays around the circle. Recommend nrays >= 36
-delta = 0.5; % distance increment along each ray, in cells. Recommend delta <= 0.5
+nrays = 180; % 360/5number of rays around the circle. Recommend nrays >= 36
+delta = 0.05; % 0.5 distance increment along each ray, in cells. Recommend delta <= 0.5
 
 ns = length(shorelines);
 
 tic
 
-% Convert to matrix units 
-for n = 1:ns
-
-    shorelines{n}(:,1) = shorelines{n}(:,1)/cellsize;
-    shorelines{n}(:,2) = shorelines{n}(:,2)/cellsize;                
-    
-end
-
-
-% % Detect islands.
-% % We reverse the order of island points so that islands are ordered CCW if i increases up)
+% % Convert to matrix units 
+% for n = 1:ns
+% 
+%     shorelines{n}(:,1) = shorelines{n}(:,1)/cellsize;
+%     shorelines{n}(:,2) = shorelines{n}(:,2)/cellsize;                
+%     
+% end
+% 
+% 
+% % % Detect islands.
+% % % We reverse the order of island points so that islands are ordered CCW if i increases up)
 % island = zeros(ns,1);
 % for n = 1:ns
 % 
@@ -65,16 +67,16 @@ end
 %     
 % end
 
-[warea,~,wpiws,wpjws,rayaz,coastaz,fpis,fpjs] = GetFetchArea(shorelines,lake,nrays,delta,cell_size);
+[warea,~,wpiws,wpjws,rayaz,coastaz,fpis,fpjs] = GetFetchArea(shorelines,lake,nrays,delta,cellsize);
 
 toc
 
-for n = 1:ns
-
-    shorelines{n}(:,1) = shorelines{n}(:,1)*cellsize;
-    shorelines{n}(:,2) = shorelines{n}(:,2)*cellsize;                
-    
-end
+% for n = 1:ns
+% 
+%     shorelines{n}(:,1) = shorelines{n}(:,1)*cellsize;
+%     shorelines{n}(:,2) = shorelines{n}(:,2)*cellsize;                
+%     
+% end
 %% plot weighted fetch area
 
 figure
@@ -94,7 +96,7 @@ title('log10(weighted fetch area in cells)')
 %% plot rays for selected points
 
 figure
-imagesc(~lake); axis equal tight; colormap gray
+% imagesc(~lake); axis equal tight; colormap gray
 hold on
 
 ns = length(shorelines);

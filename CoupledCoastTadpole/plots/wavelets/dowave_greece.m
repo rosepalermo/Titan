@@ -16,12 +16,12 @@ function [period, eq14] = dowave_greece(y,dt,ord,xx,yy,savename,save_on,fetch,pm
 % y = (y - mean(y))/sqrt(variance);
 
 % % close the loop
-figure(); scatter3(xx,yy,[(0:length(xx)-1)*dt],100,[(0:length(xx)-1)*dt],'.');view(2);grid off;axis equal tight; colormap hsv; h = colorbar; xlabel('meters'); ylabel('meters'); ylabel(h,'# points'); set(gca,'FontSize',16)
-% % 
-    if save_on
-        fig = '.eps'; fig_suf ='_pts'; figname = strcat(savename,fig_suf,'.jpg');
-        saveas(gcf,figname)
-    end
+% figure(); scatter3(xx,yy,[(0:length(xx)-1)*dt],100,[(0:length(xx)-1)*dt],'.');view(2);grid off;axis equal tight; colormap hsv; h = colorbar; xlabel('meters'); ylabel('meters'); ylabel(h,'# points'); set(gca,'FontSize',16)
+% % % 
+%     if save_on
+%         fig = '.eps'; fig_suf ='_pts'; figname = strcat(savename,fig_suf,'.jpg');
+%         saveas(gcf,figname)
+%     end
 
 n = length(y);
 t = (0:length(y)-1)*dt;  % construct time array
@@ -130,109 +130,109 @@ global_signif = wave_signif_ARn(std(y)^2,dt,scale,1,fft_theor,-1,dof,mother);
 
 eq14 = dj.*dt./0.776./length(y)*sum(sum(power./scale'));
 
-% PLOTTING
-h = figure();
-
-%--- Plot time series
-subplot('position',[0.1 0.75 0.65 0.2]);
-scatter3(t,y,[(0:length(xx)-1)*dt],100,[(0:length(xx)-1)*dt],'.');view(2);
-hold on;
-plot(t,y,'k')
-set(gca,'XLim',xlimits(:))
-% xlabel('Alongshore location')
-ylabel('Azimuth')
-title('data')
-set(gca,'FontSize',16)
-hold off
-
-%--- Contour plot wavelet power spectrum
-ax2 = subplot('position',[0.1 0.37 0.65 0.28]);
-% levels = [0.0625,0.125,0.25,0.5,1,2,4,8,16] ;
-Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
-
-% contour(t,log2(period),log2(power),log2(levels));  %*** or use 'contourf'
-imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
-colormap gray
-
-xlabel('alongshore position (meters)')
-ylabel('Period (units of Alongshore location)')
-title('Wavelet Power Spectrum')
-load('climits_wps.mat')
-set(gca,'Clim',climits)
-set(gca,'XLim',xlimits(:))
-set(gca,'YLim',log2([min(period),max(period)]), ...
-	'YDir','reverse', ...
-	'YTick',log2(Yticks(:)), ...
-	'YTickLabel',Yticks)
-set(gca,'FontSize',16)
-% xlim([0 8000])
-% 95% significance contour, levels at -99 (fake) and 1 (95% signif)
-hold on
-contour(t,log2(period),sig95,[-99,1],'r','linewidth',1);
-hold on
-% cone-of-influence, anything "below" is dubious
-plot(t,log2(coi),'k')
-hold off
-
-
-% --- Plot global wavelet spectrum
-ax1 = subplot('position',[0.77 0.37 0.2 0.28]);
-semilogx(fft_theor,log2(period),'k')
-hold on
-% semilogx(global_signif,log2(period),'r')
-semilogx(global_ws,log2(period))
-% legend('fft estimate','significance','spatial average')
-xlabel('Power (amplitude^2)')
-title('Global Wavelet Spectrum')
-set(gca,'YLim',log2([min(period),max(period)]), ...
-	'YDir','reverse', ...
-	'YTick',log2(Yticks(:)), ...
-	'YTickLabel','')
-set(gca,'XLim',[0,1.25*max(global_ws)])
-h.Position = [569  -217   950   699];
-linkaxes([ax1 ax2],'y')
-
-% plotting the 95% and 5% of points on the global
-globalquant = quantile(power',[0.05 0.95]);
-semilogx(globalquant(1,:),log2(period))
-semilogx(globalquant(2,:),log2(period))
-legend('fft estimate','spatial average','5%','95%','location','southwest')
-
-    if save_on
-        fig = '.eps'; fig_suf ='_wps_all_gray_quant'; figname = strcat(savename,fig_suf,'.jpg');
-        saveas(gcf,figname)
-    end
-    
+% % PLOTTING
+% h = figure();
+% 
+% %--- Plot time series
+% subplot('position',[0.1 0.75 0.65 0.2]);
+% scatter3(t,y,[(0:length(xx)-1)*dt],100,[(0:length(xx)-1)*dt],'.');view(2);
+% hold on;
+% plot(t,y,'k')
+% set(gca,'XLim',xlimits(:))
+% % xlabel('Alongshore location')
+% ylabel('Azimuth')
+% title('data')
+% set(gca,'FontSize',16)
+% hold off
+% 
+% %--- Contour plot wavelet power spectrum
+% ax2 = subplot('position',[0.1 0.37 0.65 0.28]);
+% % levels = [0.0625,0.125,0.25,0.5,1,2,4,8,16] ;
+% Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
+% 
+% % contour(t,log2(period),log2(power),log2(levels));  %*** or use 'contourf'
+% imagesc(t,log2(period),log2(power));  %*** uncomment for 'image' plot
+% colormap gray
+% 
+% xlabel('alongshore position (meters)')
+% ylabel('Period (units of Alongshore location)')
+% title('Wavelet Power Spectrum')
+% load('climits_wps.mat')
+% set(gca,'Clim',climits)
+% set(gca,'XLim',xlimits(:))
+% set(gca,'YLim',log2([min(period),max(period)]), ...
+% 	'YDir','reverse', ...
+% 	'YTick',log2(Yticks(:)), ...
+% 	'YTickLabel',Yticks)
+% set(gca,'FontSize',16)
+% % xlim([0 8000])
+% % 95% significance contour, levels at -99 (fake) and 1 (95% signif)
+% hold on
+% contour(t,log2(period),sig95,[-99,1],'r','linewidth',1);
+% hold on
+% % cone-of-influence, anything "below" is dubious
+% plot(t,log2(coi),'k')
+% hold off
+% 
+% 
+% % --- Plot global wavelet spectrum
+% ax1 = subplot('position',[0.77 0.37 0.2 0.28]);
+% semilogx(fft_theor,log2(period),'k')
+% hold on
+% % semilogx(global_signif,log2(period),'r')
+% semilogx(global_ws,log2(period))
+% % legend('fft estimate','significance','spatial average')
+% xlabel('Power (amplitude^2)')
+% title('Global Wavelet Spectrum')
+% set(gca,'YLim',log2([min(period),max(period)]), ...
+% 	'YDir','reverse', ...
+% 	'YTick',log2(Yticks(:)), ...
+% 	'YTickLabel','')
+% set(gca,'XLim',[0,1.25*max(global_ws)])
+% h.Position = [569  -217   950   699];
+% linkaxes([ax1 ax2],'y')
+% 
+% % plotting the 95% and 5% of points on the global
+% globalquant = quantile(power',[0.05 0.95]);
+% semilogx(globalquant(1,:),log2(period))
+% semilogx(globalquant(2,:),log2(period))
+% legend('fft estimate','spatial average','5%','95%','location','southwest')
+% 
+%     if save_on
+%         fig = '.eps'; fig_suf ='_wps_all_gray_quant'; figname = strcat(savename,fig_suf,'.jpg');
+%         saveas(gcf,figname)
+%     end
+%     
 % figure of variance at each wavelength
-figure()
-globalvar = var(power');
-semilogx(globalvar,log2(period),'k','LineWidth',2)
-set(gca,'Ydir','reverse')
-xlabel('Variance of power (amplitude^2)')
-ylabel('Period (units of Alongshore location)')
-xlim([0 1e8])
-    if save_on
-        fig = '.eps'; fig_suf ='_global_var'; figname = strcat(savename,fig_suf,'.jpg');
-        saveas(gcf,figname)
-    end
-
-
-    figure()
-semilogx(fft_theor,log2(period),'k')
-hold on
-semilogx(global_signif,log2(period),'r')
-semilogx(global_ws,log2(period))
-legend('fft estimate','significance','spatial average')
-hold off
-xlabel('Power (amplitude^2)')
-title('Global Wavelet Spectrum')
-% set(gca,'YLim',log2([4,256]), ...
-set(gca,'YDir','reverse')
-set(gca,'XLim',[0,1.25*max(global_ws)])
-        if save_on
-        fig = '.eps'; fig_suf ='global'; figname = strcat(savename,fig_suf,'.jpg');
-        saveas(gcf,figname)
-    end
+% figure()
+% globalvar = var(power');
+% semilogx(globalvar,log2(period),'k','LineWidth',2)
+% set(gca,'Ydir','reverse')
+% xlabel('Variance of power (amplitude^2)')
+% ylabel('Period (units of Alongshore location)')
+% xlim([0 1e8])
+%     if save_on
+%         fig = '.eps'; fig_suf ='_global_var'; figname = strcat(savename,fig_suf,'.jpg');
+%         saveas(gcf,figname)
+%     end
+% 
+% 
+%     figure()
+% semilogx(fft_theor,log2(period),'k')
+% hold on
+% semilogx(global_signif,log2(period),'r')
+% semilogx(global_ws,log2(period))
+% legend('fft estimate','significance','spatial average')
+% hold off
+% xlabel('Power (amplitude^2)')
+% title('Global Wavelet Spectrum')
+% % set(gca,'YLim',log2([4,256]), ...
+% set(gca,'YDir','reverse')
+% set(gca,'XLim',[0,1.25*max(global_ws)])
+%         if save_on
+%         fig = '.eps'; fig_suf ='global'; figname = strcat(savename,fig_suf,'.jpg');
+%         saveas(gcf,figname)
+%     end
 %Model lakes
 % pmin = 2^2;
 % pmax = 2^3.8;
@@ -284,27 +284,29 @@ eq14 = dj.*dt./0.776./length(y)*sum(powernorm_sub./scale(pband1)');
 
 
 %% shoreline w/ eq4
-%     figure()
-%     scatter3(xx,yy,eq14',[],eq14','filled')
-%     view(2)
-%     grid off
-%     axis tight
-%     axis equal
-% %     xlim([0 200])
-% %     ylim([20 180])
-% %         set(gca,'Ydir','reverse')
-%     h = colorbar;
-%     ylabel(h, 'azimuthal variance')
+    hh = figure();
+%     subplot('position',[457 113 857 692]);
+    subplot(2,2,2)
+    scatter3(xx,yy,eq14',[],eq14','filled')
+    view(2)
+    grid off
+    axis tight
+    axis equal
+%     xlim([0 200])
+%     ylim([20 180])
+%         set(gca,'Ydir','reverse')
+    h = colorbar;
+    ylabel(h, 'azimuthal variance')
 %     set(gca,'Clim',[0 3e-4])
-%     xlabel('meters');ylabel('meters');
-% %     load('clim_eq14.mat')
-% %     set(gca,'Clim',clim_eq14)
-%     set(gca,'FontSize',16)
-% %     set(gca,'ColorScale','log')
-% %     set(gca,'YTickLabel',[])
-% %     set(gca,'XTickLabel',[])
-% %     set(gca,'fontsize',18)
-%     grid off
+    xlabel('meters');ylabel('meters');
+%     load('clim_eq14.mat')
+%     set(gca,'Clim',clim_eq14)
+    set(gca,'FontSize',16)
+%     set(gca,'ColorScale','log')
+%     set(gca,'YTickLabel',[])
+%     set(gca,'XTickLabel',[])
+%     set(gca,'fontsize',18)
+    grid off
 %     if save_on
 %         fig = '.eps'; fig_suf ='_eq14_sl'; 
 %         range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
@@ -313,25 +315,26 @@ eq14 = dj.*dt./0.776./length(y)*sum(powernorm_sub./scale(pband1)');
 %     end
 %% Plot fetch on shoreline
 %         figure()
-%     scatter3(xx,yy,fetch,[],fetch,'filled')
-%     view(2)
-%     grid off
-%     axis tight
-%     axis equal
-% %     xlim([0 200])
-% %     ylim([20 180])
-% %         set(gca,'Ydir','reverse')
-%     h = colorbar;
-%     ylabel(h, 'fetch area')
-% %     set(gca,'Clim',[1e9 1e10])
-%     xlabel('meters');ylabel('meters');
-% %     load('clim_eq14.mat')
-% %     set(gca,'Clim',clim_eq14)
-%     set(gca,'FontSize',16)
-% %     set(gca,'ColorScale','log')
-% %     set(gca,'YTickLabel',[])
-% %     set(gca,'XTickLabel',[])
-% %     set(gca,'fontsize',18)
+subplot(2,2,1)
+    scatter3(xx,yy,fetch,[],fetch,'filled')
+    view(2)
+    grid off
+    axis tight
+    axis equal
+%     xlim([0 200])
+%     ylim([20 180])
+%         set(gca,'Ydir','reverse')
+    h = colorbar;
+    ylabel(h, 'fetch area')
+%     set(gca,'Clim',[1e9 1e10])
+    xlabel('meters');ylabel('meters');
+%     load('clim_eq14.mat')
+%     set(gca,'Clim',clim_eq14)
+    set(gca,'FontSize',16)
+%     set(gca,'ColorScale','log')
+%     set(gca,'YTickLabel',[])
+%     set(gca,'XTickLabel',[])
+%     set(gca,'fontsize',18)
 %     if save_on
 %         fig = '.eps'; fig_suf ='_ww_sl'; 
 %         range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
@@ -404,7 +407,8 @@ eq14 = dj.*dt./0.776./length(y)*sum(powernorm_sub./scale(pband1)');
 %         saveas(gcf,figname)
 %     end
     %% log
-    figure()
+%     figure()
+subplot(2,2,3)
 scatter(log(fetch),eq14')
 [B,~,idx] = loghistcounts(fetch);
 % plot(B);
@@ -446,12 +450,41 @@ xlabel('weighted fetch area')
 ylabel('azimuthal variance (radians^2)')
 % legend('mean','data','95% CI')
 set(gca,'FontSize',16)
-    if save_on
-        fig = '.eps'; fig_suf ='fvr_mean_log'; 
-        range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
-        figname = strcat(savename,range,fig_suf,'.jpg');
-        saveas(gcf,figname)
-    end
+%     if save_on
+%         fig = '.eps'; fig_suf ='fvr_mean_log'; 
+%         range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
+%         figname = strcat(savename,range,fig_suf,'.jpg');
+%         saveas(gcf,figname)
+%     end
 pp = polyfit(log(meanfetch(B>1)),meaneq14(B>1),1);
 slope = pp(1)
+
+% Plot fetch vs roughness
+%  figure()
+subplot(2,2,4)
+ scatter(log(fetch),eq14')
+ % scatter(log(fetch),eq14')
+ X = [log(fetch),eq14'];
+ X(X==inf) = NaN;
+ X(X==-inf) = NaN;
+ hist3(X,'CdataMode','auto','Nbins',[20 20]); view(2)
+ xlabel('log fetch')
+ ylabel('wavelet variance')
+ set(gca,'FontSize',14)
+ colorbar
+%      if save_on
+%          fig = '.eps'; fig_suf ='fvr'; figname = strcat(savename,fig_suf);
+%          fig = '.eps'; fig_suf ='fvr'; 
+%          range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
+%          figname = strcat(savename,range,fig_suf,'.jpg');
+%          saveas(gcf,figname)
+%      end
+    hh.Position = [457 113 857 692];
+
+     if save_on
+         fig = '.eps'; fig_suf ='mapv_fvr'; figname = strcat(savename,fig_suf);
+         range = strcat('_min',num2str(pmin),'_max',num2str(pmax));
+         figname = strcat(savename,range,fig_suf,'.jpg');
+         saveas(gcf,figname)
+     end
 
