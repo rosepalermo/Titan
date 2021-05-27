@@ -89,7 +89,10 @@ p.con8 = 1;                 %     p.con8  1 for 8 connected shoreline (no corner
 p.doWaveErosion = 1;        %     p.doWaveErosion  Turn fetch based coastal erosion on (1) or off (0)
 p.doUniformErosion = 0;     %     p.doUniformErosion  Turn uniform coastal erosion on (1) or off (0)
 p.So = 1;
-p.dxo = 100;
+p.dxo = 125/2;
+p.nrays = 180;
+p.delta = 0.05;
+p.deptheroded = 0.5;        %     p.deptheroded depth to which uniform or coastal processes will erode a cell (m)
 % p.SLR = 50/p.tf;                  %     p.SLR            Rate of sea level rise (m/yr)
 p.sealevel_init = 1;        %     p.sealevel_init  Initial sea level
 if p.doUniformErosion
@@ -135,8 +138,8 @@ if rand_IC
     % coastal positions, and sea level. --> No, that is what g.C is for (that's
     % why it's a "grid" in g and p.F is a parameter in F).
 elseif river_IC
-%     load('river_wideria_200x200.mat')
-    load('river_IC_v2.mat')
+    load('river_wideria_200x200.mat')
+%     load('river_IC_v2.mat')
 %     init = River_IC_200x200;
     p.sealevel_init=40;
 
@@ -168,11 +171,12 @@ end
 % Kc_ = p.Kf;
 % p.folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/riverIC/';
 % p.folder = '/home/rpalermo/TitanModelOutput/08_2020/results1/091820/';
-cluster = 1;
+cluster = 0;
 [Kc_,p.folder,p.size_final] = inputs_k_folder(cluster);
-p.run = 'river_wave_Kc';
+
+p.run = 'river_wave_Kc_con81';
 time = 'time';
-for i = 3
+for i = 1
     p.tf = 1e5;
     tstart = tic;
     if p.doUniformErosion

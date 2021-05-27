@@ -7,18 +7,18 @@ for i = 1:length(ind)
 nLakeCells(i) = length(find(g.output(:,:,ind(i))<=p.sealevel_init));
 end
 
-pct_Ao = nLakeCells;%./p.Ao_cells;
+pct_Ao = nLakeCells./nLakeCells(1);
 time = 1:length(g.t);
 figure(1)
 hold on
 if p.doWaveErosion
-    plot(time,pct_Ao,'r','LineWidth',2)
+    plot(time,pct_Ao,'r--','LineWidth',2)
 elseif p.doUniformErosion
     plot(time,pct_Ao,'k','LineWidth',2)
 end
 set(gca,'FontSize',14)
 xlabel('time')
-ylabel('Lake area/A_o area')
+ylabel('Lake area relative to init')
 %%
 neroded = zeros(size(pct_Ao));
 for i = 2:length(ind)

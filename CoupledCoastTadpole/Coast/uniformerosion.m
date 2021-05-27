@@ -32,8 +32,8 @@ else
     
     % make new subaqueous points elevation 0.5 below sea level? Talk to Andrew about what this depth
     % should be.
-    % g.U(erodedind) = g.sealevel(p.n)-0.5;
-    g.U(erodedind) = g.sealevel-0.5;
+    % g.U(erodedind) = g.sealevel(p.n)-p.deptheroded;
+    g.U(erodedind) = g.sealevel-p.deptheroded;
 end
 
 g.nLakeCells = length(find(g.uniform_output));

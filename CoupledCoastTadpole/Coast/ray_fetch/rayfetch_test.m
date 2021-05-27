@@ -15,6 +15,7 @@
 % load a test lake and the ordered shoreline
 load('fetch_input8con_lake','F_lake'); % lake is 1 for water, 0 for land
 load('fetch_input8con','fetch_sl_cells'); % x and y are ordered clockwise if i increases downward, first point != last point
+load('topography_test')
 
 shorelines = fetch_sl_cells;
 % shorelines{1}(:,1) = flipud(shorelines{1}(:,1));
@@ -94,18 +95,53 @@ title('log10(weighted fetch area in cells)')
 
 
 %% plot rays for selected points
-
+x = cellsize*(1:length(topography_test));
+y = cellsize*(1:length(topography_test));
+[X,Y] = meshgrid(x,y);
 figure
-% imagesc(~lake); axis equal tight; colormap gray
-hold on
+elev = topography_test - 40;
+% elev_test = double(elev>0);
+    
+    DEM = GRIDobj(x,y,elev);
+%     cmapsea  = [0  0 1;  0.3 0.75 1; 1 1 1];
+    cmapsea  = [0  0 1;  0.3 0.75 1];
+%     cmapland = flipud([0.93 0.69 0.13; .8 .6 0; 1  1 .8 ]);
+%     cmapland = [0 0.4 0.2; 0.87 0.98 0.76; 0.88 0.98 0.76;  0.4  0.17 0 ];
+    cmapland = [0.93 0.69 0.13; 1  1 .8 ];
+%     [cmap,climits] = demcmap(DEM.Z);
+    [cmap,climits] = demcmap(DEM.Z,256,cmapsea,cmapland);
 
+%     [cmap,zlimits] = ttcmap(DEM,'cmap','gmtrelief');    
+%     imageschs(DEM,[],'caxis',zlimits,'colormap',cmap)   
+
+    
+%     f = figure('WindowStyle','docked');
+%     imageschs(DEM,[],'caxis',climits,'colormap',cmap)
+    imageschs(DEM,[],'caxis',[climits(1)+1 climits(2)],'colormap',cmap)
+    set(gca,'Xtick',[])
+    set(gca,'Ytick',[])
+    colorbar off
+%     imageschs(DEM,[],'colorbar',false); % default colormap
+%     imageschs(DEM,[],'colormap',[.9 .9 .9],'colorbar',false); % just hillshade
+    
+%     hold on
+%     contour(x,y,DEM.Z,0*[1,1],'k','linewidth',2)
+%     hold off
+% imagesc(~lake); axis equal tight; colormap gray
+%%
+figure()
+imagesc(x,y,topography_test>40)
+colormap parula
+hold on
+colorMap = [mean(cmapsea);mean(cmapland)];
+colormap(colorMap)
 ns = length(shorelines);
 
 % plot the shorelines, including islands
 for s=1:ns
     si = shorelines{s}(:,2); % row indices
     sj = shorelines{s}(:,1); % column indices
-    plot(sj,si,'-k')
+    plot(sj,si,'-b','LineWidth',2)
 end
 
 % now plot fetch rays, one point at a time
@@ -113,17 +149,21 @@ for s=1:ns
     si = shorelines{s}(:,2); % row indices
     sj = shorelines{s}(:,1); % column indices
 
-    for n = 1:length(si)
+    for n = 122%1:length(si)
         h = zeros(1,nrays);
         hw = zeros(1,nrays);
 
         
-        f = plot(sj(n),si(n),'ok','markersize',16,'markerfacecolor','r');
+        f = plot(sj(n),si(n),'ok','markersize',10,'markerfacecolor','r');
         hc = plot([sj(n) sj(n)+cos(coastaz{s}(n))],[si(n) si(n)+sin(coastaz{s}(n))],'b');
         for k = 1:nrays
-            h(k) = plot([sj(n) fpjs{s}(n,k)],[si(n) fpis{s}(n,k)],'-r'); % unweighted rays
-            hw(k) = plot([sj(n) wpjws{s}(n,k)],[si(n) wpiws{s}(n,k)],'-g'); % weighted rays
+            h(k) = plot([sj(n) fpjs{s}(n,k)],[si(n) fpis{s}(n,k)],'k','LineWidth',1); % unweighted rays
+            hw(k) = plot([sj(n) wpjws{s}(n,k)],[si(n) wpiws{s}(n,k)],'w','LineWidth',1); % weighted rays
         end
+        patch(fpjs{s}(n,:),fpis{s}(n,:),0.1*ones( size(fpis{s}(n,:) , 2),1)  , ...
+           'k' , 'linewidth' , 1.5 );
+        patch(wpjws{s}(n,:),wpiws{s}(n,:),0.1*ones( size(fpis{s}(n,:) , 2),1)  , ...
+           'w' , 'linewidth' , 1.5 );
         pause
         delete(f)
         delete(h)

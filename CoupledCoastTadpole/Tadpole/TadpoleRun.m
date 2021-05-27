@@ -80,14 +80,14 @@ while keepgoing
                 g.t(p.lastsave) = p.t;
                 g.sealevelsave(p.lastsave) = g.sealevel;
 %                 save(p.runname, '-v7.3', 'p', 'g');
-                g.nLakeCells = length(find(g.U<=p.sealevel_init));
+                g.nLakeCells = length(find(g.U<=g.sealevel));
             end
         end
     end
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     kill_switch = isfield(p,'boundary');
-    g.nLakeCells = length(find(g.U<=p.sealevel_init));
+    g.nLakeCells = length(find(g.U<=g.sealevel));
     
     if isfield(p,'rand_gen')
     temp = g.output(:,:,1)-g.U;

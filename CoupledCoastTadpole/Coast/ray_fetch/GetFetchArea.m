@@ -30,10 +30,10 @@ for n = 1:ns
         end
     end
 
-%     if island(n)
-%         shorelines{n}(:,1) = flipud(sj);
-%         shorelines{n}(:,2) = flipud(si);        
-%     end
+    if island(n)
+        shorelines{n}(:,1) = flipud(sj);
+        shorelines{n}(:,2) = flipud(si);        
+    end
     
 end
 

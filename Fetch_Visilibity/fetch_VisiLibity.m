@@ -1,4 +1,4 @@
-function [WaveArea, Fetch_dist, cosang] = fetch_VisiLibity(shorelines,eps,epsilon,snap_distance)
+function [WaveArea, FetchArea] = fetch_VisiLibity(shorelines,eps,epsilon,snap_distance)
 
 % initialize
 WaveArea = cell(length(shorelines),1);

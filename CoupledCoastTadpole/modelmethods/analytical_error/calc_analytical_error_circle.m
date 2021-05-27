@@ -13,7 +13,7 @@ load('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/grid bias t
 Area0 = 25*pi;
 r0 = 5;
 k_uniform = p.Kcoast;
-t = p.t;
+t = 1;
 Areat_uniform = pi*(r0+k_uniform*p.dx*t).^2;
 dArea_uniform_analytical = Areat_uniform - Area0;
 
@@ -33,7 +33,7 @@ load('/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/grid bias t
 Area0 = 25*pi;
 r0 = 5;
 k_wave = p.Kcoast;
-t = p.t;
+t = 1;
 Areat_wave = pi*((r0/(1-r0*k_wave*p.dx*3/4*pi*t)).^2);
 dArea_wave_analytical = Areat_wave - Area0;
 

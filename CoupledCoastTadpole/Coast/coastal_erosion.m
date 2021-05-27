@@ -56,7 +56,10 @@ while sum_dam_excess > 0
     if any(any(isinf(time_excess)))
     end
     %update the lake & shoreline & find new sl indices
-    [shoreline_new] = addidshoreline(lake,land,p); % corners and edges
+    % change land to lake at eroded pts
+    lake(erodedind) = true;
+    land = ~lake;
+    [shoreline_new] = addidshoreline(lake,~lake,p); % corners and edges
     ind_sl_new = find(shoreline_new);
     ind_new = ind_sl_new(~ismember(ind_sl_new,ind_sl_old));
     
@@ -67,30 +70,35 @@ while sum_dam_excess > 0
     % damage the neighbors for the amount of time after the cell failed
     
     % find max time excess of 8 connected neighbors
-    [time_dam_excess,p] = find_max_excess_time(time_excess,ind_new,lake,p);
+    [time_dam_excess,ind_rec_excess,p] = pass_excess_time(time_excess,ind_new,ind_sl_new,ind_excess,lake,p);    % if it hit a boundary, quit
+    if isfield(p,'boundary')
+        return
+    end
+    if ~isempty(ind_rec_excess) % if there are any points recieving the excess damage..
     if fetch_on
-        % interpolate wave_weighting for the neighboring cells
+        % interpolate wave_weighting for the new shoreline cells
         wave_weighting_interp = interp_fetch_for_ind(lake,ind_new,wave_matrix); % this already includes
-        % damage for max excess time of 8 con neighbor
-        dam_matrix(ind_new) = time_dam_excess.*p.Kwave.*shoreline_new(ind_new)*p.So./p.dxo.*wave_weighting_interp;
         wave_matrix(ind_new) = wave_weighting_interp;
+        % damage for max excess time of 8 con neighbor
+        dam_matrix(ind_rec_excess) = time_dam_excess.*p.Kwave.*shoreline_new(ind_rec_excess)*p.So./p.dxo./p.Ao.*wave_matrix(ind_rec_excess);
     else
         % damage for max excess time of 8 con neighbor
-        dam_matrix(ind_new) = time_dam_excess.*p.Kuniform.*shoreline_new(ind_new)*p.So./p.dxo;
+        dam_matrix(ind_rec_excess) = time_dam_excess.*p.Kuniform.*shoreline_new(ind_rec_excess)*p.So./p.dxo;
     end
     
     % damage shoreline
     
-    strength(ind_new) = strength(ind_new) - dam_matrix(ind_new);
+    strength(ind_rec_excess) = strength(ind_rec_excess) - dam_matrix(ind_rec_excess);
 
     % UPDATE LAKE
     lake(find(strength<=0)) = 1;
     land = ~lake;
     ind_sl_old = ind_sl_new; % update the old shoreline
-    erodedind = [erodedind;ind_new(strength(ind_new)<=0)];
+    erodedind = [erodedind;ind_rec_excess(strength(ind_rec_excess)<=0)'];
     % recalculate sum of excess damage (if the neighboring cells erode,
     % then the time will need to pass on to their neighbors in the next loop)
     % end
+    end
     [sum_dam_excess,ind_excess,time_excess] = calc_excess_dam(strength,dam_matrix,p);
 end
 

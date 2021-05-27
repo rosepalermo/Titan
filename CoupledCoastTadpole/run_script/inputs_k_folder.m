@@ -10,7 +10,7 @@ if cluster
     
 elseif ~cluster
 %     folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/results1/cluster/111820_/';
-    folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/022021/';
+    folder = '/Users/rosepalermo/Documents/Research/Titan/ModelOutput/paper1/modelmethods/modelexamples/';
 end
 
 % K

@@ -64,7 +64,7 @@ if ~p.con8 % if 4 connected shoreline, include corners
     
     shoreline = (shorelinecard + shorelinecorn./sqrt(2))./(1+sqrt(2)); % divided everything by 1+sqrt(2) so that when the shoreline is straight, the weighting factor is 1 (1 side and two corners)
 else
-    shoreline = shorelinecard;
+    shoreline = shorelinecard;% 
 end
 
 % figure()
