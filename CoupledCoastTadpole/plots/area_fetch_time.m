@@ -1,7 +1,7 @@
 % make plots of things changing through time
 
 % area through time
-ind = 1:size(g.output,3);
+ind = 1:11%size(g.output,3);
 nLakeCells = zeros(1,length(ind));
 for i = 1:length(ind)
 nLakeCells(i) = length(find(g.output(:,:,ind(i))<=p.sealevel_init));
@@ -12,9 +12,9 @@ time = 1:length(g.t);
 figure(1)
 hold on
 if p.doWaveErosion
-    plot(time,pct_Ao,'r--','LineWidth',2)
+    plot(time(1:233)./time(233),pct_Ao,'r','LineWidth',2)
 elseif p.doUniformErosion
-    plot(time,pct_Ao,'k','LineWidth',2)
+    plot(time(1:11)./time(11),pct_Ao,'k','LineWidth',2)
 end
 set(gca,'FontSize',14)
 xlabel('time')

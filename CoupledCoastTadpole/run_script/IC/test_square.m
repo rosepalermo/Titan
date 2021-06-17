@@ -1,13 +1,14 @@
-function [init,p] = test_square(p);
+function [init,p] = test_square(p,dx,eps);
 
-side_length = 10;
+side_length = 900;
 lakex = [linspace(0,side_length,100) side_length*ones(1,100) linspace(side_length,0,100) zeros(1,100)];
 lakey = [zeros(1,100) linspace(0,side_length,100) side_length*ones(1,100) linspace(side_length,0,100)];
 
-eps = 50;
-dx = 0.05; dy = 0.05;
-x = (min(lakex)-eps):dx:(max(lakex)+eps);
-y = (min(lakey)-eps):dy:(max(lakey)+eps);
+dy = dx;
+% eps = 50;
+% dx = 0.05; dy = 0.05;
+x = (min(lakex)-eps):dx:(max(lakex)+eps-1);
+y = (min(lakey)-eps):dy:(max(lakey)+eps-1);
 [X,Y] = meshgrid(x,y);
 Xinon = reshape(X,[],1);
 Yinon = reshape(Y,[],1);
@@ -20,9 +21,9 @@ init = double(~lake);
 p.dx = dx; p.dy = dy; p.Nx = length(x); p.Ny = length(y);
 
 
-    p.strength = 1;
-    p.So = 1;
-    p.dxo =0.05;
-    p.Ao = 100;
-    p.Ao_cells = length(find(lake));
+%     p.strength = 1;
+%     p.So = 1;
+%     p.dxo =0.05;
+%     p.Ao = 100;
+%     p.Ao_cells = length(find(lake));
 end

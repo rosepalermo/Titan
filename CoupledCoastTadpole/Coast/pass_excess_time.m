@@ -1,6 +1,6 @@
 function        [time_dam_excess,ind_rec_excess,p] = pass_excess_time(time_excess,ind_new,ind_sl_new,ind_excess,lake,p)
 % this function takes the excess indices, the excess time, and the new
-% indices to find the max excess time of the eight connected neighbors of
+% indices to find the excess time of the eight connected neighbors of
 % the new indices
 
 
@@ -28,12 +28,14 @@ for xxx = 1: length(ind_excess)
     R = sub2ind(size(lake),indrslexcess(xxx)+1,indcslexcess(xxx));
     DR = sub2ind(size(lake),indrslexcess(xxx)+1,indcslexcess(xxx)-1);
     
-
+if p.con8
+    directions = [U,D,L,R];
+else
     directions = [U, UL, L, DL, D, DR, R, UR]; % all 8 directions.
-    
+end
     ind_rec_excess_temp{xxx} = directions(ismember(directions,ind_sl_new));
     if ~isempty(ind_rec_excess_temp{xxx})
-        time_dam_excess_temp{xxx} = time_excess(ind_excess(xxx))./sum(find(ind_rec_excess_temp{xxx}))*ones(size(ind_rec_excess_temp{xxx}));
+        time_dam_excess_temp{xxx} = time_excess(ind_excess(xxx))*ones(size(ind_rec_excess_temp{xxx}));
     else
         time_dam_excess_temp{xxx} = [];
     end

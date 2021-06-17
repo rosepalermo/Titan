@@ -17,6 +17,7 @@ Yinon = reshape(Y,[],1);
 %points in and on the polygon are the lake
 [in, on] = inpoly([Xinon,Yinon]',[lakex;lakey]);
 lake = in + on;
+lake(lake>1) =1;
 lake = reshape(lake,length(y),length(x));
 % figure()
 % imagesc(x,y,lake)

@@ -1,12 +1,12 @@
-function [init,p] = test_circle(p);
+function [init,p] = test_circle(p,dx,eps);
 
 theta = 0 : 0.1 : 2*pi;
-radius = 5;
+radius = 500;
 lakex = radius * cos(theta);
 lakey = radius * sin(theta);
-
-eps = 50;
-dx = 0.05; dy = 0.05;
+dy = dx;
+% eps = 50;
+% dx = 0.05; dy = 0.05;
 x = (min(lakex)-eps):dx:(max(lakex)+eps);
 y = (min(lakey)-eps):dy:(max(lakey)+eps);
 [X,Y] = meshgrid(x,y);

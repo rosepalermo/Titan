@@ -10,7 +10,8 @@ indshoreline = find(shoreline);
 uniform_weight = double(shoreline);
 
 %calc damage matrix for uniform erosion
-dam = p.dt*p.Kuniform*uniform_weight(indshoreline)*p.So./p.dxo;
+dam = p.dt*p.Kuniform*uniform_weight(indshoreline)*p.So./p.dxo*p.dx;
+
 dam_matrix(indshoreline) = dam;
 
 %% check if shoreline is on a boundary
